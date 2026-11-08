@@ -4,6 +4,7 @@ import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, c
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
 import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
+import { FrameAnimator, hasFrames, frameURL, posFrame } from './frames.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -69,10 +70,11 @@ const today = () => new Date();
 const dayKey = d => { const x = new Date(d); return `${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`; };
 const weekStart = d => { const x = new Date(d); const wd = (x.getDay() + 6) % 7; x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - wd); return x; };
 
-// ── modelo animado (mismo esqueleto para todos los movimientos; ver js/rig/)
+// ── animación: fotogramas del mismo personaje (js/frames.js, data/anim.js); el modelo vectorial de js/rig/
+//    queda solo como respaldo para movimientos sin fotogramas.
 const modelOf = model => model || set().model || 'f';
 const keyIdx = m => m.positions.map((p, i) => p.mid ? -1 : i).filter(i => i >= 0);
-const imgOf = (m, i, model) => stillURL(m.id, modelOf(model), i);
+const imgOf = (m, i, model) => hasFrames(m.id) ? frameURL(m.id, modelOf(model), posFrame(m.id, i, m.positions.length)) : stillURL(m.id, modelOf(model), i);
 const thumb = (m, n = 1, model) => `<span class="thumb"><img src="${imgOf(m, keyIdx(m)[n - 1] ?? 0, model)}" alt="" loading="lazy"></span>`;
 const breathHTML = ps => `${I.wind}<b>${ps.breath === 'in' ? 'INHALA' : 'EXHALA'}</b><span>${esc(ps.verb)}</span>`;
 // caja del modelo animado + borde que indica la respiración
@@ -88,7 +90,8 @@ function setBreath(box, m, i) {
 }
 function mountRig(box, m, { model, fixed = null, play = true, isPaused } = {}) {
   if (!box) return () => {};
-  const an = new Animator(box, m.id, modelOf(model), { fixed, play: play && fixed == null, speed: set().animSpeed, isPaused, onPos: i => setBreath(box, m, i) });
+  const opts = { fixed, play: play && fixed == null, speed: set().animSpeed, isPaused, onPos: i => setBreath(box, m, i) };
+  const an = hasFrames(m.id) ? new FrameAnimator(box, m.id, modelOf(model), { ...opts, nPos: m.positions.length }) : new Animator(box, m.id, modelOf(model), opts);
   return () => an.destroy();
 }
 
@@ -262,7 +265,7 @@ const VIEWS = {
       row({ title: 'Importar respaldo', a: 'importData', chev: true }),
       row({ title: '<span class="danger">Borrar todos los datos</span>', a: 'resetAll' }),
     ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas, y no caduca mientras uses la app instalada en la pantalla de inicio. En Safari (sin instalar), el iPhone puede borrar los datos tras 7 días sin abrirla. Safari y la app instalada no comparten datos.' });
-    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.2</span>' })], { header: 'Acerca de' });
+    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.3</span>' })], { header: 'Acerca de' });
     return { title: 'Ajustes', large: true, html };
   },
 };

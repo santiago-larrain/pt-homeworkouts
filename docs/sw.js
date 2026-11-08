@@ -1,23 +1,23 @@
 // Service worker: guarda la app en caché para que funcione sin internet.
 // IMPORTANTE: sube CACHE_VERSION cada vez que cambies archivos o imágenes.
-const CACHE_VERSION = 'ptw-v1.2.0';
+const CACHE_VERSION = 'ptw-v1.3.0';
 const CORE = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/engine.js', 'js/store.js', 'js/audio.js', 'js/icons.js',
-  'js/rig/rig.js', 'js/rig/poses.js', 'js/rig/anim.js',
-  'data/catalog.js', 'data/plans.js',
+  'js/frames.js', 'js/rig/rig.js', 'js/rig/poses.js', 'js/rig/anim.js',
+  'data/catalog.js', 'data/plans.js', 'data/anim.js',
   'img/cover.webp', 'img/muscle-map.webp',
   'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
 ];
-const MOVE_IDS = ['cat-cow', 'shoulder-circles', 'good-morning', 'glute-bridge-iso', 'goblet-squat', 'b-stance-rdl', 'monster-walk',
-  'face-pull', 'floor-press', 'band-external-rotation', 'dead-bug', 'ring-adductor-lift', 'ring-legs-side',
-  'doorway-pec', 'child-pose-lateral', 'kneeling-hip-flexor', 'figure-4'];
-const EXTRA_FRAMES = ['img/moves/dead-bug-3.webp', 'img/moves/band-external-rotation-3.webp'];
-// Las ilustraciones ya no se usan en la app (todo es el modelo animado de js/rig); quedan en img/moves como referencia.
-const ASSETS = CORE;
+// Fotogramas de las animaciones (img/anim/<f|m>/…): la lista la genera project/tools/build_anim.py.
+// Las ilustraciones antiguas de img/moves ya no se usan en la app; quedan como referencia.
+const FRAME_LIST = 'img/anim/list.json';
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_VERSION).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE_VERSION).then(async c => {
+    await c.addAll(CORE);
+    try { const list = await (await fetch(FRAME_LIST, { cache: 'no-store' })).json(); await c.addAll(list); } catch (err) { /* se guardarán al verlos */ }
+  }).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));

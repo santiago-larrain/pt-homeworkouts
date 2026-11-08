@@ -16,9 +16,14 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | `docs/js/store.js` | Estado en `localStorage` (`ptw.state.v1`): ajustes, planes editados, historial. |
 | `docs/js/audio.js` | Pitidos con Web Audio + voz guía (`speechSynthesis`). |
 | `docs/sw.js` | Service worker (offline). **Subir `CACHE_VERSION` en cada cambio.** |
-| `docs/js/rig/` | **Modelo animado** (fuente de verdad visual): `rig.js` (esqueleto, cuerpo, músculos, modelos mujer/hombre), `poses.js` (poses clave por movimiento), `anim.js` (interpolación en vivo, encuadre, miniaturas). |
+| `docs/data/anim.js` | **Animaciones** (`ANIM`): fotogramas por movimiento y qué fotograma es cada posición. |
+| `docs/js/frames.js` | Reproductor de fotogramas (`FrameAnimator`): fundidos, pausas en cada posición, respiración. |
+| `docs/img/anim/<f\|m>/<id>-<k>.webp` | **Fotogramas** (fuente de verdad visual, v1.3), mujer `f` y hombre `m`. `list.json` = lista para el service worker. |
+| `docs/js/rig/` | Modelo vectorial anterior (v1.2). Solo **respaldo** para movimientos sin fotogramas. |
 | `docs/img/moves/<id>-N.webp` | Ilustraciones antiguas (ChatGPT/vector). **Ya no se usan en la app**; quedan como referencia visual. |
 | `project/renderer/` | Versión Node antigua del dibujo (exporta PNG). La app usa `docs/js/rig/`. |
+| `project/references/anim/` | Tiras originales de Wonder (`<f\|m>-<id>.jpg`), fuente de los fotogramas. |
+| `project/tools/build_anim.py` | Recorta todas las tiras → `docs/img/anim/` (usa `strip_frames.py`). |
 | `project/` | Contexto, investigación, decisiones de diseño, prompts de imágenes y material fuente (NO se publica como app, pero el repo es público). |
 
 Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (técnica de cada ejercicio),
@@ -36,13 +41,15 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
   **Plan en pareja** (`mode:'duo'`): cada item agrega `b: {move, dose}` para la persona 2; `people: [{name, model:'f'|'m'}, …]`.
   Un solo ritmo para ambas: `settings.duoGovern` = `'time'` (reps → segundos con `secsPerRep`, se usa el más largo) o `'reps'` (espera "Hecho" de las dos).
   En el reproductor: persona 1 arriba, controles al centro, persona 2 abajo.
-- **Animación (v1.2)**: cada movimiento tiene poses clave en `docs/js/rig/poses.js` (`RIG[id].keys`, en el orden de `positions`;
-  `via` = poses de paso sin pausa; `morph:false` = vistas distintas, solo fundido). `anim.js` normaliza las poses a ángulos
-  y las interpola en vivo (~30-40 fps) con suavizado; mismo esqueleto para todos los ejercicios y para ambos modelos.
-  Para un movimiento nuevo: agrega sus poses en `RIG` (mismo formato que las existentes) y su entrada en `MOVES`.
-  El borde de la imagen (`.glow`) se tiñe de azul (inhala) o rojo (exhala) según el fotograma visible.
-- **Modelos**: `settings.model` ('f' | 'm') o `plan.people[i].model` en planes en pareja. `MODELS` en `rig.js` define colores, ropa, pelo y proporciones.
-  Próximo paso visual: "skins" (piezas del cuerpo de ChatGPT pegadas a cada hueso), ver `project/prompts/PROMPTS_v4_body_parts_skin.md`.
+- **Animación (v1.3)**: cada movimiento es una secuencia de 3-5 **fotogramas** del mismo personaje, generados con Wonder
+  como una "tira" (todas las poses en una sola imagen, así el personaje sale idéntico) y recortados/alineados por
+  `project/tools/build_anim.py`. `ANIM[id]` en `docs/data/anim.js`: `n` fotogramas, `pos` (fotograma de cada posición),
+  `loop` (ciclo en vez de ida y vuelta). `FrameAnimator` recorre los fotogramas con fundidos y se detiene en cada posición;
+  con una posición fija (fases, `dose.phases[].pos`) muestra ese fotograma quieto. Las miniaturas usan el fotograma de la posición.
+  El borde de la imagen (`.glow`) se tiñe de azul (inhala) o rojo (exhala) según la posición hacia la que va.
+  Movimientos sin entrada en `ANIM` usan el modelo vectorial de `docs/js/rig/` (v1.2) como respaldo.
+- **Modelos**: `settings.model` ('f' | 'm') o `plan.people[i].model` en planes en pareja → carpeta `img/anim/f` o `img/anim/m`.
+  Mujer: hoja `project/references/character-sheet.jpg`; hombre: `character-sheet-male.jpg`.
   Los planes referencian movimientos por id: **galería y planes están desacoplados**.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
@@ -50,8 +57,10 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
 ## Reglas al cambiar cosas
 
 1. **Nunca romper datos guardados**: si cambias la forma del estado, migra en `store.load()` (no cambies `KEY` sin migración).
-2. Movimiento nuevo: poses en `docs/js/rig/poses.js` + entrada en `MOVES`. Sube `CACHE_VERSION` en `docs/sw.js`.
-   Verifica todas las poses con una página de prueba (render de cada pose y del punto medio) en claro, para ambos modelos.
+2. Movimiento nuevo: entrada en `MOVES` + tiras de Wonder para mujer y hombre (`project/prompts/PROMPTS_v5_wonder_strips.md`)
+   guardadas en `project/references/anim/`, su línea en `STRIPS` de `build_anim.py`, `python3 project/tools/build_anim.py <id>`
+   y su entrada en `ANIM`. Revisa la tira (biomecánica, lados, aro/banda) y los fotogramas recortados antes de publicar.
+   Sube `CACHE_VERSION` en `docs/sw.js`.
 3. Cambios de UI: respeta `project/DESIGN.md`: un solo color de acento (rosa `#E0457B` / `#FF6E9C` en oscuro),
    fuente del sistema, listas agrupadas, zonas táctiles ≥ 44 px, modo claro/oscuro, `prefers-reduced-motion`.
 4. iOS: el audio solo se activa tras un toque (`unlockAudio()` al iniciar la sesión). El temporizador usa

@@ -1,9 +1,21 @@
 # Ilustraciones
 
-> **Desde v1.2 la app no usa imágenes por ejercicio**: todo se dibuja con el modelo animado de `docs/js/rig/`
-> (mismo personaje para todos los ejercicios, mujer u hombre, con animación fluida). Lo de abajo describe las
-> ilustraciones de ChatGPT, que quedan como referencia de estilo y como fuente para las futuras "skins"
-> (`prompts/PROMPTS_v4_body_parts_skin.md`).
+> **v1.3: animaciones por fotogramas.** Cada ejercicio es una secuencia de 3-5 fotogramas del mismo personaje (mujer y
+> hombre), generada con Wonder como una sola "tira" y recortada con `project/tools/build_anim.py` →
+> `docs/img/anim/<f|m>/<id>-<k>.webp`. Prompts y proceso: `prompts/PROMPTS_v5_wonder_strips.md`. Tiras originales:
+> `references/anim/`. Configuración por ejercicio: `docs/data/anim.js`.
+>
+> Lo de abajo describe las ilustraciones anteriores (ChatGPT, 2 paneles), que siguen como referencia de estilo y como
+> ancla al generar tiras nuevas. El modelo vectorial de `docs/js/rig/` (v1.2) queda solo como respaldo.
+
+## Fotogramas (v1.3)
+- `strip_frames.py <tira> <N> <salida> <prefijo> [--anchor=feet|center|left|right] [--cuts=x1,…]`: separa las figuras por
+  regiones conectadas, reconoce y reconstruye el suelo/mat, alinea por el punto de apoyo y exporta fotogramas del mismo tamaño.
+- `build_anim.py [id …]`: corre lo anterior para todas las tiras (lista `STRIPS`), deja el papel en blanco puro, limita el
+  ancho a 640 px y escribe `docs/img/anim/list.json` (el service worker guarda todos los fotogramas para usar sin internet).
+- Ancla: `feet` de pie / en cuatro apoyos, `left` tendida con la cabeza a la izquierda (o el marco de puerta), `right` cuando
+  los pies quedan fijos a la derecha, `center` para pasos laterales y vistas desde arriba.
+- `ring-legs-side` usa dos tiras (`ring-legs-up` + `ring-legs-side`, sin su primer fotograma) unidas en 5 fotogramas.
 
 ## Estilo definitivo (generado con ChatGPT)
 Basado en `references/character-sheet.jpg`: la misma mujer (Anita) con piel morena clara, pelo castaño oscuro en coleta alta con una
