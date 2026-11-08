@@ -17,6 +17,7 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | `docs/js/audio.js` | Pitidos con Web Audio + voz guía (`speechSynthesis`). |
 | `docs/sw.js` | Service worker (offline). **Subir `CACHE_VERSION` en cada cambio.** |
 | `docs/img/moves/<id>-1.webp`, `-2.webp` | Las 2 posiciones de cada movimiento (posición 1 → 2). |
+| `project/renderer/` | Dibujo vectorial con la paleta del personaje (`node render_moves.js <salida>`), con fotogramas interpolados. Se usa para los movimientos sin imagen de ChatGPT. |
 | `project/` | Contexto, investigación, decisiones de diseño, prompts de imágenes y material fuente (NO se publica como app, pero el repo es público). |
 
 Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (técnica de cada ejercicio),
@@ -30,7 +31,13 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
   `breath` indica cómo respirar **para llegar** a esa posición (regla: exhala en el esfuerzo).
 - **Dosis**: `{type:'time', secs, perSide?, note?}` | `{type:'reps', min, max, perSide?, alternating?, unit?}` |
   `{type:'phases', phases:[{label, secs, pos, perSide?}]}` (`pos` fija qué imagen se muestra).
-- **Plan**: `{id, name, subtitle, goal, frequency, sections:[{id, name, note, kind:'circuit'|'sequence', rounds, rest, items:[{move, dose?}]}]}`.
+- **Plan**: `{id, name, subtitle, goal, frequency, mode:'solo'|'duo', people?, sections:[{id, name, note, kind:'circuit'|'sequence', rounds, rest, items:[{move, dose?, b?}]}]}`.
+  **Plan en pareja** (`mode:'duo'`): cada item agrega `b: {move, dose}` para la persona 2; `people: [{name, model:'f'|'m'}, …]`.
+  Un solo ritmo para ambas: `settings.duoGovern` = `'time'` (reps → segundos con `secsPerRep`, se usa el más largo) o `'reps'` (espera "Hecho" de las dos).
+  En el reproductor: persona 1 arriba, controles al centro, persona 2 abajo.
+- **Fotogramas**: `positions` puede tener más de 2 (los intermedios llevan `mid: true`); la animación va ida y vuelta.
+  El borde de la imagen (`.glow`) se tiñe de azul (inhala) o rojo (exhala) según el fotograma visible.
+- **Modelo masculino**: imágenes en `docs/img/moves/m/<id>-<n>.webp` (mismo número de fotogramas que la versión femenina) y `male: true` en el movimiento.
   Los planes referencian movimientos por id: **galería y planes están desacoplados**.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
@@ -44,6 +51,10 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
    fuente del sistema, listas agrupadas, zonas táctiles ≥ 44 px, modo claro/oscuro, `prefers-reduced-motion`.
 4. iOS: el audio solo se activa tras un toque (`unlockAudio()` al iniciar la sesión). El temporizador usa
    timestamps (`endsAt`) para seguir correcto si la pantalla se bloquea. La pantalla se mantiene encendida con Wake Lock.
+   Cada paso tiene `key` estable: los ajustes cambiados durante una sesión (botón ⚙︎ del reproductor) reconstruyen los pasos
+   (`P.rebuild`) sin perder la posición.
+   Datos: `localStorage` + `navigator.storage.persist()`. En iOS la app instalada en inicio NO caduca; en Safari sin instalar,
+   ITP puede borrar los datos tras 7 días sin uso. Safari y la app instalada tienen almacenamientos separados.
 5. Las imágenes de una misma persona/estilo deben ser coherentes (ver `project/IMAGES.md`). Nunca subas fotos reales
    de Anita ni imágenes de terceros con copyright a este repo público.
 6. Verifica en un viewport de iPhone antes de publicar (Playwright: `devices['iPhone 13']`, claro y oscuro), sirviendo

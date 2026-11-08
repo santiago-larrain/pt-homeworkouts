@@ -19,10 +19,11 @@ en foco, editor de planes e historial. Funciona en el iPhone sin cuentas y sin i
 - **Planes**: editar bloques (circuito o secuencia, rondas, descansos), agregar, quitar o reordenar movimientos
   del catálogo, cambiar tiempos y repeticiones, duplicar y crear planes nuevos.
 - **Movimientos**: galería con búsqueda y filtros, técnica, músculos y respiración de cada ejercicio.
+- **En pareja**: planes dúo con un ejercicio distinto por persona, un solo ritmo (manda el tiempo o mandan las repeticiones).
 - **Historial**: calendario, rachas, sesiones con ánimo y notas.
 - **Ajustes**: sonidos, tiempos, modo de repeticiones, tema claro/oscuro y respaldo (exportar/importar).
 
-Los datos quedan solo en el teléfono. Conviene exportar un respaldo de vez en cuando (Ajustes → Datos).
+Los datos quedan solo en el teléfono y **no caducan si usas la app instalada** (en Safari sin instalar, el iPhone puede borrarlos tras 7 días sin uso). Safari y la app instalada no comparten datos. Conviene exportar un respaldo de vez en cuando (Ajustes → Datos).
 
 ## Desarrollo
 Sin build. Sirve la carpeta `docs/`:

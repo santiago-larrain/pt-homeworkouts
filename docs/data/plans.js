@@ -13,6 +13,7 @@ export const DEFAULT_PLANS = [
     goal: 'Recomposición corporal, salud postural, protección articular de hombro y alta adherencia.',
     frequency: '2× por semana',
     builtin: true,
+    mode: 'solo',
     sections: [
       {
         id: 'A', name: 'Activación', note: 'Sin saltos ni impacto. Lubrica articulaciones y activa estabilizadores.',

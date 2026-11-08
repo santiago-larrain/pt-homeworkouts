@@ -1,7 +1,13 @@
 # Pendientes e ideas
 
+## Hecho en v1.1
+- Ajustes de tiempo aplicados en vivo (también durante una sesión, botón ⚙︎) y "Descanso entre rondas" global.
+- Protección de datos: `storage.persist()`, avisos de Safari vs app instalada y recordatorio de respaldo.
+- Borde de respiración (azul/rojo), fotogramas intermedios, planes en pareja (dúo), soporte de modelo masculino.
+- 4 movimientos redibujados con la paleta del personaje (`project/renderer`).
+
 ## Pendiente inmediato
-- [ ] Generar ilustraciones finales: dead-bug (brazo y pierna opuestos), band-external-rotation, doorway-pec, child-pose-lateral (`IMAGES.md`).
+- [ ] Generar con ChatGPT (prompts v3): modelo masculino, vistas 3/4 y fotogramas intermedios; reemplazar los 4 vectoriales.
 - [ ] Probar en el iPhone de Anita: sonido con el interruptor de silencio, voz guía en español, Wake Lock y "Agregar a inicio".
 
 ## Ideas futuras

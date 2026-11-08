@@ -14,10 +14,13 @@ una lámina anatómica de 3DLABZ (músculos en naranja) y una foto real de Anita
 | id | Estado | Nota |
 |---|---|---|
 | cat-cow, shoulder-circles, good-morning, glute-bridge-iso, goblet-squat, b-stance-rdl, monster-walk, face-pull, floor-press, ring-adductor-lift, ring-legs-side, kneeling-hip-flexor, figure-4 | ✅ final | Generadas con ChatGPT (`references/generated/`) |
-| dead-bug | ⚠️ placeholder | ChatGPT no logró brazo y pierna **opuestos**. Se usa el dibujo vectorial antiguo. Ver `prompts/PROMPTS_v2_missing.md` + `references/diagrams/` |
-| band-external-rotation | ⚠️ placeholder | Falta generar (vista de frente + recuadro del infraespinoso por detrás) |
-| doorway-pec | ⚠️ placeholder | Falta generar |
-| child-pose-lateral | ⚠️ placeholder | Falta generar (pos. 2 vista desde arriba) |
+| dead-bug | 🟡 vector (3 fotogramas) | ChatGPT no logró brazo y pierna **opuestos**. Dibujo de `project/renderer` con la paleta del personaje |
+| band-external-rotation | 🟡 vector (3 fotogramas) | Ídem. Ideal: vista 3/4 de espalda (ver prompts v3) |
+| doorway-pec | 🟡 vector | Ídem |
+| child-pose-lateral | 🟡 vector | Ídem (pos. 2 vista desde arriba) |
+
+Prompts vigentes: `prompts/PROMPTS_v3_male_angles_frames.md` (modelo masculino, vistas 3/4 recomendadas y fotogramas intermedios;
+una imagen por mensaje, editando la anterior para mantener el encuadre). `PROMPTS_v2_missing.md` sigue sirviendo para los 4 vectoriales.
 
 `references/generated/3-3-ring-legs-side-panels-swapped.jpg` trae los paneles invertidos: el panel derecho es la posición 1 (foto 4).
 

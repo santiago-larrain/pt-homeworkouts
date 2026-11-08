@@ -29,6 +29,7 @@ export const I = {
   wind: s(`<path d="M3 8h10.5a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 18h7" ${st}/>`),
   speaker: s(`<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11" ${st}/>`),
   sides: s(`<path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4" ${st}/>`),
+  shield: s(`<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8-7.5 9.5-4.3-1.5-7.5-4.9-7.5-9.5V6z" ${st}/><path d="M8.5 12l2.5 2.5 4.5-5" ${st}/>`),
   heart: s('<path d="M12 20.5s-8-4.9-8-10.6A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.9c0 5.7-8 10.6-8 10.6z" fill="currentColor"/>'),
   info: s(`<circle cx="12" cy="12" r="9" ${st}/><path d="M12 11v6M12 7.5v.1" ${st}/>`),
   sparkle: s('<path d="M12 2.5l1.8 5.7 5.7 1.8-5.7 1.8L12 17.5l-1.8-5.7L4.5 10l5.7-1.8z" fill="currentColor"/>'),

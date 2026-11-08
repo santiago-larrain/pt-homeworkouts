@@ -15,6 +15,10 @@ export const DEFAULT_SETTINGS = {
   switchSides: 5,       // cambio de lado
   phaseGap: 3,          // cambio de posición dentro de un ejercicio
   sectionRest: 60,      // descanso entre bloques
+  roundRest: 0,         // descanso entre rondas: 0 = el de cada bloque del plan
+  duoGovern: 'time',    // planes en pareja: 'time' (manda el tiempo) | 'reps' (mandan las repeticiones)
+  model: 'f',           // dibujos: 'f' (mujer) | 'm' (hombre, si hay imágenes)
+  lastBackup: null,
   repsMode: 'manual',   // 'manual' (botón Hecho) | 'auto' (temporizado)
   secsPerRep: 3,
   repSecondsEstimate: 30,  // estimación (solo para calcular la duración total)
@@ -39,6 +43,7 @@ export const store = {
     s.settings = { ...DEFAULT_SETTINGS, ...(s.settings || {}) };
     s.history = s.history || [];
     s.hiddenBuiltins = s.hiddenBuiltins || [];
+    s.plans.forEach(p => { if (!p.mode) p.mode = 'solo'; });
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
     if (!s.plans.some(p => p.id === s.activePlanId)) s.activePlanId = s.plans[0] ? s.plans[0].id : null;
@@ -60,6 +65,12 @@ export const store = {
     if (!Array.isArray(d.plans)) throw new Error('Archivo no válido');
     this.state = { settings: { ...DEFAULT_SETTINGS, ...d.settings }, plans: d.plans, activePlanId: d.activePlanId, history: d.history || [], hiddenBuiltins: d.hiddenBuiltins || [] };
     this.save(); this.load();
+  },
+  // Pide al navegador no borrar los datos (Safari puede borrar datos de sitios no usados en 7 días;
+  // la app instalada en la pantalla de inicio no tiene ese límite).
+  async persist() {
+    try { if (navigator.storage && navigator.storage.persist) { const already = await navigator.storage.persisted(); return already || await navigator.storage.persist(); } } catch (e) { }
+    return false;
   },
   reset() { localStorage.removeItem(KEY); this.load(); this.save(); },
 };

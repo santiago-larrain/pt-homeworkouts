@@ -1,6 +1,6 @@
 // Service worker: guarda la app en caché para que funcione sin internet.
 // IMPORTANTE: sube CACHE_VERSION cada vez que cambies archivos o imágenes.
-const CACHE_VERSION = 'ptw-v1.0.0';
+const CACHE_VERSION = 'ptw-v1.1.0';
 const CORE = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/engine.js', 'js/store.js', 'js/audio.js', 'js/icons.js',
@@ -11,7 +11,8 @@ const CORE = [
 const MOVE_IDS = ['cat-cow', 'shoulder-circles', 'good-morning', 'glute-bridge-iso', 'goblet-squat', 'b-stance-rdl', 'monster-walk',
   'face-pull', 'floor-press', 'band-external-rotation', 'dead-bug', 'ring-adductor-lift', 'ring-legs-side',
   'doorway-pec', 'child-pose-lateral', 'kneeling-hip-flexor', 'figure-4'];
-const ASSETS = CORE.concat(MOVE_IDS.flatMap(id => [`img/moves/${id}-1.webp`, `img/moves/${id}-2.webp`]));
+const EXTRA_FRAMES = ['img/moves/dead-bug-3.webp', 'img/moves/band-external-rotation-3.webp'];
+const ASSETS = CORE.concat(MOVE_IDS.flatMap(id => [`img/moves/${id}-1.webp`, `img/moves/${id}-2.webp`]), EXTRA_FRAMES);
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_VERSION).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

@@ -7,7 +7,9 @@
 //   3. Sube CACHE_VERSION en docs/sw.js para que el iPhone descargue lo nuevo.
 //
 // breath: 'in' = inhala para LLEGAR a esa posición, 'ex' = exhala.
-// imageStatus: 'final' (ilustración definitiva) | 'placeholder' (provisional, rehacer).
+// imageStatus: 'final' (ilustración de ChatGPT) | 'vector' (dibujo vectorial de project/renderer, provisional) | 'placeholder'.
+// positions puede tener 2 o más fotogramas; los marcados `mid: true` son intermedios (solo para la animación).
+// Modelo masculino: si existen docs/img/moves/m/<id>-<n>.webp, agrega `male: true` al movimiento.
 
 export const CATEGORIES = [
   { id: 'movilidad', name: 'Movilidad' },
@@ -136,9 +138,10 @@ export const MOVES = [
     tips: ['Pon una toalla enrollada entre el codo y las costillas.', 'Movimiento corto y controlado, sin dolor.', 'El codo no se mueve; solo gira el antebrazo.'],
     positions: [
       { label: 'Adentro', breath: 'in', verb: 'regresa', img: img('band-external-rotation', 1) },
-      { label: 'Afuera', breath: 'ex', verb: 'abre', img: img('band-external-rotation', 2) },
+      { label: 'Gira', breath: 'ex', verb: 'abre', img: img('band-external-rotation', 2), mid: true },
+      { label: 'Afuera', breath: 'ex', verb: 'abre', img: img('band-external-rotation', 3) },
     ],
-    dose: { type: 'reps', min: 10, max: 10, perSide: true }, imageStatus: 'placeholder',
+    dose: { type: 'reps', min: 10, max: 10, perSide: true }, imageStatus: 'vector',
   },
   {
     id: 'dead-bug', name: 'Dead Bug', alias: 'Bicho muerto', category: 'core', equipment: ['mat'],
@@ -147,9 +150,10 @@ export const MOVES = [
     tips: ['Brazos al techo, caderas y rodillas a 90°.', 'Estira brazo y pierna OPUESTOS, cerca del suelo.', 'Si la lumbar se despega, acorta el rango.'],
     positions: [
       { label: 'Mesa', breath: 'in', verb: 'prepara', img: img('dead-bug', 1) },
-      { label: 'Estira', breath: 'ex', verb: 'estira', img: img('dead-bug', 2) },
+      { label: 'Baja', breath: 'ex', verb: 'estira', img: img('dead-bug', 2), mid: true },
+      { label: 'Estira', breath: 'ex', verb: 'estira', img: img('dead-bug', 3) },
     ],
-    dose: { type: 'reps', min: 10, max: 12, alternating: true }, imageStatus: 'placeholder',
+    dose: { type: 'reps', min: 10, max: 12, alternating: true }, imageStatus: 'vector',
   },
   {
     id: 'ring-adductor-lift', name: 'Aro: aductores + torso arriba', category: 'core', equipment: ['aro', 'mat'],
@@ -182,7 +186,7 @@ export const MOVES = [
       { label: 'Apoya', breath: 'in', verb: 'antebrazo en el marco', img: img('doorway-pec', 1) },
       { label: 'Avanza', breath: 'ex', verb: 'abre el pecho', img: img('doorway-pec', 2) },
     ],
-    dose: { type: 'time', secs: 30, perSide: true }, imageStatus: 'placeholder',
+    dose: { type: 'time', secs: 30, perSide: true }, imageStatus: 'vector',
   },
   {
     id: 'child-pose-lateral', name: 'Postura del niño + lateral', category: 'elongacion', equipment: ['mat'],
@@ -193,7 +197,7 @@ export const MOVES = [
       { label: 'Centro', breath: 'ex', verb: 'suelta', img: img('child-pose-lateral', 1) },
       { label: 'Lateral', breath: 'in', verb: 'alcanza', img: img('child-pose-lateral', 2) },
     ],
-    dose: { type: 'phases', phases: [{ label: 'Centro', secs: 30, pos: 0 }, { label: 'Lateral', secs: 15, pos: 1, perSide: true }] }, imageStatus: 'placeholder',
+    dose: { type: 'phases', phases: [{ label: 'Centro', secs: 30, pos: 0 }, { label: 'Lateral', secs: 15, pos: 1, perSide: true }] }, imageStatus: 'vector',
   },
   {
     id: 'kneeling-hip-flexor', name: 'Psoas y cuádriceps', category: 'elongacion', equipment: ['mat'],
