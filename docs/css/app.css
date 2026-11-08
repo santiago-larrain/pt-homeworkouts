@@ -387,3 +387,10 @@ u.s { background: var(--yellow); }
 .p-main.done.sm.on { background: var(--accent); }
 .duo-reps em { font: 600 22px var(--round); font-style: normal; color: rgba(255, 255, 255, .7); font-variant-numeric: tabular-nums; }
 .p-nexts { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 520px; align-items: center; }
+
+/* ───────── v1.2: modelo animado (SVG en vivo) */
+.rigbox { position: relative; background: #fff; overflow: hidden; }
+.rigsvg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rigsvg .lay { opacity: 0; transition: opacity .55s ease; }
+.rigsvg .lay.on { opacity: 1; }
+.viewer.rigbox { aspect-ratio: 4/3.2; }

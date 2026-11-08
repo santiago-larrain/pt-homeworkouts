@@ -3,6 +3,7 @@ import { store, uid, clone } from './store.js';
 import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, clock, isDuo } from './engine.js';
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
 import { I } from './icons.js';
+import { Animator, stillURL } from './rig/anim.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -68,31 +69,27 @@ const today = () => new Date();
 const dayKey = d => { const x = new Date(d); return `${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`; };
 const weekStart = d => { const x = new Date(d); const wd = (x.getDay() + 6) % 7; x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - wd); return x; };
 
-// ── imágenes y fotogramas
-const imgOf = (m, i, model = set().model) => (model === 'm' && m.male) ? `img/moves/m/${m.id}-${i + 1}.webp` : m.positions[i].img;
+// ── modelo animado (mismo esqueleto para todos los movimientos; ver js/rig/)
+const modelOf = model => model || set().model || 'f';
 const keyIdx = m => m.positions.map((p, i) => p.mid ? -1 : i).filter(i => i >= 0);
+const imgOf = (m, i, model) => stillURL(m.id, modelOf(model), i);
 const thumb = (m, n = 1, model) => `<span class="thumb"><img src="${imgOf(m, keyIdx(m)[n - 1] ?? 0, model)}" alt="" loading="lazy"></span>`;
 const breathHTML = ps => `${I.wind}<b>${ps.breath === 'in' ? 'INHALA' : 'EXHALA'}</b><span>${esc(ps.verb)}</span>`;
-function seqOf(m) { const f = [...m.positions.keys()]; return f.length > 2 ? f.concat(f.slice(1, -1).reverse()) : f; } // ida y vuelta
-const frameMs = (m, i) => set().animSpeed * 1000 * (m.positions[i].mid ? 0.45 : 1);
-// Recorre los fotogramas del movimiento (posición 1 → intermedias → final → vuelta). Devuelve una función para detener.
-function runFrames(m, onFrame, isPaused = () => false, start = 0) {
-  const seq = seqOf(m); let k = Math.max(0, seq.indexOf(start)), alive = true, t;
-  const tick = () => { if (!alive) return; if (!isPaused()) { k = (k + 1) % seq.length; onFrame(seq[k]); } t = setTimeout(tick, frameMs(m, seq[k])); };
-  t = setTimeout(tick, frameMs(m, seq[k]));
-  return () => { alive = false; clearTimeout(t); };
-}
-// caja de imagen con fotogramas apilados + borde que indica la respiración
-function mediaHTML(m, cur, { id = '', cls = 'p-media', model, extra = '' } = {}) {
+// caja del modelo animado + borde que indica la respiración
+function mediaHTML(m, cur, { id = '', cls = 'p-media', extra = '' } = {}) {
   const ps = m.positions[cur];
-  return `<div class="${cls}" ${id ? `id="${id}"` : ''}>${m.positions.map((p, k) => `<img src="${imgOf(m, k, model)}" alt="${esc(p.label)}" class="${k === cur ? 'on' : ''}">`).join('')}<div class="glow ${ps.breath}"></div><div class="p-breath ${ps.breath}">${breathHTML(ps)}</div>${extra}</div>`;
+  return `<div class="${cls} rigbox" ${id ? `id="${id}"` : ''}><div class="glow ${ps.breath}"></div><div class="p-breath ${ps.breath}">${breathHTML(ps)}</div>${extra}</div>`;
 }
-function setFrame(box, m, i) {
+function setBreath(box, m, i) {
   if (!box) return;
-  box.querySelectorAll(':scope > img').forEach((im, k) => im.classList.toggle('on', k === i));
-  const ps = m.positions[i];
+  const ps = m.positions[i]; if (!ps) return;
   const g = box.querySelector('.glow'); if (g) g.className = `glow ${ps.breath}`;
   const b = box.querySelector('.p-breath'); if (b) { b.className = `p-breath ${ps.breath}`; b.innerHTML = breathHTML(ps); }
+}
+function mountRig(box, m, { model, fixed = null, play = true, isPaused } = {}) {
+  if (!box) return () => {};
+  const an = new Animator(box, m.id, modelOf(model), { fixed, play: play && fixed == null, speed: set().animSpeed, isPaused, onPos: i => setBreath(box, m, i) });
+  return () => an.destroy();
 }
 
 function toast(msg) {
@@ -203,8 +200,9 @@ const VIEWS = {
     const cur = ui.moveShow[m.id] ?? 0;
     const inPlans = [];
     S().plans.forEach(p => p.sections.forEach(sec => sec.items.forEach(it => { if (it.move === m.id || (it.b && it.b.move === m.id)) inPlans.push(`${p.name} · ${sec.name}`); })));
+    if (ui.moveAuto !== m.id) { ui.moveAuto = m.id; stopAnim(); anim = { id: m.id }; } // al abrir, se anima solo
     const playing = anim && anim.id === m.id;
-    let html = mediaHTML(m, cur, { id: 'mv', cls: 'viewer', extra: m.imageStatus !== 'final' ? `<em class="ph">${m.imageStatus === 'vector' ? 'dibujo provisional' : 'ilustración provisional'}</em>` : '' });
+    let html = mediaHTML(m, cur, { id: 'mv', cls: 'viewer' });
     html += `<div class="viewer-ctl">${seg('showPos', `data-id="${m.id}"`, keys.map((k, n) => [k, `${n + 1} · ${esc(m.positions[k].label)}`]), playing ? -1 : cur)}<button class="iconbtn tinted" data-a="animMove" data-id="${m.id}" aria-label="${playing ? 'Detener animación' : 'Ver animación'}">${playing ? I.pause : I.play}</button></div>
       <h1 class="detail-title">${esc(m.name)}</h1>${m.alias ? `<p class="muted center">${esc(m.alias)}</p>` : ''}
       <div class="keycue">${I.check}<span>${esc(m.cue)}</span></div>`;
@@ -215,7 +213,7 @@ const VIEWS = {
     html += group(m.tips.map((tp, i) => `<div class="row tip"><span class="num">${i + 1}</span><span class="rt"><span class="rtt">${esc(tp)}</span></span></div>`), { header: 'Técnica' });
     html += group(keys.map((k, n) => { const ps = m.positions[k]; return row({ icon: `<span class="badge sm">${n + 1}</span>`, title: esc(ps.label), right: `<span class="breath-txt ${ps.breath}">${ps.breath === 'in' ? 'Inhala' : 'Exhala'} · ${esc(ps.verb)}</span>` }); }), { header: 'Respiración', footer: 'Indica cómo respirar para llegar a cada posición. El borde de la imagen se pone azul al inhalar y rosado al exhalar.' });
     html += group([...inPlans.map(x => row({ title: esc(x) })), row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir a un plan</span>', a: 'addToPlan', data: `data-id="${m.id}"` })], { header: 'En tus planes' });
-    return { title: m.name, backLabel: nav.tab === 'moves' ? 'Movimientos' : 'Atrás', html, after: () => { if (playing) startAnim(m.id); } };
+    return { title: m.name, backLabel: nav.tab === 'moves' ? 'Movimientos' : 'Atrás', html, after: () => startAnim(m.id, playing ? null : cur) };
   },
 
   history() {
@@ -249,12 +247,12 @@ const VIEWS = {
     html += group([row({ title: 'Ritmo compartido', right: seg('setSeg', 'data-k="duoGovern"', [['time', 'Manda el tiempo'], ['reps', 'Mandan las reps']], st.duoGovern) })],
       { header: 'Planes en pareja', footer: st.duoGovern === 'time' ? 'Ambas personas trabajan el mismo tiempo: las repeticiones se convierten a segundos y se usa el ejercicio más largo.' : 'Si alguna hace repeticiones, el reloj espera a que las dos toquen «Hecho».' });
     html += group([
-      row({ title: 'Dibujos', right: seg('setSeg', 'data-k="model"', [['f', 'Mujer'], ['m', 'Hombre']], st.model) }),
+      row({ title: 'Modelo', right: seg('setSeg', 'data-k="model"', [['f', 'Mujer'], ['m', 'Hombre']], st.model) }),
       row({ title: 'Mantener pantalla encendida', right: toggle('set:wakeLock', st.wakeLock) }),
       row({ title: 'Animar movimientos', sub: 'Alterna las posiciones durante el ejercicio', right: toggle('set:animate', st.animate) }),
       row({ title: 'Velocidad de la animación', right: stepper('setStep', 'data-k="animSpeed" data-min="0.8" data-max="4" data-st="0.4"', `${st.animSpeed.toFixed(1)} s`) }),
       row({ title: 'Apariencia', right: seg('setSeg', 'data-k="theme"', [['auto', 'Auto'], ['light', 'Clara'], ['dark', 'Oscura']], st.theme) }),
-    ], { header: 'Pantalla', footer: 'Si un movimiento aún no tiene dibujo masculino, se muestra el femenino.' });
+    ], { header: 'Pantalla', footer: 'Todos los ejercicios usan el mismo modelo animado. En los planes en pareja cada persona elige su modelo.' });
     const persisted = ui.persisted;
     html += group([
       row({ title: 'Dónde se guardan', right: `<span class="muted">${standalone() ? 'App instalada' : 'Navegador'}</span>` }),
@@ -264,7 +262,7 @@ const VIEWS = {
       row({ title: 'Importar respaldo', a: 'importData', chev: true }),
       row({ title: '<span class="danger">Borrar todos los datos</span>', a: 'resetAll' }),
     ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas, y no caduca mientras uses la app instalada en la pantalla de inicio. En Safari (sin instalar), el iPhone puede borrar los datos tras 7 días sin abrirla. Safari y la app instalada no comparten datos.' });
-    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.1</span>' })], { header: 'Acerca de' });
+    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.2</span>' })], { header: 'Acerca de' });
     return { title: 'Ajustes', large: true, html };
   },
 };
@@ -293,7 +291,7 @@ function timesGroup(st) {
 function catalogList() {
   const q = ui.q.trim().toLowerCase();
   const list = MOVES.filter(m => (ui.cat === 'all' || m.category === ui.cat) && (!q || (m.name + ' ' + (m.alias || '') + ' ' + m.focus.join(' ')).toLowerCase().includes(q)));
-  return `<div class="grid">${list.map(m => `<button class="mcard" data-a="openMove" data-id="${m.id}"><span class="mimg"><img src="${imgOf(m, 0)}" alt="" loading="lazy">${m.imageStatus !== 'final' ? '<em class="ph">provisional</em>' : ''}</span><span class="mname">${esc(m.name)}</span><span class="mfocus">${esc(m.focus.join(' · '))}</span></button>`).join('')}</div>
+  return `<div class="grid">${list.map(m => `<button class="mcard" data-a="openMove" data-id="${m.id}"><span class="mimg"><img src="${imgOf(m, 0)}" alt="" loading="lazy"></span><span class="mname">${esc(m.name)}</span><span class="mfocus">${esc(m.focus.join(' · '))}</span></button>`).join('')}</div>
     ${list.length ? `<p class="gf center">${list.length} movimientos</p>` : '<p class="empty">Sin resultados</p>'}`;
 }
 
@@ -329,11 +327,11 @@ function calendarHTML() {
 }
 
 // ───────────────────────── animación en el detalle del movimiento
-function startAnim(id) {
+function startAnim(id, fixed = null) {
   stopAnim(false);
   const m = MOVE_BY_ID[id];
-  const stop = runFrames(m, i => { ui.moveShow[id] = i; setFrame($('#mv'), m, i); if (!$('#mv')) stopAnim(); }, () => false, ui.moveShow[id] ?? 0);
-  anim = { id, stop };
+  const stop = mountRig($('#mv'), m, { fixed });
+  anim = fixed == null ? { id, stop } : { id: null, stop, fixedFor: id };
 }
 function stopAnim(clear = true) { if (anim && anim.stop) anim.stop(); if (clear) anim = null; }
 
@@ -407,7 +405,7 @@ const A = {
   tab: el => { stopAnim(); switchTab(el.dataset.id); },
   back: () => { stopAnim(); back(); },
   openPlan: el => { if (nav.tab !== 'train') nav.tab = 'train'; push('plan', { id: el.dataset.id }); },
-  openMove: el => { stopAnim(); push('move', { id: el.dataset.id }); },
+  openMove: el => { stopAnim(); ui.moveAuto = null; push('move', { id: el.dataset.id }); },
   sheetOpenMove: el => { closeSheet(); if (P.steps) return; push('move', { id: el.dataset.id }); },
   dismissInstall: () => { ui.dismissedInstall = true; sessionStorage.setItem('ptw.noinstall', '1'); render(); },
   closeSheet: () => closeSheet(),
@@ -415,7 +413,7 @@ const A = {
   cat: el => { ui.cat = el.dataset.id; render(); },
   calMove: el => { let { y, m } = ui.cal; m += +el.dataset.d; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.cal = { y, m }; render(); },
   showPos: el => { stopAnim(); ui.moveShow[el.dataset.id] = +el.dataset.v; render(); },
-  animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); render(); } else { anim = { id }; render(); } },
+  animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); } else { stopAnim(); anim = { id }; } render(); },
   muscleMap: () => openSheet(`<div class="sheet-head"><span></span><h2>Músculos</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body"><img class="musclemap" src="img/muscle-map.webp" alt="Mapa de músculos de frente y de espalda"><p class="gf">En cada ejercicio, el <b>naranja</b> marca el músculo que debes sentir trabajar y el <b>amarillo</b> el de apoyo.</p></div>`),
   toggleEdit: el => { ui.editing[el.dataset.id] = !ui.editing[el.dataset.id]; render(); },
   start: el => startSession(el.dataset.id),
@@ -698,9 +696,9 @@ const P = {
       layout = 'duo-layout';
       const who = (u, k) => `<div class="duo-cap"><span class="who">${esc(pp[k].name)}</span><b>${esc(u.move.name)}</b><em>${esc(u.secs != null || u.reps == null ? (u.sub || '') : u.reps + (u.sub ? ' · ' + u.sub : ''))}</em></div>`;
       const meter = s.secs != null ? `<div class="p-ring sm">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>` : `<div class="duo-reps"><em id="pTime">${clock(0)}</em></div>`;
-      center = `<div class="duo-wrap"><div class="duo-p">${mediaHTML(s.a.move, s.a.pos ?? 0, { id: 'pmA', model: pp[0].model })}${who(s.a, 0)}</div>
+      center = `<div class="duo-wrap"><div class="duo-p">${mediaHTML(s.a.move, s.a.pos ?? 0, { id: 'pmA' })}${who(s.a, 0)}</div>
         <div class="duo-mid">${meter}<div class="p-ctl" id="pCtl"></div></div>
-        <div class="duo-p">${who(s.b, 1)}${mediaHTML(s.b.move, s.b.pos ?? 0, { id: 'pmB', model: pp[1].model })}</div></div>`;
+        <div class="duo-p">${who(s.b, 1)}${mediaHTML(s.b.move, s.b.pos ?? 0, { id: 'pmB' })}</div></div>`;
     } else if (isWork) {
       const m = s.move;
       center = `${mediaHTML(m, s.pos ?? 0, { id: 'pm0', extra: s.pos == null && m.positions.length > 1 ? `<button class="p-animbtn" data-a="pAnimToggle" aria-label="Animación">${st.animate ? I.pause : I.play}</button>` : '' })}
@@ -725,9 +723,9 @@ const P = {
       <div class="p-center">${center}</div>
       ${layout ? '' : '<div class="p-ctl" id="pCtl"></div>'}`;
     this.renderControls(); this.paint();
-    if (isWork && st.animate) {
-      const go = (m, pos, id) => { if (pos == null && m.positions.length > 1) this.stops.push(runFrames(m, i => setFrame($('#' + id), m, i), () => this.paused)); };
-      if (s.duo) { go(s.a.move, s.a.pos, 'pmA'); go(s.b.move, s.b.pos, 'pmB'); } else go(s.move, s.pos, 'pm0');
+    if (isWork) {
+      const go = (m, pos, id, model) => this.stops.push(mountRig($('#' + id), m, { model, fixed: pos ?? (st.animate ? null : 0), isPaused: () => this.paused }));
+      if (s.duo) { go(s.a.move, s.a.pos, 'pmA', pp[0].model); go(s.b.move, s.b.pos, 'pmB', pp[1].model); } else go(s.move, s.pos, 'pm0');
     }
   },
   renderControls() {

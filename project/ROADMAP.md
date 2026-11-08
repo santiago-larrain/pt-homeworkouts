@@ -6,7 +6,11 @@
 - Borde de respiración (azul/rojo), fotogramas intermedios, planes en pareja (dúo), soporte de modelo masculino.
 - 4 movimientos redibujados con la paleta del personaje (`project/renderer`).
 
+## Hecho en v1.2
+- Modelo animado único para los 17 ejercicios (interpolación en vivo), versión mujer y hombre, mejor volumen y sombreado.
+
 ## Pendiente inmediato
+- [ ] Skins: pedir a ChatGPT las láminas de partes del cuerpo (prompts v4) y pegarlas a los huesos del modelo.
 - [ ] Generar con ChatGPT (prompts v3): modelo masculino, vistas 3/4 y fotogramas intermedios; reemplazar los 4 vectoriales.
 - [ ] Probar en el iPhone de Anita: sonido con el interruptor de silencio, voz guía en español, Wake Lock y "Agregar a inicio".
 

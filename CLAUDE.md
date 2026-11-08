@@ -16,8 +16,9 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | `docs/js/store.js` | Estado en `localStorage` (`ptw.state.v1`): ajustes, planes editados, historial. |
 | `docs/js/audio.js` | Pitidos con Web Audio + voz guía (`speechSynthesis`). |
 | `docs/sw.js` | Service worker (offline). **Subir `CACHE_VERSION` en cada cambio.** |
-| `docs/img/moves/<id>-1.webp`, `-2.webp` | Las 2 posiciones de cada movimiento (posición 1 → 2). |
-| `project/renderer/` | Dibujo vectorial con la paleta del personaje (`node render_moves.js <salida>`), con fotogramas interpolados. Se usa para los movimientos sin imagen de ChatGPT. |
+| `docs/js/rig/` | **Modelo animado** (fuente de verdad visual): `rig.js` (esqueleto, cuerpo, músculos, modelos mujer/hombre), `poses.js` (poses clave por movimiento), `anim.js` (interpolación en vivo, encuadre, miniaturas). |
+| `docs/img/moves/<id>-N.webp` | Ilustraciones antiguas (ChatGPT/vector). **Ya no se usan en la app**; quedan como referencia visual. |
+| `project/renderer/` | Versión Node antigua del dibujo (exporta PNG). La app usa `docs/js/rig/`. |
 | `project/` | Contexto, investigación, decisiones de diseño, prompts de imágenes y material fuente (NO se publica como app, pero el repo es público). |
 
 Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (técnica de cada ejercicio),
@@ -35,9 +36,13 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
   **Plan en pareja** (`mode:'duo'`): cada item agrega `b: {move, dose}` para la persona 2; `people: [{name, model:'f'|'m'}, …]`.
   Un solo ritmo para ambas: `settings.duoGovern` = `'time'` (reps → segundos con `secsPerRep`, se usa el más largo) o `'reps'` (espera "Hecho" de las dos).
   En el reproductor: persona 1 arriba, controles al centro, persona 2 abajo.
-- **Fotogramas**: `positions` puede tener más de 2 (los intermedios llevan `mid: true`); la animación va ida y vuelta.
+- **Animación (v1.2)**: cada movimiento tiene poses clave en `docs/js/rig/poses.js` (`RIG[id].keys`, en el orden de `positions`;
+  `via` = poses de paso sin pausa; `morph:false` = vistas distintas, solo fundido). `anim.js` normaliza las poses a ángulos
+  y las interpola en vivo (~30-40 fps) con suavizado; mismo esqueleto para todos los ejercicios y para ambos modelos.
+  Para un movimiento nuevo: agrega sus poses en `RIG` (mismo formato que las existentes) y su entrada en `MOVES`.
   El borde de la imagen (`.glow`) se tiñe de azul (inhala) o rojo (exhala) según el fotograma visible.
-- **Modelo masculino**: imágenes en `docs/img/moves/m/<id>-<n>.webp` (mismo número de fotogramas que la versión femenina) y `male: true` en el movimiento.
+- **Modelos**: `settings.model` ('f' | 'm') o `plan.people[i].model` en planes en pareja. `MODELS` en `rig.js` define colores, ropa, pelo y proporciones.
+  Próximo paso visual: "skins" (piezas del cuerpo de ChatGPT pegadas a cada hueso), ver `project/prompts/PROMPTS_v4_body_parts_skin.md`.
   Los planes referencian movimientos por id: **galería y planes están desacoplados**.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
@@ -45,8 +50,8 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
 ## Reglas al cambiar cosas
 
 1. **Nunca romper datos guardados**: si cambias la forma del estado, migra en `store.load()` (no cambies `KEY` sin migración).
-2. Movimiento nuevo: agrega las 2 imágenes (`webp`, ancho ≤ 900 px, fondo blanco) y su entrada en `MOVES`.
-   Luego agrega el id a `MOVE_IDS` en `docs/sw.js` y sube `CACHE_VERSION`.
+2. Movimiento nuevo: poses en `docs/js/rig/poses.js` + entrada en `MOVES`. Sube `CACHE_VERSION` en `docs/sw.js`.
+   Verifica todas las poses con una página de prueba (render de cada pose y del punto medio) en claro, para ambos modelos.
 3. Cambios de UI: respeta `project/DESIGN.md`: un solo color de acento (rosa `#E0457B` / `#FF6E9C` en oscuro),
    fuente del sistema, listas agrupadas, zonas táctiles ≥ 44 px, modo claro/oscuro, `prefers-reduced-motion`.
 4. iOS: el audio solo se activa tras un toque (`unlockAudio()` al iniciar la sesión). El temporizador usa

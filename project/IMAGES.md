@@ -1,4 +1,9 @@
-# Ilustraciones: estilo, estado y flujo de trabajo
+# Ilustraciones
+
+> **Desde v1.2 la app no usa imágenes por ejercicio**: todo se dibuja con el modelo animado de `docs/js/rig/`
+> (mismo personaje para todos los ejercicios, mujer u hombre, con animación fluida). Lo de abajo describe las
+> ilustraciones de ChatGPT, que quedan como referencia de estilo y como fuente para las futuras "skins"
+> (`prompts/PROMPTS_v4_body_parts_skin.md`).
 
 ## Estilo definitivo (generado con ChatGPT)
 Basado en `references/character-sheet.jpg`: la misma mujer (Anita) con piel morena clara, pelo castaño oscuro en coleta alta con una
