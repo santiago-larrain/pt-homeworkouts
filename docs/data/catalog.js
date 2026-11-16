@@ -34,7 +34,8 @@ const img = (id, n) => `img/moves/${id}-${n}.webp`;
 export const MOVES = [
   {
     id: 'cat-cow', name: 'Gato – Camello', category: 'movilidad', equipment: ['mat'],
-    focus: ['Erectores espinales', 'Recto abdominal'], support: ['Glúteo medio', 'Transverso'],
+    group: 'movilidad', met: 2.5, level: 1,
+    focus: ['Erectores espinales', 'Recto abdominal'], support: ['Glúteo medio', 'Transverso abdominal'],
     cue: 'Vértebra por vértebra, lento',
     tips: ['Muñecas bajo los hombros, rodillas bajo las caderas.', 'Camello: el ombligo baja y el pecho avanza; la mirada va al frente.', 'Gato: empuja el suelo y redondea, mentón al pecho.'],
     positions: [
@@ -45,6 +46,7 @@ export const MOVES = [
   },
   {
     id: 'shoulder-circles', name: 'Círculos de hombros', category: 'movilidad', equipment: ['ninguno'],
+    group: 'movilidad', met: 2.5, level: 1,
     focus: ['Trapecio superior', 'Romboides'], support: ['Trapecio medio'],
     cue: 'Círculos lentos hacia atrás',
     tips: ['Sube los hombros hacia las orejas, llévalos atrás y bájalos.', 'No fuerces el rango del hombro sensible.', 'Termina con las escápulas juntas y el pecho abierto.'],
@@ -56,6 +58,7 @@ export const MOVES = [
   },
   {
     id: 'good-morning', name: 'Bisagra de cadera', alias: 'Good Morning sin peso', category: 'movilidad', equipment: ['ninguno'],
+    group: 'gluteos', met: 3.0, level: 1,
     focus: ['Isquiotibiales', 'Glúteo mayor'], support: ['Erectores espinales'],
     cue: 'Cadera atrás, espalda larga',
     tips: ['Manos en la nuca, codos abiertos.', 'Rodillas suaves (≈15°); la cadera viaja hacia atrás.', 'Baja hasta sentir los isquios sin redondear la espalda.'],
@@ -67,7 +70,8 @@ export const MOVES = [
   },
   {
     id: 'glute-bridge-iso', name: 'Puente de glúteos isométrico', category: 'movilidad', equipment: ['mat'],
-    focus: ['Glúteo mayor'], support: ['Isquiotibiales', 'Transverso'],
+    group: 'gluteos', met: 3.0, level: 1,
+    focus: ['Glúteo mayor'], support: ['Isquiotibiales', 'Transverso abdominal'],
     cue: 'Sostén 3 s arriba cada repetición',
     tips: ['Pies al ancho de cadera, talones a un palmo del glúteo.', 'Arriba: hombros, cadera y rodillas en una línea.', 'Aprieta glúteos; no arquees la zona lumbar.'],
     positions: [
@@ -78,6 +82,7 @@ export const MOVES = [
   },
   {
     id: 'goblet-squat', name: 'Sentadilla Goblet', category: 'piernas', equipment: ['mancuernas', 'mini-banda'],
+    group: 'piernas', met: 4.3, level: 2,
     focus: ['Cuádriceps', 'Glúteo mayor'], support: ['Aductores', 'Glúteo medio'],
     cue: 'Rodillas empujan la banda hacia afuera',
     tips: ['Mancuerna vertical pegada al pecho, codos abajo.', 'Cadera atrás y abajo hasta muslos paralelos; talones apoyados.', 'Pecho alto, rodillas en línea con la punta de los pies.'],
@@ -89,6 +94,7 @@ export const MOVES = [
   },
   {
     id: 'b-stance-rdl', name: 'Peso muerto B-Stance', category: 'piernas', equipment: ['mancuernas'],
+    group: 'gluteos', met: 3.8, level: 2,
     focus: ['Isquiotibiales', 'Glúteo mayor'], support: ['Erectores espinales'],
     cue: '80 % del peso en la pierna de adelante',
     tips: ['Pie de atrás solo en punta, a la altura del talón delantero.', 'Rodilla delantera suave; la cadera empuja hacia atrás.', 'Mancuernas pegadas a la pierna, espalda neutra.'],
@@ -101,6 +107,7 @@ export const MOVES = [
   },
   {
     id: 'monster-walk', name: 'Monster Walk lateral', category: 'piernas', equipment: ['mini-banda'],
+    group: 'gluteos', met: 3.8, level: 2,
     focus: ['Glúteo medio'], support: ['Glúteo mayor'],
     cue: 'Media sentadilla; los pies nunca se juntan',
     tips: ['Banda en los tobillos, siempre con tensión.', 'Pasos laterales cortos, puntas al frente.', 'No balancees el tronco.'],
@@ -113,6 +120,7 @@ export const MOVES = [
   },
   {
     id: 'face-pull', name: 'Face-Pull', category: 'torso', equipment: ['banda'],
+    group: 'espalda', met: 3.0, level: 1,
     focus: ['Deltoides posterior', 'Romboides'], support: ['Infraespinoso', 'Trapecio medio'],
     cue: 'Codos altos, junta las escápulas',
     tips: ['Banda anclada a la altura de la cabeza.', 'Termina con las manos junto a las orejas y los antebrazos verticales.', 'Hombros lejos de las orejas.'],
@@ -124,6 +132,7 @@ export const MOVES = [
   },
   {
     id: 'floor-press', name: 'Floor Press', category: 'torso', equipment: ['mancuernas', 'mat'],
+    group: 'pecho', met: 3.5, level: 1,
     focus: ['Pectoral mayor'], support: ['Tríceps', 'Deltoides anterior'],
     cue: 'Codos a 45° del cuerpo',
     tips: ['El tríceps toca el suelo antes de subir: protege el hombro.', 'Empuja sobre el pecho, no sobre la cara.', 'Rodillas dobladas, espalda baja apoyada.'],
@@ -135,6 +144,7 @@ export const MOVES = [
   },
   {
     id: 'band-external-rotation', name: 'Rotación externa', category: 'torso', equipment: ['banda'],
+    group: 'hombros', met: 3.0, level: 1,
     focus: ['Manguito rotador'], support: ['Deltoides posterior'],
     cue: 'Codo pegado a las costillas',
     tips: ['Pon una toalla enrollada entre el codo y las costillas.', 'Movimiento corto y controlado, sin dolor.', 'El codo no se mueve; solo gira el antebrazo.'],
@@ -148,6 +158,7 @@ export const MOVES = [
   },
   {
     id: 'dead-bug', name: 'Dead Bug', alias: 'Bicho muerto', category: 'core', equipment: ['mat'],
+    group: 'core', met: 3.0, level: 1, sided: false, mirror: true,
     focus: ['Transverso abdominal'], support: ['Recto abdominal'],
     cue: 'Zona lumbar 100 % pegada al mat',
     tips: ['Brazos al techo, caderas y rodillas a 90°.', 'Estira brazo y pierna OPUESTOS, cerca del suelo.', 'Si la lumbar se despega, acorta el rango.'],
@@ -160,7 +171,8 @@ export const MOVES = [
   },
   {
     id: 'ring-adductor-lift', name: 'Aro: aductores + torso arriba', category: 'core', equipment: ['aro', 'mat'],
-    focus: ['Aductores', 'Recto abdominal'], support: ['Transverso'],
+    group: 'core', met: 3.5, level: 2,
+    focus: ['Aductores', 'Recto abdominal'], support: ['Transverso abdominal'],
     cue: 'Aprieta firme el aro entre las rodillas',
     tips: ['Posición 1: boca arriba, aprieta y suelta el aro.', 'Posición 2: sube el torso apoyándote en las manos, sin soltar el aro.', 'Cuello largo, hombros relajados.'],
     positions: [
@@ -171,7 +183,8 @@ export const MOVES = [
   },
   {
     id: 'ring-legs-side', name: 'Aro: piernas arriba + lateral', category: 'core', equipment: ['aro', 'mat'],
-    focus: ['Aductores', 'Transverso', 'Glúteo medio'], support: ['Oblicuos'],
+    group: 'core', met: 3.5, level: 2,
+    focus: ['Aductores', 'Transverso abdominal', 'Glúteo medio'], support: ['Oblicuos'],
     cue: 'Aro firme entre los tobillos',
     tips: ['Piernas arriba: torso apenas elevado, brazos largos, respira profundo.', 'De lado: apóyate en el antebrazo y eleva la pierna de arriba.', 'Mantén el abdomen activo todo el tiempo.'],
     positions: [
@@ -183,6 +196,7 @@ export const MOVES = [
   },
   {
     id: 'doorway-pec', name: 'Pectoral en marco de puerta', category: 'elongacion', equipment: ['puerta'],
+    group: 'movilidad', met: 2.3, level: 1,
     focus: ['Pectoral mayor'], support: ['Deltoides anterior'],
     cue: 'Codo a la altura del hombro, sin dolor',
     tips: ['Antebrazo vertical apoyado en el marco.', 'Da un paso adelante hasta sentir el pecho abrirse.', 'Hombro abajo y relajado.'],
@@ -195,7 +209,8 @@ export const MOVES = [
   },
   {
     id: 'child-pose-lateral', name: 'Postura del niño + lateral', category: 'elongacion', equipment: ['mat'],
-    focus: ['Zona lumbar', 'Dorsal ancho'], support: ['Oblicuos'],
+    group: 'movilidad', met: 2.3, level: 1,
+    focus: ['Erectores espinales', 'Dorsal ancho', 'Cuadrado lumbar'], support: ['Oblicuos'],
     cue: 'Cadera hacia los talones',
     tips: ['Frente en el mat, brazos largos adelante.', 'Lateral: camina las manos hacia un lado y respira en las costillas.', 'Suelta la tensión en cada exhalación.'],
     positions: [
@@ -207,6 +222,7 @@ export const MOVES = [
   },
   {
     id: 'kneeling-hip-flexor', name: 'Psoas y cuádriceps', category: 'elongacion', equipment: ['mat'],
+    group: 'movilidad', met: 2.3, level: 1,
     focus: ['Psoas', 'Recto femoral'], support: ['Cuádriceps'],
     cue: 'Pelvis hacia adentro, glúteo apretado',
     tips: ['Rodilla de atrás en el mat, rodilla delantera a 90°.', 'Lleva la cadera un poco adelante sin arquear la espalda.', 'Para más intensidad, toma el pie de atrás.'],
@@ -219,6 +235,7 @@ export const MOVES = [
   },
   {
     id: 'figure-4', name: 'Figura 4', category: 'elongacion', equipment: ['mat'],
+    group: 'movilidad', met: 2.3, level: 1,
     focus: ['Glúteo mayor', 'Piriforme'], support: [],
     cue: 'Tobillo cruzado, pie activo',
     tips: ['Cruza el tobillo sobre la rodilla contraria.', 'Toma el muslo de abajo y acércalo al pecho.', 'Cabeza y hombros relajados en el mat.'],

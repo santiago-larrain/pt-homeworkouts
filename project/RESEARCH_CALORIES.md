@@ -7,15 +7,43 @@ Siempre se muestra como **estimación** ("≈ 120 kcal"), redondeada a múltiplo
 
 | Fuente | Qué se usa | Estado |
 |---|---|---|
-| Ainsworth BE et al. *2011 Compendium of Physical Activities: a second update of codes and MET values.* Med Sci Sports Exerc 2011;43(8):1575-81 | Valores MET por actividad (fuerza, calistenia, yoga/estiramiento, caminata) | Cita **de memoria** (la búsqueda no devolvió las tablas). Los valores de la sección 4 son los que recuerdo del Compendio; verificar en pacompendium.com antes de publicar. |
+| Ainsworth BE et al. *2011 Compendium of Physical Activities: a second update of codes and MET values.* Med Sci Sports Exerc 2011;43(8):1575-81 | Valores MET por actividad (fuerza, calistenia, yoga/estiramiento, caminata) | Cita verificada. **Valores MET verificados por búsqueda web** (ver sección 1b); la tabla original no se pudo abrir desde el entorno de desarrollo (pacompendium.com, cdn-links.lww.com y pmc.ncbi.nlm.nih.gov no resuelven allí), así que lo verificado son extractos de las páginas/PDF oficiales que devolvió el buscador. |
 | Herrmann SD et al. *2024 Adult Compendium of Physical Activities: A third update of the energy costs of human activities.* J Sport Health Sci 2024;13(1):6-12 (doi 10.1016/j.jshs.2023.10.010) | Actualización: 1114 actividades (912 con valores medidos, 202 estimados), 22 categorías, solo adultos de 19-59 años | **Verificado por búsqueda** (existencia, alcance y cifras). Valores individuales de fuerza no verificados. |
 | Byrne NM, Hills AP, Hunter GR, Weinsier RL, Schutz Y. *Metabolic equivalent: one size does not fit all.* J Appl Physiol 2005;99(3):1112-9 | El MET convencional (3,5 ml O2/kg/min = 1 kcal/kg/h) **sobreestima** el gasto en reposo: en promedio ≈35 % en VO2 y ≈20 % en energía (n = 769, 18-74 años); propone corregir con el RMR medido o predicho | **Verificado por búsqueda** |
 | Kozey SL, Lyden K, Howe CA, Staudenmayer JW, Freedson PS. *Errors in MET estimates of physical activities using 3.5 ml/kg/min as the baseline oxygen consumption.* J Phys Act Health 2010 | Misma idea: el error del MET 3,5 depende de la persona (sexo, composición corporal, edad) | **De memoria** (no apareció en la búsqueda) |
-| Mifflin MD et al. *A new predictive equation for resting energy expenditure in healthy individuals.* Am J Clin Nutr 1990;51:241-7 | Ecuación de RMR (498 sujetos sanos, 19-78 años); más exacta que Harris-Benedict original, que sobreestimó ≈5 % en ese estudio | Cita verificada; los coeficientes son de memoria (ver abajo) |
+| Mifflin MD et al. *A new predictive equation for resting energy expenditure in healthy individuals.* Am J Clin Nutr 1990;51:241-7 | Ecuación de RMR (498 sujetos sanos, 19-78 años); más exacta que Harris-Benedict original, que sobreestimó ≈5 % en ese estudio | Cita y coeficientes **verificados** por búsqueda (ver 1b, con 2 ejemplos) |
 | Roza AM, Shizgal HM. *The Harris Benedict equation reevaluated.* Am J Clin Nutr 1984;40:168-82 | Harris-Benedict revisada (alternativa) | De memoria |
 | Literatura de costo energético del entrenamiento de fuerza (p. ej. Ratamess et al., ACSM Position Stand 2009; Scott CB 2006; Vezina 2014) | Los METs de fuerza del Compendio (≈3,5-6,0) son promedios de la sesión incluyendo pausas; el gasto real varía mucho con carga, pausas y masa muscular; el EPOC aporta poco en cargas bajas | De memoria; sin cifras citables verificadas |
 
-Aviso: los coeficientes de Mifflin y Harris-Benedict aparecen con constantes distintas en algunas páginas; los usados abajo son los canónicos que conozco (Mifflin: 10·kg + 6,25·cm − 5·años + 5 hombres / −161 mujeres). Validar con 2-3 casos conocidos al implementarlos.
+Aviso: los coeficientes de Harris-Benedict aparecen con constantes distintas según la versión; Mifflin está confirmado (sección 1b).
+
+### 1b. Verificación (hecha al implementar la fase 4)
+Método: búsqueda web (el entorno no permite abrir pacompendium.com ni los PDF directamente). Los valores salen de los extractos de la página oficial *Conditioning Exercise* y de los PDF del Compendio 2011 y 2024 que devolvió el buscador; donde dos fuentes discrepan, se indica.
+
+| Actividad | Código | 2011 | 2024 | Estado |
+|---|---|---|---|---|
+| Fuerza (pesas), vigoroso | 02050 | 6.0 | 6.0 | Verificado |
+| Fuerza, varios ejercicios, 8-15 rep., resistencia variada (ligera/moderada) | 02054 | 3.5 | 3.5 | Verificado |
+| Fuerza, sentadillas / peso muerto, lento o explosivo | 02052 | 5.0 | 5.0 | Verificado |
+| Ejercicios de peso corporal (sentadilla, zancada, flexión, abdominal) | 02056 | — | 3.0 | Verificado (2024); alta intensidad 02057 = 6.5 |
+| Calistenia, vigorosa | 02020 | 8.0 | 7.5 | Verificado (cambió en 2024) |
+| Calistenia, moderada | 02022 | 3.8 | 3.8 | Verificado |
+| Calistenia, ligera | 02024 | 2.8 | 2.8 | Verificado. **Corrección:** antes se decía "ligera/moderada ≈ 3,8" |
+| Calistenia, ligera o moderada, general | 02030 | 3.5 | 3.5 | Verificado |
+| Circuito, esfuerzo moderado | 02035 | 4.3 | 5.0 | Verificado (cambió en 2024). Circuito con peso corporal: 02032 = 6.0 (2024) |
+| Circuito con kettlebells/aeróbico, mínima pausa | 02040 | 8.0 | — | Verificado (2011) |
+| Ejercicio en casa, general | 02064 | 3.8 | — | Verificado (2011) |
+| Pilates, general | 02105 | 3.0 | ver nota | Verificado 2011. **Corrección de código** (antes 02064). 2024: un resultado menciona 2.8; **no verificado** |
+| Yoga Hatha | 02150 | 2.5 | ver nota | Verificado 2011. 2024: **no verificado** (solo "videos de yoga/estiramiento, ligero" 02140 = 2.5) |
+| Estiramiento suave | 02101 | 2.3 | ver nota | Verificado 2011. 2024: **no verificado** |
+| Sentado en reposo / TV | 07021 / 07020 | 1.3 | 1.0 | Verificado, con discrepancia entre ediciones (1.3 en 2011, 1.0 en la web 2024) |
+
+Consecuencias para la app: los `met` por movimiento de la sección 3 son **interpolaciones** entre estas anclas (fuerza 3,5-6,0; calistenia 2,8-3,8; estiramiento 2,3; yoga 2,5), no valores medidos por movimiento. El descanso se mantiene en 1,5 (heurística propia, algo por encima del 1,0-1,3 del Compendio por la recuperación entre series). Con 2011 y 2024 distintos, se usó el valor de 2011 salvo donde el 2024 está verificado.
+
+**Mifflin-St Jeor verificado** (Mifflin et al., Am J Clin Nutr 1990;51:241-7): RMR = 10·kg + 6,25·cm − 5·edad + 5 (hombres) o − 161 (mujeres). Ejemplos calculados a mano:
+1. Mujer 60 kg, 160 cm, 30 años: 600 + 1000 − 150 − 161 = **1289 kcal/día** → k = 1289 / (25,2 · 60) = 0,853.
+2. Hombre 75 kg, 172 cm, 30 años: 750 + 1075 − 150 + 5 = **1680 kcal/día** → k = 1680 / (25,2 · 75) = 0,889.
+(Con los valores por defecto: mujer 62 kg/160 cm/30 → 1309 → k = 0,838; hombre → 0,889, coherente con la sección 2.6.)
 
 ## 2. Fórmulas
 
@@ -95,7 +123,7 @@ function kcalSession(profile, steps) {      // steps: [{secs, kind:'work'|'rest'
 Planes en pareja: cada perfil usa su propio peso y su propio movimiento (`b.move`) con el mismo tiempo.
 
 ## 3. Tabla de METs por tipo de ejercicio (campo `met`)
-Los METs "de esfuerzo" abajo son lo que se guarda en `met` (sin descanso). Referencias del Compendio de memoria: *resistance training* ligero/moderado ≈ 3,5 y vigoroso ≈ 6,0; *calisthenics* ligero/moderado ≈ 3,8 y vigoroso ≈ 8,0; *circuit training* moderado ≈ 4,3; *Pilates* ≈ 3,0; *yoga hatha* ≈ 2,5; *stretching* ≈ 2,3; sentado/de pie quieto ≈ 1,3.
+Los METs "de esfuerzo" abajo son lo que se guarda en `met` (sin descanso). Anclas del Compendio (verificadas, sección 1b): *resistance training* ligero/moderado 3,5 y vigoroso 6,0; *calisthenics* ligera 2,8, moderada 3,8, vigorosa 8,0 (2011) / 7,5 (2024); *circuit training* moderado 4,3 (2011) / 5,0 (2024); *Pilates* 3,0 (2011); *yoga hatha* 2,5 (2011); *stretching* suave 2,3 (2011); sentado quieto 1,3 (2011) / 1,0 (2024).
 
 | Nivel de esfuerzo | `met` | Tipo de ejercicio (ejemplos del catálogo) |
 |---|---|---|
