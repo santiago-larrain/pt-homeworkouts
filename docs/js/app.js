@@ -6,7 +6,8 @@ import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './
 import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
 import { FrameAnimator, hasFrames, frameURL, posFrame } from './frames.js';
-import { sessionKcal, kcalText, DEFAULTS as KCAL_DEFAULTS } from './calories.js';
+import { sessionKcal, kcalText } from './calories.js';
+import { entriesOf, localISO, streakWeeks as streakWeeksOf } from './progress.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -30,7 +31,7 @@ const TABS = [
   { id: 'settings', name: 'Ajustes', icon: I.gear, root: 'settings' },
 ];
 const nav = { tab: 'train', stacks: Object.fromEntries(TABS.map(t => [t.id, [{ v: t.root }]])) };
-const ui = { q: '', f: { g: [], e: [], l: [] }, editing: {}, cal: null, moveShow: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
+const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [] }, editing: {}, cal: null, moveShow: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
 let anim = null;
 
 const top = () => nav.stacks[nav.tab][nav.stacks[nav.tab].length - 1];
@@ -86,7 +87,12 @@ const kcalChip = r => `<span class="mchip" title="Estimación">${I.flame}${kcalT
 const today = () => new Date();
 const EQ = { silla: 'Silla', kettlebell: 'Kettlebell', ...EQUIPMENT };
 const equipOf = p => [...new Set(p.sections.flatMap(sec => sec.items.flatMap(it => [it.move, it.b && it.b.move]))).values()].filter(Boolean).flatMap(id => (MOVE_BY_ID[id] || { equipment: [] }).equipment).filter(e => e !== 'ninguno').filter((e, i, a) => a.indexOf(e) === i).map(e => EQ[e] || e);
-const weekSessions = () => { const ws = weekStart(today()); return S().history.filter(h => new Date(h.date) >= ws); };
+const firstPid = () => S().profiles[0].id;
+const profEntries = pid => entriesOf(S().history, pid, firstPid());
+const weekSessions = (pid = S().activeProfile) => { const ws = weekStart(today()); return profEntries(pid).filter(h => new Date(h.date) >= ws); };
+const histPid = () => (S().profiles.some(p => p.id === ui.histPid) ? ui.histPid : S().activeProfile);
+const fmt1 = n => (+n).toLocaleString('es', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const dShort = (iso, y = false) => new Date(iso + 'T12:00:00').toLocaleDateString('es', { day: 'numeric', month: 'short', ...(y ? { year: 'numeric' } : {}) });
 const dayKey = d => { const x = new Date(d); return `${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`; };
 const weekStart = d => { const x = new Date(d); const wd = (x.getDay() + 6) % 7; x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - wd); return x; };
 
@@ -259,22 +265,11 @@ const VIEWS = {
   },
 
   history() {
-    const h = [...S().history].sort((a, b) => new Date(b.date) - new Date(a.date));
-    const now = today();
-    const month = h.filter(x => { const d = new Date(x.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
-    const mins = Math.round(h.reduce((a, x) => a + (x.secs || 0), 0) / 60);
-    if (!ui.cal) ui.cal = { y: now.getFullYear(), m: now.getMonth() };
-    let html = `<div class="stats"><div><b>${h.length}</b><span>Sesiones</span></div><div><b>${month.length}</b><span>Este mes</span></div><div><b>${mins}</b><span>Minutos</span></div><div><b>${streakWeeks()}</b><span>Semanas seguidas</span></div></div>`;
-    html += calendarHTML();
-    if (!h.length) html += `<div class="emptystate"><img src="img/cover.webp" alt=""><p><b>Aún no hay sesiones</b></p><p class="muted">Cuando termines un entrenamiento aparecerá aquí.</p></div>`;
-    else {
-      const byMonth = {};
-      h.forEach(x => { const k = new Date(x.date).toLocaleDateString('es', { month: 'long', year: 'numeric' }); (byMonth[k] = byMonth[k] || []).push(x); });
-      Object.entries(byMonth).forEach(([k, xs]) => {
-        html += group(xs.map(x => row({ icon: `<span class="mood">${x.mood || '✓'}</span>`, title: esc(x.planName), sub: `${new Date(x.date).toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })} · ${fmtMin(x.secs)}${x.people ? ' · ' + esc(x.people.join(' + ')) : ''}${x.partial ? ' · parcial' : ''}`, chev: true, a: 'openSession', data: `data-id="${x.id}"` })), { header: k });
-      });
-    }
-    return { title: 'Historial', large: true, html };
+    const pid = histPid(), pr = store.profile(pid), body = ui.histTab === 'body';
+    const many = S().profiles.length > 1;
+    let html = `<div class="histctl">${seg('histTab', '', [['act', 'Actividad'], ['body', 'Cuerpo']], ui.histTab)}${many ? seg('histProf', '', S().profiles.map(x => [x.id, esc(x.name)]), pid) : ''}</div>`;
+    html += body ? bodyHTML(pr) : activityHTML(pr);
+    return { title: 'Historial', large: true, html, right: body ? `<button class="navbtn strong" data-a="bodyAdd" data-id="${pid}">Registrar</button>` : '' };
   },
 
   settings() {
@@ -414,24 +409,101 @@ function secSub(sec) {
   return sec.kind === 'circuit' ? `Circuito · ${sec.rounds} rondas · ${n} ej.${rest ? ` · descanso ${rest} s` : ''}` : `Secuencia · ${n} ejercicios`;
 }
 
+function activityHTML(pr) {
+  const h = [...profEntries(pr.id)].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const now = today();
+  const month = h.filter(x => { const d = new Date(x.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+  const mins = Math.round(h.reduce((a, x) => a + (x.secs || 0), 0) / 60);
+  if (!ui.cal) ui.cal = { y: now.getFullYear(), m: now.getMonth() };
+  let html = `<div class="stats"><div><b>${h.length}</b><span>Sesiones</span></div><div><b>${month.length}</b><span>Este mes</span></div><div><b>${mins}</b><span>Minutos</span></div><div><b>${streakWeeks(pr.id)}</b><span>Semanas seguidas</span></div></div>`;
+  html += calendarHTML(h);
+  if (!h.length) return html + `<div class="emptystate"><img src="img/cover.webp" alt=""><p><b>Aún no hay sesiones</b></p><p class="muted">Cuando termines un entrenamiento aparecerá aquí.</p></div>`;
+  const byMonth = {};
+  h.forEach(x => { const k = new Date(x.date).toLocaleDateString('es', { month: 'long', year: 'numeric' }); (byMonth[k] = byMonth[k] || []).push(x); });
+  Object.entries(byMonth).forEach(([k, xs]) => {
+    html += group(xs.map(x => { const kc = kcalText(x.kcal && x.kcal[pr.id]); return row({ icon: `<span class="mood">${x.mood || '✓'}</span>`, title: esc(x.planName), sub: `${new Date(x.date).toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })} · ${fmtMin(x.secs)}${kc ? ' · ' + kc : ''}${x.people ? ' · ' + esc(x.people.join(' + ')) : ''}${x.partial ? ' · parcial' : ''}`, chev: true, a: 'openSession', data: `data-id="${x.id}"` }); }), { header: k });
+  });
+  return html;
+}
+
+// ── Cuerpo: peso con fecha (y estatura opcional), gráfico, IMC discreto y totales
+const wlog = pr => [...(pr.weights || [])].filter(w => w && w.kg > 0 && w.date).sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+function totalsOf(pid) {
+  const ws = weekStart(today()), now = today(), all = profEntries(pid);
+  const sum = es => ({ n: es.length, mins: Math.round(es.reduce((a, x) => a + (x.secs || 0), 0) / 60), kcal: es.reduce((a, x) => a + ((x.kcal && x.kcal[pid]) || 0), 0), hasK: es.some(x => x.kcal && x.kcal[pid] != null) });
+  return { week: sum(all.filter(x => new Date(x.date) >= ws)), month: sum(all.filter(x => { const d = new Date(x.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); })) };
+}
+function weightChart(ws) {
+  const W = 340, H = 196, L = 40, R = 16, T = 22, B = 30, pw = W - L - R, ph = H - T - B;
+  const ts = ws.map(w => new Date(w.date + 'T12:00:00').getTime()), vs = ws.map(w => w.kg);
+  let t0 = Math.min(...ts), t1 = Math.max(...ts);
+  if (t1 - t0 < 6 * 864e5) { const mid = (t0 + t1) / 2; t0 = mid - 3.5 * 864e5; t1 = mid + 3.5 * 864e5; } // pocos días: la línea no se aprieta
+  let lo = Math.min(...vs), hi = Math.max(...vs);
+  const span = Math.max(hi - lo, 2), pad = span * 0.25, mid = (hi + lo) / 2;
+  lo = mid - span / 2 - pad; hi = mid + span / 2 + pad;
+  const step = [0.5, 1, 2, 5, 10, 20].find(s => (hi - lo) / s <= 4) || 20;
+  const yMin = Math.floor(lo / step) * step, yMax = Math.ceil(hi / step) * step;
+  const X = ts_ => L + (ts_ - t0) / (t1 - t0) * pw, Y = v => T + (1 - (v - yMin) / (yMax - yMin)) * ph;
+  const grid = []; for (let v = yMin; v <= yMax + 1e-9; v += step) grid.push(v);
+  const pts = ws.map((w, i) => [X(ts[i]), Y(w.kg)]);
+  const line = pts.map((q, i) => `${i ? 'L' : 'M'}${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join('');
+  const area = pts.length > 1 ? `${line}L${pts[pts.length - 1][0].toFixed(1)} ${T + ph}L${pts[0][0].toFixed(1)} ${T + ph}Z` : '';
+  const many = ws.length > 30, last = pts[pts.length - 1];
+  const yr = (t1 - t0) > 300 * 864e5, lab = iso => yr ? new Date(iso + 'T12:00:00').toLocaleDateString('es', { month: 'short', year: '2-digit' }) : dShort(iso);
+  const midI = ws.length > 2 ? ts.reduce((bi, v, i) => Math.abs(v - (t0 + t1) / 2) < Math.abs(ts[bi] - (t0 + t1) / 2) ? i : bi, 0) : -1;
+  const midOk = midI > 0 && midI < ws.length - 1 && Math.abs(X(ts[midI]) - X(ts[0])) > 85 && Math.abs(X(ts[ws.length - 1]) - X(ts[midI])) > 85;
+  const xs = ws.length === 1 ? [[0]] : [[0], ...(midOk ? [[midI]] : []), [ws.length - 1]];
+  const lastX = Math.min(Math.max(last[0], L + 18), W - R - 18);
+  return `<svg class="wchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de peso: ${ws.length} ${ws.length === 1 ? 'registro' : 'registros'}, el último ${fmt1(vs[vs.length - 1])} kg">
+    <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
+    ${grid.map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="wgrid"/><text x="${L - 6}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end" class="wtxt">${step < 1 ? fmt1(v) : v}</text>`).join('')}
+    ${area ? `<path d="${area}" fill="url(#wg)"/>` : ''}
+    ${pts.length > 1 ? `<path d="${line}" class="wline"/>` : ''}
+    ${(many ? [last] : pts).map(q => `<circle cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="3.5" class="wdot"/>`).join('')}
+    <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="6" class="wlast"/>
+    <text x="${lastX.toFixed(1)}" y="${(last[1] - 12).toFixed(1)}" text-anchor="middle" class="wval">${fmt1(vs[vs.length - 1])}</text>
+    ${xs.map(([i]) => { const x = ws.length === 1 ? L + pw / 2 : pts[i][0], an = ws.length === 1 ? 'middle' : x < L + 34 ? 'start' : x > W - R - 34 ? 'end' : 'middle'; return `<text x="${(an === 'start' ? Math.max(x, L) : an === 'end' ? Math.min(x, W - R) : x).toFixed(1)}" y="${H - 8}" text-anchor="${an}" class="wtxt">${lab(ws[i].date)}</text>`; }).join('')}
+  </svg>`;
+}
+function bodyHTML(pr) {
+  const ws = wlog(pr), tot = totalsOf(pr.id), cm = pr.heightCm, many = S().profiles.length > 1;
+  let html = '';
+  if (!ws.length) {
+    html += `<div class="card bodycard empty"><p><b>Peso y medidas</b></p><p class="muted">Es opcional. Si quieres, registra tu peso para ver su evolución y afinar las calorías estimadas.</p><button class="btn tinted" data-a="bodyAdd" data-id="${pr.id}">${I.plus}Registrar peso</button></div>`;
+  } else {
+    const last = ws[ws.length - 1], first = ws[0], d = last.kg - first.kg;
+    const delta = ws.length > 1 ? `${d > 0 ? '+' : d < 0 ? '−' : ''}${fmt1(Math.abs(d))} kg desde el ${dShort(first.date, true)}` : `Registrado el ${dShort(last.date, true)}`;
+    html += `<div class="card bodycard"><div class="bc-top"><div><p class="bc-k">Peso</p><p class="bc-v"><b>${fmt1(last.kg)}</b> kg</p></div><p class="bc-d">${delta}</p></div>${weightChart(ws)}</div>`;
+    if (cm) { const bmi = last.kg / ((cm / 100) ** 2); html += group([row({ title: 'IMC', sub: 'Referencia general; no distingue músculo de grasa.', right: `<span class="muted">${fmt1(bmi)}</span>` })]); }
+  }
+  const T = x => `${x.n} ${x.n === 1 ? 'sesión' : 'sesiones'} · ${x.mins} min · ${x.hasK ? kcalText(x.kcal) || '—' : '—'}`;
+  html += group([row({ title: 'Esta semana', right: `<span class="muted">${T(tot.week)}</span>`, cls: 'tall' }), row({ title: 'Este mes', right: `<span class="muted">${T(tot.month)}</span>`, cls: 'tall' })], { header: `Totales${many ? ' · ' + esc(pr.name) : ''}`, footer: 'Las calorías son una estimación y suman solo las sesiones que las registraron.' });
+  if (ws.length) html += group([...ws.slice().reverse().map(w => row({ title: `${fmt1(w.kg)} kg`, sub: dShort(w.date, true) + (w.cm ? ` · ${w.cm} cm` : ''), chev: true, a: 'bodyEdit', data: `data-id="${pr.id}" data-date="${w.date}"` }))], { header: 'Registros' });
+  return html;
+}
+function bodySheetHTML() {
+  const d = ui.bodyDraft, pr = store.profile(d.pid), edit = !!d.orig;
+  return `<div class="sheet-head"><button class="navbtn" data-a="closeSheet">Cancelar</button><h2>${edit ? 'Editar registro' : 'Nuevo registro'}</h2><button class="navbtn strong" data-a="bodySave">Guardar</button></div><div class="sheet-body">
+    ${group([row({ title: 'Fecha', right: `<input class="inline short" type="date" data-in="bodyDraft" data-k="date" value="${esc(d.date)}" max="${todayISO()}">` }),
+      row({ title: 'Peso (kg)', right: `<input class="inline short" type="number" inputmode="decimal" step="0.1" min="20" max="400" data-in="bodyDraft" data-k="kg" value="${esc(d.kg)}" placeholder="Ej. 62,5">` }),
+      row({ title: 'Estatura (cm)', sub: 'Opcional', right: `<input class="inline short" type="number" inputmode="decimal" min="80" max="250" data-in="bodyDraft" data-k="cm" value="${esc(d.cm)}" placeholder="Opcional">` })], { footer: `Para ${esc(pr.name)}. Se usa solo en este teléfono y para afinar las calorías estimadas.` })}
+    ${d.err ? `<p class="gf err">${esc(d.err)}</p>` : ''}
+    ${edit ? group([row({ title: '<span class="danger">Eliminar registro</span>', a: 'bodyDel' })]) : ''}</div>`;
+}
+
 function ringSvg(frac, size = 54, w = 6) {
   const r = (size - w) / 2, c = 2 * Math.PI * r;
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" class="ring-bg" stroke-width="${w}" fill="none"/><circle cx="${size / 2}" cy="${size / 2}" r="${r}" class="ring-fg" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - frac)}" transform="rotate(-90 ${size / 2} ${size / 2})"/></svg>`;
 }
 
-function streakWeeks() {
-  const h = S().history; if (!h.length) return 0;
-  const weeks = new Set(h.map(x => weekStart(x.date).getTime()));
-  const w = weekStart(today()); if (!weeks.has(w.getTime())) w.setDate(w.getDate() - 7);
-  let n = 0; while (weeks.has(w.getTime())) { n++; w.setDate(w.getDate() - 7); }
-  return n;
-}
+function streakWeeks(pid) { return streakWeeksOf(profEntries(pid), goalOf(pid)); }
+const goalOf = pid => Math.min(7, Math.max(1, store.profile(pid).weeklyGoal || set().weeklyGoal || 3));
 
-function calendarHTML() {
+function calendarHTML(entries) {
   const { y, m } = ui.cal;
   const first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
   const off = (first.getDay() + 6) % 7;
-  const done = new Set(S().history.map(x => dayKey(x.date)));
+  const done = new Set(entries.map(x => dayKey(x.date)));
   const tk = dayKey(today());
   let cells = '';
   for (let i = 0; i < off; i++) cells += '<span></span>';
@@ -517,6 +589,7 @@ function profileSheetHTML(id) {
       row({ title: 'Estatura (cm)', right: `<input class="inline short" type="number" inputmode="decimal" data-in="profNum" data-k="heightCm" ${base} value="${pr.heightCm ?? ''}" placeholder="Opcional" min="80" max="250">` }),
       row({ title: 'Peso actual (kg)', right: `<input class="inline short" type="number" inputmode="decimal" step="0.1" data-in="profWeight" ${base} value="${last}" placeholder="Opcional" min="20" max="400">` })],
       { header: 'Datos corporales', footer: 'Opcionales. Al cambiar el peso se guarda con la fecha de hoy.' })}
+    ${group([row({ title: 'Peso y medidas', sub: 'Registros, gráfico y totales', a: 'openBody', data: base, chev: true })])}
     ${group([row({ title: 'Mancuernas', right: stepper('profStep', `${base} data-k="dumbbellKg" data-st="0.5" data-max="40"`, kg(L.dumbbellKg)) }),
       row({ title: 'Kettlebell', right: stepper('profStep', `${base} data-k="kettlebellKg" data-st="1" data-max="48"`, kg(L.kettlebellKg)) }),
       row({ title: 'Banda de brazos', right: seg('profLevel', `${base} data-k="band"`, LEVEL, L.band) }),
@@ -563,6 +636,28 @@ const A = {
   calMove: el => { let { y, m } = ui.cal; m += +el.dataset.d; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.cal = { y, m }; render(); },
   showPos: el => { stopAnim(); ui.moveShow[el.dataset.id] = +el.dataset.v; render(); },
   animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); } else { stopAnim(); anim = { id }; } render(); },
+  histTab: el => { ui.histTab = el.dataset.v; render(); },
+  histProf: el => { ui.histPid = el.dataset.v; render(); },
+  bodyAdd: el => { ui.bodyDraft = { pid: el.dataset.id || histPid(), orig: null, date: todayISO(), kg: '', cm: '' }; openSheet(bodySheetHTML(), { cls: 'tall' }); },
+  bodyEdit: el => { const pr = store.profile(el.dataset.id), w = (pr.weights || []).find(x => x.date === el.dataset.date); if (!w) return; ui.bodyDraft = { pid: pr.id, orig: w.date, date: w.date, kg: String(w.kg), cm: w.cm ? String(w.cm) : '' }; openSheet(bodySheetHTML(), { cls: 'tall' }); },
+  bodySave: () => {
+    const d = ui.bodyDraft, pr = store.profile(d.pid), kg = Math.round(parseFloat(String(d.kg).replace(',', '.')) * 10) / 10, cm = parseFloat(String(d.cm).replace(',', '.'));
+    const bad = m => { d.err = m; refreshSheet(bodySheetHTML()); };
+    if (!(kg >= 20 && kg <= 400)) return bad('Escribe un peso entre 20 y 400 kg.');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date) || d.date > todayISO()) return bad('Elige una fecha válida (hoy o antes).');
+    if (d.cm !== '' && !(cm >= 80 && cm <= 250)) return bad('La estatura debe estar entre 80 y 250 cm.');
+    pr.weights = (pr.weights || []).filter(w => w.date !== d.orig && w.date !== d.date);
+    pr.weights.push({ date: d.date, kg, ...(cm > 0 ? { cm: Math.round(cm * 10) / 10 } : {}) });
+    pr.weights.sort((a, b) => a.date < b.date ? -1 : 1);
+    const lastCm = [...pr.weights].reverse().find(w => w.cm); if (lastCm) pr.heightCm = lastCm.cm;
+    store.save(); ui.bodyDraft = null; closeSheet(); render(); toast('Registro guardado');
+  },
+  bodyDel: () => {
+    const d = ui.bodyDraft, pr = store.profile(d.pid), removed = pr.weights.find(w => w.date === d.orig); if (!removed) return;
+    pr.weights = pr.weights.filter(w => w !== removed); store.save(); ui.bodyDraft = null; closeSheet(); render();
+    undoToast('Registro eliminado', () => { pr.weights.push(removed); pr.weights.sort((a, b) => a.date < b.date ? -1 : 1); store.save(); render(); });
+  },
+  openBody: el => { closeSheet(); ui.histTab = 'body'; ui.histPid = el.dataset.id; nav.tab = 'history'; nav.stacks.history = nav.stacks.history.slice(0, 1); render(); },
   kcalInfo: () => openSheet(kcalInfoHTML()),
   kcalSettings: () => { closeSheet(); if (P.steps) return; nav.tab = 'settings'; nav.stacks.settings = nav.stacks.settings.slice(0, 1); render(); setTimeout(() => { const g = document.getElementById('kcalGroup'); if (g) g.scrollIntoView({ block: 'center' }); }, 60); },
   muscleMap: () => openSheet(`<div class="sheet-head"><span></span><h2>Músculos</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body"><img class="musclemap" src="img/muscle-map.webp" alt="Mapa de músculos de frente y de espalda"><p class="gf">En cada ejercicio, el <b>naranja</b> marca el músculo que debes sentir trabajar y el <b>amarillo</b> el de apoyo.</p></div>`),
@@ -719,6 +814,7 @@ const INPUT = {
   pickerSearch: el => { picker.q = el.value; $('#pickList').innerHTML = pickerList(); },
   profName: el => { profOf(el.dataset.id).name = el.value.trim() || 'Perfil'; store.save(); },
   profNum: el => { const pr = profOf(el.dataset.id), v = parseFloat(el.value); if (v > 0) pr[el.dataset.k] = el.dataset.k === 'birthYear' ? Math.round(v) : v; else delete pr[el.dataset.k]; store.save(); },
+  bodyDraft: el => { ui.bodyDraft[el.dataset.k] = el.value; if (ui.bodyDraft.err) { ui.bodyDraft.err = ''; const e = $('#sheet-layer .gf.err'); if (e) e.remove(); } },
   profWeight: el => { // agrega el peso con la fecha de hoy (reemplaza el de hoy si ya existía)
     const pr = profOf(el.dataset.id), v = Math.round(parseFloat(el.value) * 10) / 10, d = todayISO();
     pr.weights = pr.weights.filter(w => w.date !== d);
