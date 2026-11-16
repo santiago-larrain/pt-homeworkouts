@@ -178,29 +178,37 @@ const VIEWS = {
     const p = store.plan(t.id);
     if (!p) return { title: 'Plan', html: '<p class="empty">Este plan ya no existe.</p>' };
     const editing = !!ui.editing[p.id], duo = isDuo(p), pp = people(p);
-    const right = `<button class="navbtn strong" data-a="toggleEdit" data-id="${p.id}">${editing ? 'OK' : 'Editar'}</button>`;
-    let html = `<div class="plan-head"><h1>${esc(p.name)}</h1>${duo ? `<p class="muted">${I.figure} ${esc(pp[0].name)} + ${esc(pp[1].name)}</p>` : (p.subtitle ? `<p class="muted">${esc(p.subtitle)}</p>` : '')}
+    const right = `<button class="navbtn strong" data-a="toggleEdit" data-id="${p.id}">${editing ? 'Listo' : 'Editar'}</button>`;
+    let html;
+    if (editing) {
+      html = `<div class="plan-head edit-head"><input class="t" data-in="planName" data-p="${p.id}" value="${esc(p.name)}" placeholder="Nombre del plan" maxlength="40" aria-label="Nombre del plan" autocomplete="off"><input class="s" data-in="planSub" data-p="${p.id}" value="${esc(p.subtitle || '')}" placeholder="Descripción (opcional)" maxlength="60" aria-label="Descripción" autocomplete="off"></div>`;
+    } else {
+      html = `<div class="plan-head"><h1>${esc(p.name)}</h1>${duo ? `<p class="muted">${I.figure} ${esc(pp[0].name)} + ${esc(pp[1].name)}</p>` : (p.subtitle ? `<p class="muted">${esc(p.subtitle)}</p>` : '')}
       <div class="meta"><span>${I.clock}${planMins(p)}</span>${p.frequency ? `<span>${I.calendar}${esc(p.frequency)}</span>` : ''}${duo ? '<span class="pill">En pareja</span>' : ''}</div>
-      <div class="btnrow"><button class="btn primary" data-a="start" data-id="${p.id}">${I.play}Comenzar</button><button class="btn tinted icon" data-a="planMenu" data-id="${p.id}" aria-label="Más opciones">${I.more}</button></div>
+      <div class="btnrow"><button class="btn primary cta" data-a="start" data-id="${p.id}">${I.play}Comenzar</button><button class="btn tinted icon" data-a="planMenu" data-id="${p.id}" aria-label="Más opciones" style="min-height:60px;border-radius:20px">${I.more}</button></div>
       ${p.goal ? `<p class="goal">${esc(p.goal)}</p>` : ''}</div>`;
+    }
     p.sections.forEach((sec, si) => {
-      const head = `<span class="gh-row"><span class="badge sm">${BADGE[si] || si + 1}</span><span class="gh-name">${esc(sec.name)}</span><span class="gh-meta">${secSub(sec)}</span>${editing ? `<button class="mini" data-a="editSection" data-p="${p.id}" data-s="${si}" aria-label="Editar bloque">${I.pencil}</button>` : `<button class="mini" data-a="startSection" data-p="${p.id}" data-s="${si}" aria-label="Comenzar solo este bloque">${I.play}</button>`}</span>`;
-      const rows = sec.items.map((it, ii) => {
-        const m = MOVE_BY_ID[it.move]; if (!m) return '';
+      const head = `<span class="gh-row"><span class="badge sm">${BADGE[si] || si + 1}</span><span class="gh-name">${esc(sec.name)}</span><span class="gh-meta">${secShort(sec)}</span>${editing ? '' : `<button class="mini" data-a="startSection" data-p="${p.id}" data-s="${si}" aria-label="Comenzar solo este bloque">${I.play}</button>`}</span>`;
+      const rows = [];
+      if (editing) rows.push(row({ icon: `<span class="ri-plus">${I.gear}</span>`, title: 'Bloque, rondas y descanso', sub: esc(secSub(sec)), a: 'editSection', data: `data-p="${p.id}" data-s="${si}"`, chev: true }));
+      sec.items.forEach((it, ii) => {
+        const m = MOVE_BY_ID[it.move]; if (!m) return;
         const mb = duo && it.b ? MOVE_BY_ID[it.b.move] : null;
         const d = doseOf(it);
         const icon = duo && mb ? `<span class="duo-th">${thumb(m, 1, pp[0].model)}${thumb(mb, 1, pp[1].model)}</span>` : thumb(m);
         const title = duo && mb ? (mb.id === m.id ? esc(m.name) : `${esc(m.name)} <span class="muted">/</span> ${esc(mb.name)}`) : esc(m.name);
-        const sub = duo && mb ? `${esc(pp[0].name)}: ${esc(doseText(d))} · ${esc(pp[1].name)}: ${esc(doseText(doseOf(it.b)))}` : esc(doseText(d)) + (d.note ? ` · ${esc(d.note)}` : '');
+        const dtxt = esc(doseText(d)), sub = duo && mb ? `${esc(pp[0].name)}: ${dtxt} · ${esc(pp[1].name)}: ${esc(doseText(doseOf(it.b)))}` : (d.note ? esc(d.note) : '');
         const base = `data-p="${p.id}" data-s="${si}" data-i="${ii}"`;
-        if (editing) return `<div class="row edit ${duo ? 'duorow' : ''}"><button class="del" data-a="delItem" ${base} aria-label="Quitar">${I.minusCircle}</button>${icon}<button class="rt plain" data-a="editItem" ${base}><span class="rtt">${title}</span><span class="rts accent">${sub} · editar</span></button><span class="reorder"><button data-a="moveItem" ${base} data-d="-1" ${ii === 0 ? 'disabled' : ''} aria-label="Subir">${I.up}</button><button data-a="moveItem" ${base} data-d="1" ${ii === sec.items.length - 1 ? 'disabled' : ''} aria-label="Bajar">${I.down}</button></span></div>`;
-        return row({ icon, title: `${sec.kind === 'circuit' && BADGE[si] !== 'A' ? `<span class="ord">${BADGE[si]}.${ii + 1}</span>` : ''}${title}`, sub, chev: true, a: duo ? 'editItem' : 'openMove', data: duo ? base : `data-id="${m.id}"`, cls: 'withthumb' + (duo ? ' duorow' : '') });
+        if (editing) rows.push(`<div class="row edit withthumb ${duo ? 'duorow' : ''}"><button class="del" data-a="delItem" ${base} aria-label="Quitar">${I.minusCircle}</button>${icon}<button class="rt plain" data-a="editItem" ${base}><span class="rtt">${title}</span><span class="rts accent">${duo && mb ? sub : dtxt}${!duo && d.note ? ' · ' + esc(d.note) : ''}</span></button><span class="reorder"><button data-a="moveItem" ${base} data-d="-1" ${ii === 0 ? 'disabled' : ''} aria-label="Subir">${I.up}</button><button data-a="moveItem" ${base} data-d="1" ${ii === sec.items.length - 1 ? 'disabled' : ''} aria-label="Bajar">${I.down}</button></span></div>`);
+        else rows.push(row({ icon, title: `${sec.kind === 'circuit' && BADGE[si] !== 'A' ? `<span class="ord">${BADGE[si]}.${ii + 1}</span>` : ''}${title}`, sub: duo && mb ? sub : sub, right: duo && mb ? '' : `<span class="dose">${dtxt}</span>`, chev: true, a: duo ? 'editItem' : 'openMove', data: duo ? base : `data-id="${m.id}"`, cls: 'withthumb' + (duo ? ' duorow' : '') }));
       });
-      if (editing) rows.push(row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir movimientos</span>', a: 'addMoves', data: `data-p="${p.id}" data-s="${si}"` }));
+      if (editing) rows.push(row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir movimiento</span>', a: 'addMoves', data: `data-p="${p.id}" data-s="${si}"` }));
       if (!sec.items.length && !editing) rows.push(row({ title: '<span class="muted">Sin movimientos</span>' }));
       html += group(rows, { header: head, footer: !editing && sec.note ? esc(sec.note) : '' });
     });
     if (editing) html += group([row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir bloque</span>', a: 'addSection', data: `data-p="${p.id}"` })]);
+    if (editing) html += `<p class="gf center">Toca un ejercicio para cambiar su dosis. Usa las flechas para ordenar.</p>`;
     return { title: p.name, backLabel: 'Entrenar', right, html };
   },
 
@@ -345,6 +353,7 @@ function catalogList() {
     ${list.length ? `<p class="gf center">${list.length} movimientos</p>` : '<p class="empty">Sin resultados</p>'}`;
 }
 
+const secShort = sec => sec.kind === 'circuit' ? `${sec.rounds} ${sec.rounds === 1 ? 'ronda' : 'rondas'} · ${sec.items.length} ej.` : `Secuencia · ${sec.items.length} ej.`;
 function secSub(sec) {
   const n = sec.items.length, rest = set().roundRest || sec.rest;
   return sec.kind === 'circuit' ? `Circuito · ${sec.rounds} rondas · ${n} ej.${rest ? ` · descanso ${rest} s` : ''}` : `Secuencia · ${n} ejercicios`;
@@ -492,7 +501,6 @@ const A = {
     const acts = [];
     if (s.activePlanId !== p.id) acts.push({ label: 'Sugerir en Entrenar', fn: () => { s.activePlanId = p.id; planSave(); toast('Aparecerá en Entrenar'); } });
     if (isDuo(p)) acts.push({ label: 'Participantes', fn: () => openSheet(peopleSheetHTML(p.id), { onClose: render }) });
-    acts.push({ label: 'Renombrar', fn: () => { const n = prompt('Nombre del plan', p.name); if (n && n.trim()) { p.name = n.trim(); planSave(); } } });
     acts.push({ label: 'Duplicar', fn: () => { const c = clone(p); c.id = uid(); c.name = p.name + ' (copia)'; c.builtin = false; s.plans.push(c); store.save(); push('plan', { id: c.id }); toast('Plan duplicado'); } });
     if (!isDuo(p)) acts.push({ label: 'Crear versión en pareja', fn: () => { const c = toDuo(p); s.plans.push(c); store.save(); push('plan', { id: c.id }); toast('Plan en pareja creado'); } });
     if (store.isBuiltin(p.id)) acts.push({ label: 'Restaurar plan original', destructive: true, fn: () => { store.restoreBuiltin(p.id); render(); toast('Plan restaurado'); } });
@@ -504,10 +512,9 @@ const A = {
     } });
     actionSheet(p.name, acts);
   },
-  newPlan: () => actionSheet('Nuevo plan', [
-    { label: 'Individual', fn: () => createPlan('solo') },
-    { label: 'En pareja (dúo)', fn: () => createPlan('duo') },
-  ]),
+  newPlan: () => { ui.np = { mode: 'solo' }; openSheet(newPlanHTML(), { cls: 'newplan' }); const f = $('#npName'); if (f) f.focus(); },
+  npMode: el => { const f = $('#npName'); ui.np.name = f ? f.value : ''; ui.np.mode = el.dataset.v; refreshSheet(newPlanHTML()); const g = $('#npName'); if (g) g.focus(); },
+  npGo: () => createPlan(ui.np.mode, ($('#npName').value || '').trim() || 'Mi plan'),
   editItem: el => openSheet(itemSheetHTML(el.dataset.p, +el.dataset.s, +el.dataset.i, 'a'), { onClose: render }),
   itemSide: el => refreshSheet(itemSheetHTML(el.dataset.p, +el.dataset.s, +el.dataset.i, el.dataset.v)),
   editSection: el => openSheet(sectionSheetHTML(el.dataset.p, +el.dataset.s), { onClose: render }),
@@ -609,13 +616,21 @@ const A = {
   pSettings: () => P.openSettings(),
 };
 
-function createPlan(mode) {
-  const name = prompt(mode === 'duo' ? 'Nombre del plan en pareja' : 'Nombre del nuevo plan', mode === 'duo' ? 'Entrenamos juntos' : 'Mi plan');
-  if (!name || !name.trim()) return;
-  const p = { id: uid(), name: name.trim(), subtitle: '', frequency: '', mode, sections: [{ id: uid(), name: 'Bloque 1', kind: 'circuit', rounds: 3, rest: 45, items: [] }] };
+function newPlanHTML() {
+  return `<div class="sheet-head"><button class="navbtn" data-a="closeSheet">Cancelar</button><h2>Nuevo plan</h2><span></span></div>
+    <div class="sheet-body new-plan"><input id="npName" class="field" placeholder="Nombre del plan" value="${esc((ui.np && ui.np.name) || '')}" maxlength="40" autocomplete="off" aria-label="Nombre del plan" enterkeyhint="next">
+    ${seg('npMode', '', [['solo', 'Individual'], ['duo', 'En pareja']], ui.np.mode)}
+    <p class="gf">${ui.np.mode === 'duo' ? 'Dos personas entrenan al mismo tiempo, cada una con su ejercicio.' : 'Empieza con un circuito de 3 rondas; luego eliges los movimientos.'}</p>
+    <button class="btn primary big cta" data-a="npGo">Elegir movimientos</button></div>`;
+}
+// nombre → movimientos → listo: crea el plan con un bloque por defecto (circuito de 3 rondas, 45 s) y abre el selector
+function createPlan(mode, name) {
+  const p = { id: uid(), name, subtitle: '', frequency: '', mode, sections: [{ id: uid(), name: 'Bloque 1', kind: 'circuit', rounds: 3, rest: 45, items: [] }] };
   if (mode === 'duo') p.people = defaultPeople();
   S().plans.push(p); store.save(); ui.editing[p.id] = true;
+  closeSheet();
   nav.tab = 'train'; push('plan', { id: p.id });
+  setTimeout(() => A.addMoves({ dataset: { p: p.id, s: '0' } }), 320);
 }
 function refreshItem(el) { refreshSheet(itemSheetHTML(el.dataset.p, +el.dataset.s, +el.dataset.i, el.dataset.side || 'a')); }
 // tras cambiar un ajuste: guarda, aplica y refresca la vista visible (o los ajustes rápidos del reproductor)
@@ -635,7 +650,9 @@ const INPUT = {
     const pr = profOf(el.dataset.id), v = Math.round(parseFloat(el.value) * 10) / 10, d = todayISO();
     pr.weights = pr.weights.filter(w => w.date !== d);
     if (v > 0) pr.weights.push({ date: d, kg: v }); pr.weights.sort((a, b) => a.date < b.date ? -1 : 1); store.save();
-  },  secName: el => { store.plan(el.dataset.p).sections[+el.dataset.s].name = el.value; store.save(); },
+  },  planName: el => { const p = store.plan(el.dataset.p), v = el.value.trim(); if (p && v) { p.name = v; store.save(); } },
+  planSub: el => { const p = store.plan(el.dataset.p); if (p) { p.subtitle = el.value.trim(); store.save(); } },
+  secName: el => { store.plan(el.dataset.p).sections[+el.dataset.s].name = el.value; store.save(); },
 };
 
 document.addEventListener('click', e => {
