@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mapa muscular (dev)</title>
+<style>
+  :root{--bg:#FAF5F6;--card:#fff;--label:#2A1D23;--label2:#6B5A62;--accent:#E0457B;--accent-ink:#C42E64;--sep:rgba(0,0,0,.1)}
+  :root[data-theme="estandar"]{--bg:#F3F4F8;--label:#15171D;--label2:#596072;--accent:#5B63E8;--accent-ink:#4B55D6}
+  :root[data-mode="dark"]{--bg:#140E12;--card:#211719;--label:#FAF1F4;--label2:#C4B0B8;--accent:#FF6E9C;--accent-ink:#FF6E9C;--sep:rgba(255,255,255,.12)}
+  :root[data-theme="estandar"][data-mode="dark"]{--bg:#0E0F14;--card:#1A1C23;--label:#F2F3F8;--label2:#A9AFC2;--accent:#8E9BFF;--accent-ink:#8E9BFF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--label);font:15px/1.4 -apple-system,system-ui,sans-serif;padding:16px}
+  h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:26px 0 8px} p.n{color:var(--label2);font-size:13px;margin:0 0 8px}
+  .card{background:var(--card);border-radius:22px;padding:14px;margin:10px 0;box-shadow:0 1px 3px var(--sep)}
+  .card h3{margin:0 0 6px;font-size:15px}
+  .bar{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .bar a{padding:6px 10px;border-radius:99px;background:var(--card);color:var(--accent-ink);text-decoration:none;font-weight:600;font-size:13px}
+  table{border-collapse:collapse;font-size:12px;width:100%} td{padding:2px 6px;border-bottom:1px solid var(--sep)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+</style>
+</head>
+<body>
+<h1>Mapa muscular</h1>
+<div class="bar" id="bar"></div>
+<div id="app"></div>
+<script type="module">
+import { muscleLoad, muscleLoadFromMoves, muscleMapSVG, mountMuscleMap, muscleLegendHTML, muscleNumbers, MUSCLES, injectMuscleMapCSS } from '../js/musclemap.js';
+import { MOVES, MOVE_BY_ID } from '../data/catalog.js';
+import { DEFAULT_PLANS } from '../data/plans.js';
+
+const q = new URLSearchParams(location.search);
+const mode = q.get('mode') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const theme = q.get('theme') || 'rosa', page = q.get('p') || 'all', gender = q.get('g') || 'f';
+document.documentElement.dataset.mode = mode; document.documentElement.dataset.theme = theme;
+injectMuscleMapCSS();
+
+const bar = document.getElementById('bar');
+const link = (k, v, t) => { const u = new URLSearchParams(location.search); u.set(k, v); return `<a href="?${u}">${t}</a>`; };
+bar.innerHTML = [link('mode', 'light', 'claro'), link('mode', 'dark', 'oscuro'), link('theme', 'rosa', 'rosa'), link('theme', 'estandar', 'estándar'), link('g', 'f', 'mujer'), link('g', 'm', 'hombre'), link('p', 'regions', 'regiones'), link('p', 'all', 'todo')].join('');
+
+const app = document.getElementById('app');
+const settings = { secsPerRep: 3 };
+let html = '';
+
+if (page === 'regions') {
+  // (a) todas las regiones etiquetadas: valores 1..16 cíclicos para distinguirlas
+  const load = {}; MUSCLES.forEach((m, i) => { load[m.name] = ((i * 5) % 16 + 1) / 16; });
+  html += `<h2>(a) Regiones · ${gender === 'f' ? 'mujer' : 'hombre'}</h2><p class="n">Valores cíclicos para distinguir cada región. Números = tabla de abajo.</p>`;
+  html += `<div class="card">${muscleMapSVG(load, { gender, views: 'front', labels: 'num', titles: true })}</div>`;
+  html += `<div class="card">${muscleMapSVG(load, { gender, views: 'back', labels: 'num', titles: true })}</div>`;
+  html += `<div class="card"><table>${muscleNumbers().map(r => `<tr><td>${r.n}</td><td>${r.name}</td><td>${r.id}</td><td>${r.group}</td><td>${r.views.join('+')}</td></tr>`).join('')}</table></div>`;
+} else if (page === 'names') {
+  const load = {}; MUSCLES.forEach((m, i) => { load[m.name] = ((i * 5) % 16 + 1) / 16; });
+  html += `<div class="card">${muscleMapSVG(load, { gender, views: 'front', labels: true })}</div><div class="card">${muscleMapSVG(load, { gender, views: 'back', labels: true })}</div>`;
+} else {
+  const plan = DEFAULT_PLANS[0];
+  const L = muscleLoad(plan, MOVE_BY_ID, settings);
+  html += `<h2>(b) Plan: ${plan.name}</h2><div class="card" id="planMap"></div>`;
+  html += `<h2>Mismo plan · hombre</h2><div class="card" id="planMapM"></div>`;
+  html += `<h2>(c) Movimientos sueltos</h2>`;
+  ['goblet-squat', 'glute-bridge-iso', 'face-pull', 'floor-press', 'dead-bug', 'doorway-pec'].forEach(id => {
+    const m = MOVE_BY_ID[id]; if (!m) return;
+    html += `<div class="card"><h3>${m.name} <small style="color:var(--label2)">${[...m.focus, ...m.support].join(', ')}</small></h3><div class="mv" data-id="${id}"></div></div>`;
+  });
+  setTimeout(() => {
+    mountMuscleMap(document.getElementById('planMap'), L, { gender, legend: true });
+    mountMuscleMap(document.getElementById('planMapM'), L, { gender: 'm', legend: true });
+    document.querySelectorAll('.mv').forEach(el => mountMuscleMap(el, muscleLoadFromMoves([MOVE_BY_ID[el.dataset.id]]), { gender, size: 300, legend: false }));
+  }, 0);
+}
+app.innerHTML = html;
+window.__ready = true;
+</script>
+</body>
+</html>
