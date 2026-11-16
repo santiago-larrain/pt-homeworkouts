@@ -289,8 +289,8 @@ u.s { background: var(--yellow); }
 .p-info { text-align: center; display: flex; flex-direction: column; font-size: 13px; color: rgba(255, 255, 255, .6); }
 .p-info b { color: #fff; font-size: 15px; font-weight: 600; }
 .p-count { justify-self: end; font: 600 13px var(--round); color: rgba(255, 255, 255, .55); }
-.p-bar { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .12); margin: 8px 0 12px; overflow: hidden; }
-.p-bar i { display: block; height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s; }
+
+
 .p-center { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
 .p-media { position: relative; width: 100%; max-width: 520px; flex: 1 1 auto; min-height: 150px; max-height: 42vh; background: #fff; border-radius: 22px; overflow: hidden; }
 .p-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .45s ease; }
@@ -410,3 +410,20 @@ input.inline::placeholder { color: var(--label3); }
 .side-chip { display: inline-flex; align-items: center; gap: 6px; font: 700 14px var(--round); padding: 4px 12px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); margin-right: 6px; }
 .side-chip::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .side-chip.l::before { border-radius: 2px; }
+
+/* ───────── progreso del reproductor (v1.4): barra por bloques + ronda/ejercicio dentro del anillo */
+.p-prog-top { margin: 6px 0 10px; }
+.p-blk { margin: 0 0 5px; font: 600 12px var(--round); letter-spacing: .06em; text-transform: uppercase; color: rgba(255, 255, 255, .62); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-segs { display: flex; gap: 4px; width: 100%; }
+.p-segs i { display: block; flex-basis: 0; min-width: 18px; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, .14); overflow: hidden; }
+.p-segs i.cur { background: rgba(255, 255, 255, .26); }
+.p-segs b { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 3px; transition: width .25s linear; }
+@media (prefers-reduced-motion: reduce) { .p-segs b { transition: none; } }
+.p-ring.has-prog .p-time { padding-bottom: 26px; }
+.p-prog { position: absolute; left: 0; right: 0; top: 64%; display: flex; flex-direction: column; align-items: center; gap: 4px; font: 600 12px var(--round); color: rgba(255, 255, 255, .7); pointer-events: none; }
+.p-reps .p-prog { position: static; margin-top: 6px; }
+.p-prog .dots { display: inline-flex; gap: 5px; align-items: center; }
+.p-prog .dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, .22); }
+.p-prog .dots i.d { background: rgba(255, 255, 255, .7); }
+.p-prog .dots i.c { background: var(--accent); box-shadow: 0 0 0 2px rgba(255, 110, 156, .3); }
+.p-restlabel small + small { margin-top: 2px; }

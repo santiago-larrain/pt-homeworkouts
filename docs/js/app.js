@@ -726,9 +726,9 @@ const P = {
   renderStep() {
     const s = this.step, st = set(), el = $('#player'), pp = people(this.plan);
     this.stopFrames();
-    const prog = this.i / (this.steps.length - 1);
-    const sec = s.section;
-    const topInfo = sec ? `<b>${esc(sec.name)}</b>${s.rounds > 1 ? `<span>Ronda ${s.type === 'rest' && !s.betweenSections ? s.nextRound : s.round} de ${s.rounds} · ${this.worked}/${this.totalWork}</span>` : `<span>${this.worked}/${this.totalWork}</span>`}` : `<b>${esc(this.plan.name)}</b>`;
+    const sec = s.section || (s.nextWork && s.nextWork.section), segs = this.segs();
+    const duoProg = s.type === 'work' && s.duo ? ` · ${s.rounds > 1 ? `ronda ${s.round}/${s.rounds} · ` : ''}${s.itemIdx + 1}/${s.items}` : '';
+    const roundTxt = s.type === 'rest' && !s.betweenSections && s.rounds > 1 ? `<small>Ronda ${s.nextRound}/${s.rounds}</small>` : '';
     const isWork = s.type === 'work';
     let center = '', layout = '';
     if (isWork && s.duo) {
@@ -742,7 +742,7 @@ const P = {
       const m = s.move;
       center = `${mediaHTML(m, s.pos ?? 0, { id: 'pm0', extra: s.pos == null && m.positions.length > 1 ? `<button class="p-animbtn" data-a="pAnimToggle" aria-label="Animación">${st.animate ? I.pause : I.play}</button>` : '' })}
         <div class="p-title"><h2>${esc(m.name)}</h2><p>${s.sideName ? `<span class="side-chip ${s.side === 1 ? 'r' : 'l'}">${esc(s.sideName)}</span>` : ''}${esc([s.sub, ...(s.dose && s.dose.note && s.dose.note !== s.sub ? [s.dose.note] : [])].filter(Boolean).join(' · '))}</p></div>
-        <div class="p-meter">${s.secs != null ? `<div class="p-ring">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>` : `<div class="p-reps"><b>${esc(s.reps.split(' ')[0])}</b><span>${esc(s.reps.split(' ').slice(1).join(' '))}</span><em id="pTime">${clock(0)}</em></div>`}
+        <div class="p-meter">${s.secs != null ? `<div class="p-ring has-prog">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div>${progHTML(s)}</div>` : `<div class="p-reps"><b>${esc(s.reps.split(' ')[0])}</b><span>${esc(s.reps.split(' ').slice(1).join(' '))}</span><em id="pTime">${clock(0)}</em>${progHTML(s)}</div>`}
           <p class="p-cue">${I.check}${esc(m.cue)}</p></div>`;
     } else {
       const label = s.type === 'ready' ? 'Prepárate' : s.type === 'rest' ? 'Descanso' : s.type === 'switch' ? s.title : 'Siguiente';
@@ -751,16 +751,17 @@ const P = {
       let next = '';
       if (n && n.duo) next = nextCard(n.a.move, n.a, 0) + nextCard(n.b.move, n.b, 1);
       else if (n) next = nextCard(n.move, n);
-      center = `<div class="p-restlabel">${label}${s.sub ? `<small>${esc(s.sub)}</small>` : ''}</div>
+      center = `<div class="p-restlabel">${label}${s.sub ? `<small>${esc(s.sub)}</small>` : ''}${roundTxt}</div>
         <div class="p-ring rest">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>
         ${s.type === 'rest' ? `<div class="p-restbtns"><button class="btn tinted dark" data-a="pAdd">+15 s</button><button class="btn tinted dark" data-a="pNext">Saltar</button></div>` : ''}
         <div class="p-nexts">${next}</div>`;
     }
     el.className = `on t-${s.type} ${layout}`;
-    el.innerHTML = `<div class="p-top"><button class="p-x" data-a="pClose" aria-label="Terminar">${I.x}</button><div class="p-info">${topInfo}</div><button class="p-x" data-a="pSettings" aria-label="Ajustes">${I.gear}</button></div>
-      <div class="p-bar"><i style="width:${(prog * 100).toFixed(1)}%"></i></div>
+    el.innerHTML = `<div class="p-top"><button class="p-x" data-a="pClose" aria-label="Terminar">${I.x}</button><div class="p-info"><b>${esc(this.plan.name)}</b></div><button class="p-x" data-a="pSettings" aria-label="Ajustes">${I.gear}</button></div>
+      <div class="p-prog-top"><p class="p-blk">${esc(sec ? sec.name : '')}${duoProg}</p><div class="p-segs" role="progressbar" aria-label="Progreso por bloques" aria-valuemin="0" aria-valuemax="100">${segs.map(g => `<i style="flex-grow:${Math.max(g.total, 20)}"><b></b></i>`).join('')}</div></div>
       <div class="p-center">${center}</div>
       ${layout ? '' : '<div class="p-ctl" id="pCtl"></div>'}`;
+    this.segEls = [...el.querySelectorAll('.p-segs b')];
     this.renderControls(); this.paint();
     if (isWork) {
       const go = (m, pos, id, model, mirror) => this.stops.push(mountRig($('#' + id), m, { model, mirror, fixed: pos ?? (st.animate ? null : 0), isPaused: () => this.paused }));
@@ -779,13 +780,36 @@ const P = {
     $('#player').classList.toggle('paused', this.paused);
   },
   paint() {
-    const s = this.step; const t = $('#pTime'); if (!t) return;
+    const s = this.step; this.paintSegs(); const t = $('#pTime'); if (!t) return;
     if (s.secs != null) {
       const rem = Math.max(0, this.remain);
       t.textContent = clock(Math.ceil(rem));
       const fg = $('#player .p-ring .ring-fg'); if (fg) { const c = +fg.dataset.c; fg.style.strokeDashoffset = (c * (1 - rem / s.secs)).toFixed(1); }
       t.classList.toggle('warn', Math.ceil(rem) <= set().beepLast && rem > 0);
     } else t.textContent = clock((Date.now() - this.stepStart) / 1000);
+  },
+  // progreso por bloque: cada segmento se llena según el tiempo (estimado en repeticiones manuales) de sus pasos
+  segs() {
+    if (this._segs && this._segsFor === this.steps) return this._segs;
+    const segs = [], by = new Map(), w = s => s.secs != null ? s.secs : (s.type === 'work' ? set().repSecondsEstimate : 0);
+    this.steps.forEach((s, i) => {
+      if (s.sectionIdx == null || s.betweenSections) return;
+      let g = by.get(s.sectionIdx); if (!g) { g = { idx: s.sectionIdx, first: i, last: i, total: 0 }; by.set(s.sectionIdx, g); segs.push(g); }
+      s._before = g.total; s._w = w(s); g.total += s._w; g.last = i;
+    });
+    this._segsFor = this.steps; return this._segs = segs;
+  },
+  paintSegs() {
+    const segs = this.segs(), s = this.step, els = this.segEls || [];
+    const frac = s && s.secs ? Math.min(1, Math.max(0, 1 - this.remain / s.secs)) : 0;
+    let all = 0;
+    segs.forEach((g, k) => {
+      const f = this.i > g.last ? 1 : this.i < g.first ? 0 : g.total ? Math.min(1, ((s._before || 0) + (s._w || 0) * frac) / g.total) : 0;
+      all += f;
+      const w = (f * 100).toFixed(1) + '%', b = els[k]; if (b && b._w !== w) { b.style.width = w; b._w = w; }
+      const i = b && b.parentElement; if (i) i.classList.toggle('cur', this.i >= g.first && this.i <= g.last);
+    });
+    const bar = $('#player .p-segs'); if (bar) bar.setAttribute('aria-valuenow', Math.round(all / (segs.length || 1) * 100));
   },
 
   // ── final
@@ -826,6 +850,12 @@ const P = {
   },
 };
 
+// "Ronda 1/3" (solo si el bloque tiene más de una ronda) + puntos del ejercicio dentro de la ronda
+const progHTML = s => {
+  if (s.type !== 'work' || s.duo) return '';
+  const n = s.items, dots = n <= 8 ? Array.from({ length: n }, (_, k) => `<i class="${k < s.itemIdx ? 'd' : k === s.itemIdx ? 'c' : ''}"></i>`).join('') : `<span>${s.itemIdx + 1}/${n}</span>`;
+  return `<div class="p-prog">${s.rounds > 1 ? `<span>Ronda ${s.round}/${s.rounds}</span>` : ''}<span class="dots" role="img" aria-label="Ejercicio ${s.itemIdx + 1} de ${n}">${dots}</span></div>`;
+};
 function bigRing() {
   const size = 240, w = 14, r = (size - w) / 2, c = 2 * Math.PI * r;
   return `<svg viewBox="0 0 ${size} ${size}"><circle cx="120" cy="120" r="${r}" class="ring-bg" stroke-width="${w}" fill="none"/><circle cx="120" cy="120" r="${r}" class="ring-fg" data-c="${c.toFixed(1)}" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="0" transform="rotate(-90 120 120)"/></svg>`;
