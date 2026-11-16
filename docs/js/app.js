@@ -6,12 +6,13 @@ import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './
 import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
 import { FrameAnimator, hasFrames, frameURL, posFrame } from './frames.js';
+import { sessionKcal, kcalText, DEFAULTS as KCAL_DEFAULTS } from './calories.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
-const APP_VERSION = '1.5';
+const APP_VERSION = '1.6';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -68,6 +69,20 @@ const stepper = (a, data, val) => `<span class="stepper"><button data-a="${a}" $
 const seg = (a, data, opts, cur) => `<div class="seg">${opts.map(([v, l]) => `<button data-a="${a}" ${data} data-v="${v}" class="${String(v) === String(cur) ? 'on' : ''}">${l}</button>`).join('')}</div>`;
 const fmtMin = secs => `${Math.max(1, Math.round(secs / 60))} min`;
 const planMins = p => fmtMin(estimateSecs(buildSteps(p, set()), set()));
+// ── calorías: opciones del motor según Ajustes, y estimación de un plan para un perfil (con los tiempos planeados)
+const kcalOpts = () => ({ corrected: set().kcalCorrected !== false, load: set().kcalLoad !== false });
+const moveLookup = id => MOVE_BY_ID[id];
+function stepItems(steps, who = 0) {
+  const rep = set().repSecondsEstimate;
+  return steps.filter(s => s.type !== 'done').map(s => ({ secs: s.secs != null ? s.secs : (s.type === 'work' ? rep : 0), kind: s.type === 'work' ? 'work' : 'rest', moveId: s.type === 'work' ? (s.duo ? (who ? s.b.move.id : s.a.move.id) : s.move.id) : null }));
+}
+// kcal estimadas de un plan para el perfil activo (en planes en pareja, para su lugar en el plan; si no participa, la persona 1)
+function planKcal(p, onlySection = null) {
+  let who = 0, pr = store.active;
+  if (isDuo(p)) { const ids = people(p).map(x => x.profile), k = ids.indexOf(pr.id); who = k < 0 ? 0 : k; pr = store.profile(ids[who]); }
+  return sessionKcal(pr, stepItems(buildSteps(p, set(), onlySection), who), moveLookup, kcalOpts());
+}
+const kcalChip = r => `<span class="mchip" title="Estimación">${I.flame}${kcalText(r.kcal) || '—'}${r.estimated ? ' · estimado' : ''}</span>`;
 const today = () => new Date();
 const EQ = { silla: 'Silla', kettlebell: 'Kettlebell', ...EQUIPMENT };
 const equipOf = p => [...new Set(p.sections.flatMap(sec => sec.items.flatMap(it => [it.move, it.b && it.b.move]))).values()].filter(Boolean).flatMap(id => (MOVE_BY_ID[id] || { equipment: [] }).equipment).filter(e => e !== 'ninguno').filter((e, i, a) => a.indexOf(e) === i).map(e => EQ[e] || e);
@@ -160,7 +175,7 @@ const VIEWS = {
       const pp0 = isDuo(p) ? people(p) : null;
       html += `<div class="card today"><div class="today-top"><p class="eyebrow">${s.history.length ? 'Tu entrenamiento' : 'Para empezar'}${isDuo(p) ? ' · en pareja' : ''}</p><div class="thumbstack">${thumbs.map(m => thumb(m, 1, pp0 ? pp0[0].model : undefined)).join('')}</div></div>
         <h2>${esc(p.name)}</h2><p class="sub">${esc(isDuo(p) ? people(p).map(x => x.name).join(' + ') : (p.subtitle || ''))}</p>
-        <div class="mchips"><span class="mchip">${I.clock}${planMins(p)}</span><span class="mchip">${I.grid}${nSec} ${nSec === 1 ? 'bloque' : 'bloques'}</span>${shown.map(e => `<span class="mchip eq">${esc(e)}</span>`).join('')}${eq.length > 3 ? `<span class="mchip eq">+${eq.length - 3}</span>` : ''}${eq.length ? '' : '<span class="mchip eq">Sin implementos</span>'}</div>
+        <div class="mchips"><span class="mchip">${I.clock}${planMins(p)}</span>${kcalChip(planKcal(p))}<span class="mchip">${I.grid}${nSec} ${nSec === 1 ? 'bloque' : 'bloques'}</span>${shown.map(e => `<span class="mchip eq">${esc(e)}</span>`).join('')}${eq.length > 3 ? `<span class="mchip eq">+${eq.length - 3}</span>` : ''}${eq.length ? '' : '<span class="mchip eq">Sin implementos</span>'}</div>
         <button class="btn primary cta big" data-a="start" data-id="${p.id}">${I.play}Comenzar</button>
         <button class="btn plain" data-a="openPlan" data-id="${p.id}">Ver plan</button></div>`;
     }
@@ -184,7 +199,7 @@ const VIEWS = {
       html = `<div class="plan-head edit-head"><input class="t" data-in="planName" data-p="${p.id}" value="${esc(p.name)}" placeholder="Nombre del plan" maxlength="40" aria-label="Nombre del plan" autocomplete="off"><input class="s" data-in="planSub" data-p="${p.id}" value="${esc(p.subtitle || '')}" placeholder="Descripción (opcional)" maxlength="60" aria-label="Descripción" autocomplete="off"></div>`;
     } else {
       html = `<div class="plan-head"><h1>${esc(p.name)}</h1>${duo ? `<p class="muted">${I.figure} ${esc(pp[0].name)} + ${esc(pp[1].name)}</p>` : (p.subtitle ? `<p class="muted">${esc(p.subtitle)}</p>` : '')}
-      <div class="meta"><span>${I.clock}${planMins(p)}</span>${p.frequency ? `<span>${I.calendar}${esc(p.frequency)}</span>` : ''}${duo ? '<span class="pill">En pareja</span>' : ''}</div>
+      <div class="meta"><span>${I.clock}${planMins(p)}</span><button class="kchip" data-a="kcalInfo" aria-label="Cómo se estiman las calorías">${I.flame}${kcalText(planKcal(p).kcal) || '—'}${planKcal(p).estimated ? ' · estimado' : ''}</button>${p.frequency ? `<span>${I.calendar}${esc(p.frequency)}</span>` : ''}${duo ? '<span class="pill">En pareja</span>' : ''}</div>
       <div class="btnrow"><button class="btn primary cta" data-a="start" data-id="${p.id}">${I.play}Comenzar</button><button class="btn tinted icon" data-a="planMenu" data-id="${p.id}" aria-label="Más opciones" style="min-height:60px;border-radius:20px">${I.more}</button></div>
       ${p.goal ? `<p class="goal">${esc(p.goal)}</p>` : ''}</div>`;
     }
@@ -283,6 +298,11 @@ const VIEWS = {
       row({ title: 'Animar movimientos', sub: 'Alterna las posiciones durante el ejercicio', right: toggle('set:animate', st.animate) }),
       row({ title: 'Velocidad', sub: 'Segundos por posición en la animación', right: stepper('setStep', 'data-k="animSpeed" data-min="0.8" data-max="4" data-st="0.4"', `${st.animSpeed.toFixed(1)} s`) }),
     ], { header: 'Apariencia' });
+    html += `<span id="kcalGroup"></span>` + group([
+      row({ title: 'Ajustar por mi metabolismo', sub: 'Cálculo más conservador con tu peso, estatura y edad. Apagado usa la fórmula estándar.', right: toggle('set:kcalCorrected', st.kcalCorrected) }),
+      row({ title: 'Ajustar por la carga', sub: 'Suma un poco si usas mancuernas o kettlebell (según tus cargas en el perfil).', right: toggle('set:kcalLoad', st.kcalLoad) }),
+      row({ title: 'Cómo se calcula', a: 'kcalInfo', chev: true }),
+    ], { header: 'Calorías', footer: 'Siempre son una estimación, nunca una medida exacta.' });
     html += group([
       row({ title: 'Exportar respaldo', sub: st.lastBackup ? `Último: ${new Date(st.lastBackup).toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Aún no has exportado uno', a: 'exportData', chev: true }),
       row({ title: 'Importar respaldo', a: 'importData', chev: true }),
@@ -471,6 +491,19 @@ function peopleSheetHTML(pid) {
     <p class="gf">El nombre, el género y las cargas se editan en Ajustes → Perfiles. Cada persona puede hacer un ejercicio distinto en el mismo turno: edita cada ejercicio del plan y elige la persona arriba.</p></div>`;
 }
 
+// ── calorías: hoja informativa (3 ideas, límites y fuentes)
+function kcalInfoHTML() {
+  const li = x => `<div class="row tip"><span class="num">${x[0]}</span><span class="rt"><span class="rtt">${x[1]}</span></span></div>`;
+  return `<div class="sheet-head"><span></span><h2>Cómo se estiman las kcal</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body">
+    ${group([
+      [1, 'Cada ejercicio tiene una intensidad (MET). Calorías ≈ MET × 3,5 × tu peso ÷ 200 × minutos reales; las pausas cuentan como reposo activo.'],
+      [2, 'Se ajusta con tu metabolismo en reposo (peso, estatura, edad y sexo) y, si registraste mancuernas o kettlebell, un poco por la carga. Sin esos datos se usan promedios y se marca «estimado».'],
+      [3, 'Es una aproximación: el error típico es de ±20 a 30 %. No es una medida ni una meta, y no sirve para «compensar» la comida.'],
+    ].map(li))}
+    ${group([row({ title: 'Cambiar el ajuste', sub: 'En Ajustes → Calorías', a: 'kcalSettings', chev: true })])}
+    <p class="gf">Fuentes: Compendio de Actividad Física (Ainsworth et al. 2011, Med Sci Sports Exerc 43:1575; Herrmann et al. 2024, J Sport Health Sci 13:6) para los MET; Mifflin et al. 1990 (Am J Clin Nutr 51:241) para el metabolismo en reposo; Byrne et al. 2005 (J Appl Physiol 99:1112) para la corrección individual.</p></div>`;
+}
+
 // ── perfiles
 const profOf = id => store.profile(id);
 function profileSheetHTML(id) {
@@ -530,6 +563,8 @@ const A = {
   calMove: el => { let { y, m } = ui.cal; m += +el.dataset.d; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.cal = { y, m }; render(); },
   showPos: el => { stopAnim(); ui.moveShow[el.dataset.id] = +el.dataset.v; render(); },
   animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); } else { stopAnim(); anim = { id }; } render(); },
+  kcalInfo: () => openSheet(kcalInfoHTML()),
+  kcalSettings: () => { closeSheet(); if (P.steps) return; nav.tab = 'settings'; nav.stacks.settings = nav.stacks.settings.slice(0, 1); render(); setTimeout(() => { const g = document.getElementById('kcalGroup'); if (g) g.scrollIntoView({ block: 'center' }); }, 60); },
   muscleMap: () => openSheet(`<div class="sheet-head"><span></span><h2>Músculos</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body"><img class="musclemap" src="img/muscle-map.webp" alt="Mapa de músculos de frente y de espalda"><p class="gf">En cada ejercicio, el <b>naranja</b> marca el músculo que debes sentir trabajar y el <b>amarillo</b> el de apoyo.</p></div>`),
   toggleEdit: el => { ui.editing[el.dataset.id] = !ui.editing[el.dataset.id]; render(); },
   start: el => startSession(el.dataset.id),
@@ -618,7 +653,7 @@ const A = {
     const x = S().history.find(h => h.id === el.dataset.id); if (!x) return;
     openSheet(`<div class="sheet-head"><span></span><h2>${esc(x.planName)}</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body">
       <div class="sess-top"><span class="mood big">${x.mood || '✓'}</span><p>${new Date(x.date).toLocaleString('es', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p></div>
-      ${group([row({ title: 'Duración', right: `<span class="muted">${clock(x.secs)}</span>` }), row({ title: 'Ejercicios', right: `<span class="muted">${x.worked} de ${x.total}</span>` }), row({ title: 'Bloques', right: `<span class="muted">${esc((x.sections || []).join(', '))}</span>` }), ...(x.people ? [row({ title: 'En pareja', right: `<span class="muted">${esc(x.people.join(' + '))}</span>` })] : [])])}
+      ${group([row({ title: 'Duración', right: `<span class="muted">${clock(x.secs)}</span>` }), ...(x.kcal ? S().profiles.filter(pr => x.kcal[pr.id] != null).map(pr => row({ title: `Calorías${Object.keys(x.kcal).length > 1 ? ' · ' + esc(pr.name) : ''}`, right: `<span class="muted">${kcalText(x.kcal[pr.id]) || '—'}${(x.kcalApprox || []).includes(pr.id) ? ' · estimado' : ''}</span>` })) : []), row({ title: 'Ejercicios', right: `<span class="muted">${x.worked} de ${x.total}</span>` }), row({ title: 'Bloques', right: `<span class="muted">${esc((x.sections || []).join(', '))}</span>` }), ...(x.people ? [row({ title: 'En pareja', right: `<span class="muted">${esc(x.people.join(' + '))}</span>` })] : [])])}
       ${x.note ? group([`<div class="row"><span class="rt"><span class="rtt">${esc(x.note)}</span></span></div>`], { header: 'Notas' }) : ''}
       ${group([row({ title: '<span class="danger">Eliminar sesión</span>', a: 'delSession', data: `data-id="${x.id}"` })])}</div>`);
   },
@@ -722,13 +757,13 @@ function applyTheme() {
 
 // ───────────────────────── REPRODUCTOR
 const P = {
-  steps: null, i: 0, endsAt: 0, remain: 0, paused: false, stepStart: 0, sessionStart: 0, active: 0, worked: 0, lastBeep: null, timer: null, stops: [], mood: null, plan: null, wake: null, doneSections: new Set(), onlySection: null, duoMarks: {},
+  steps: null, i: 0, endsAt: 0, remain: 0, paused: false, stepStart: 0, sessionStart: 0, active: 0, worked: 0, lastBeep: null, timer: null, stops: [], mood: null, plan: null, wake: null, doneSections: new Set(), onlySection: null, duoMarks: {}, log: {}, result: null,
 
   start(plan, onlySection) {
     this.plan = plan; this.onlySection = onlySection; this.steps = buildSteps(plan, set(), onlySection);
     this.totalWork = this.steps.filter(s => s.type === 'work').length;
     this.i = 0; this.worked = 0; this.mood = null; this.paused = false; this.active = 0; this.doneSections = new Set();
-    this.sessionStart = Date.now(); this.lastTick = Date.now();
+    this.sessionStart = Date.now(); this.lastTick = Date.now(); this.log = {}; this.result = null;
     $('#player').classList.add('on'); document.body.classList.add('playing'); applyTheme();
     this.enter(0);
     clearInterval(this.timer); this.timer = setInterval(() => this.update(), 100);
@@ -752,13 +787,21 @@ const P = {
     }
     this.renderStep(true);
   },
+  // tiempo REAL de cada paso (sin pausas), por `key`: base de las calorías (ver summarize)
+  credit(s, secs) {
+    if (!s || !(secs > 0) || s.type === 'done') return;
+    const e = this.log[s.key] || (this.log[s.key] = { kind: s.type === 'work' ? 'work' : 'rest', secs: 0, who: s.type !== 'work' ? [] : s.duo ? [s.a.move.id, s.b.move.id] : [s.move.id] });
+    e.secs += secs;
+  },
   update() {
     const now = Date.now();
-    if (!this.paused) this.active += (now - this.lastTick) / 1000;
+    const dt = this.paused ? 0 : (now - this.lastTick) / 1000;
+    this.active += dt;
     this.lastTick = now;
     const s = this.step; if (!s || s.type === 'done' || this.paused) return;
     if (s.secs != null) {
       let rem = (this.endsAt - now) / 1000, guard = 0;
+      this.credit(s, rem > 0 ? dt : Math.max(0, dt + rem)); // si ya venció, solo cuenta hasta el vencimiento
       // si la pantalla estuvo bloqueada, avanza en silencio los pasos vencidos
       while (rem <= 0 && guard++ < 50) {
         const over = -rem;
@@ -766,13 +809,15 @@ const P = {
         if (this.i + 1 >= this.steps.length) return;
         const quiet = over > 1.5;
         this.enter(this.i + 1, quiet);
-        const n = this.step; if (n.type === 'done' || n.secs == null) return;
+        const n = this.step; if (n.type === 'done') return;
+        this.credit(n, n.secs != null ? Math.min(n.secs, over) : over);
+        if (n.secs == null) return;
         if (quiet) { this.endsAt = now - over * 1000 + n.secs * 1000; rem = (this.endsAt - now) / 1000; } else return;
       }
       this.remain = rem;
       const sec = Math.ceil(rem), bl = set().beepLast;
       if (bl > 0 && sec <= bl && sec >= 1 && this.lastBeep !== sec) { this.lastBeep = sec; sfx.tick(sec === 1); }
-    }
+    } else this.credit(s, dt);
     this.paint();
   },
   markWorked(s) { if (s && s.type === 'work' && !s._done) { s._done = true; this.worked++; this.doneSections.add(s.section.name); } },
@@ -923,25 +968,47 @@ const P = {
   // ── final
   finish() {
     clearInterval(this.timer); this.stopFrames(); this.releaseWake();
+    this.result = this.summarize();
     sfx.done(); say('¡Entrenamiento completado! Muy bien.');
     this.renderDone();
   },
+  // calorías y tiempos por movimiento de cada participante, a partir del tiempo real de cada paso (this.log)
+  summarize() {
+    const pids = this.duo ? people(this.plan).map(x => x.profile) : [S().activeProfile];
+    const kcal = {}, moveSecs = {}, approx = [];
+    pids.forEach((pid, k) => {
+      const items = [], ms = {};
+      Object.values(this.log).forEach(e => {
+        const id = e.who[this.duo ? k : 0] || null;
+        items.push({ secs: e.secs, kind: e.kind, moveId: id });
+        if (e.kind === 'work' && id) ms[id] = (ms[id] || 0) + e.secs;
+      });
+      const r = sessionKcal(store.profile(pid), items, moveLookup, kcalOpts());
+      kcal[pid] = r.kcal; if (r.estimated && !approx.includes(pid)) approx.push(pid);
+      moveSecs[pid] = Object.fromEntries(Object.entries(ms).map(([id, v]) => [id, Math.round(v)]));
+    });
+    return { pids, kcal, approx, moveSecs };
+  },
   renderDone() {
     const el = $('#player'); el.className = 'on t-done';
-    const names = this.duo ? people(this.plan).map(x => x.name) : [store.active.name];
-    const who = names.filter(Boolean).join(' y ');
-    const sum = { secs: Math.round(this.active), worked: this.worked, blocks: this.doneSections.size, planId: this.plan.id, profiles: this.duo ? people(this.plan).map(x => x.profile) : [S().activeProfile] };
+    const pp = this.duo ? people(this.plan) : [{ profile: S().activeProfile, name: store.active.name }];
+    const R = this.result || (this.result = this.summarize());
+    const who = pp.map(x => x.name).filter(Boolean).join(' y ');
+    const sum = { secs: Math.round(this.active), worked: this.worked, blocks: this.doneSections.size, planId: this.plan.id, profiles: R.pids, kcal: R.kcal, result: R };
     const week = weekSessions().length + 1, goal = set().weeklyGoal || 3;
+    const kcalCell = (x, label) => `<div><b>${kcalText(R.kcal[x.profile]) ? `≈ ${R.kcal[x.profile]}` : '—'}</b><span>${label}</span></div>`;
+    const kcals = this.duo ? pp.map(x => kcalCell(x, esc(x.name) + ' · kcal')).join('') : kcalCell(pp[0], `kcal${R.approx.length ? ' estimadas' : ''} <button class="p-info-btn" data-a="kcalInfo" aria-label="Cómo se estiman las calorías">${I.info}</button>`);
     el.innerHTML = `<div class="p-top"><span></span><div class="p-info"><b>${esc(this.plan.name)}</b></div><span></span></div>
       <div class="p-center done"><div class="p-done-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="halo" cx="60" cy="60" r="56"/><circle class="disc" cx="60" cy="60" r="44"/><path class="tick" d="M41 62l14 14 25-29"/></svg></div>
         <h2 class="rise d1">Listo${who ? ', ' + esc(who) : ''}</h2><p class="sub rise d1">Entrenamiento completado</p>
-        <div class="p-stats rise d2"><div><b>${clock(this.active)}</b><span>Duración</span></div><div><b>${this.doneSections.size}</b><span>${this.doneSections.size === 1 ? 'Bloque' : 'Bloques'}</span></div></div>
+        <div class="p-stats rise d2"><div><b>${clock(this.active)}</b><span>Duración</span></div>${kcals}</div>
         <p class="p-weekline rise d3">${week >= goal ? '¡Meta semanal cumplida!' : `Esta semana: ${week} de ${goal}`}</p>
         <div id="pDoneExtra" class="rise d3">${doneExtras(sum)}</div></div>
       <div class="p-ctl col rise d3"><button class="btn primary big cta" data-a="pSave">Terminar</button></div>`;
   },
   record(partial) {
-    S().history.push({ id: uid(), date: new Date(this.sessionStart).toISOString(), planId: this.plan.id, planName: this.plan.name, secs: Math.round(this.active), worked: this.worked, total: this.totalWork, sections: [...this.doneSections], mood: this.mood, note: ($('#pNote') || {}).value || '', partial: !!partial, profiles: this.duo ? people(this.plan).map(x => x.profile) : [S().activeProfile], ...(this.duo ? { people: people(this.plan).map(x => x.name) } : {}) });
+    const R = this.result || this.summarize();
+    S().history.push({ id: uid(), date: new Date(this.sessionStart).toISOString(), planId: this.plan.id, planName: this.plan.name, secs: Math.round(this.active), worked: this.worked, total: this.totalWork, sections: [...this.doneSections], blocks: this.doneSections.size, mood: this.mood, note: ($('#pNote') || {}).value || '', partial: !!partial, profiles: R.pids, kcal: R.kcal, ...(R.approx.length ? { kcalApprox: R.approx } : {}), moveSecs: R.moveSecs, ...(this.duo ? { people: people(this.plan).map(x => x.name) } : {}) });
     store.save();
   },
   save() { this.record(false); this.close(); toast('Sesión guardada'); },

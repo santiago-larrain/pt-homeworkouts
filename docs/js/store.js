@@ -2,7 +2,7 @@
 import { DEFAULT_PLANS } from '../data/plans.js';
 
 const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
-export const VERSION = 3;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5)
+export const VERSION = 4;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6)
 
 export const DEFAULT_SETTINGS = {
   name: 'Anita',
@@ -30,6 +30,8 @@ export const DEFAULT_SETTINGS = {
   appearance: 'auto',   // modo claro/oscuro: 'auto' | 'light' | 'dark'
   weeklyGoal: 3,        // sesiones por semana
   haptics: true,        // vibración breve (Android; iOS Safari la ignora)
+  kcalCorrected: true,  // calorías: corrige el MET con el metabolismo en reposo (Mifflin); apagado = fórmula estándar
+  kcalLoad: true,       // calorías: pequeño ajuste por la carga de mancuernas/kettlebell del perfil
   reminders: { on: false, days: [1, 3, 5], time: '19:00' }, // fase 6 (sin uso todavía)
 };
 
@@ -59,6 +61,7 @@ function migrateSettings(st) {
   if (!['auto', 'light', 'dark'].includes(st.appearance)) st.appearance = 'auto';
   st.weeklyGoal = Math.min(7, Math.max(1, Math.round(+st.weeklyGoal) || 3));
   st.haptics = st.haptics !== false;
+  st.kcalCorrected = st.kcalCorrected !== false; st.kcalLoad = st.kcalLoad !== false;
   st.reminders = { ...DEFAULT_SETTINGS.reminders, ...(st.reminders || {}) };
 }
 
