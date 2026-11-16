@@ -124,7 +124,7 @@ img { display: block; max-width: 100%; }
 .navbtn.back span { max-width: 32vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .large-title { padding: 2px var(--s1) var(--s3); }
 .large-title h1 { margin: 0; font-size: var(--fs-3xl); line-height: 1.1; font-weight: var(--fw-bold); letter-spacing: .005em; }
-.kicker { margin: 0 0 2px; font-size: var(--fs-sm); font-weight: var(--fw-semi); text-transform: capitalize; letter-spacing: .01em; color: var(--label2); }
+.kicker { margin: 0 0 2px; font-size: var(--fs-sm); font-weight: var(--fw-semi); letter-spacing: .01em; color: var(--label2); }
 
 #tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; justify-content: space-around; padding: 6px var(--s1) calc(var(--safe-b) + 4px); background: var(--bar); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 -.5px 0 var(--sep); }
 .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: var(--fs-2xs); font-weight: var(--fw-medium); color: var(--label2); min-height: var(--hit); transition: color var(--dur-fast); }
@@ -221,6 +221,7 @@ input.inline::placeholder { color: var(--label3); }
 .mchips { display: flex; flex-wrap: wrap; gap: 6px; margin: var(--s4) 0 var(--s5); }
 .mchip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: var(--r-pill); background: var(--fill); font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--label); }
 .mchip .i { width: 14px; height: 14px; color: var(--accent-ink); }
+.mchip.eq { background: transparent; box-shadow: inset 0 0 0 1px var(--sep); color: var(--label2); }
 .today .btn.plain { margin-top: var(--s1); }
 .week { padding: var(--s4); }
 .wk-top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }

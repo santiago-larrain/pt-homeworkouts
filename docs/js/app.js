@@ -67,6 +67,9 @@ const seg = (a, data, opts, cur) => `<div class="seg">${opts.map(([v, l]) => `<b
 const fmtMin = secs => `${Math.max(1, Math.round(secs / 60))} min`;
 const planMins = p => fmtMin(estimateSecs(buildSteps(p, set()), set()));
 const today = () => new Date();
+const EQ = { silla: 'Silla', kettlebell: 'Kettlebell', ...EQUIPMENT };
+const equipOf = p => [...new Set(p.sections.flatMap(sec => sec.items.flatMap(it => [it.move, it.b && it.b.move]))).values()].filter(Boolean).flatMap(id => (MOVE_BY_ID[id] || { equipment: [] }).equipment).filter(e => e !== 'ninguno').filter((e, i, a) => a.indexOf(e) === i).map(e => EQ[e] || e);
+const weekSessions = () => { const ws = weekStart(today()); return S().history.filter(h => new Date(h.date) >= ws); };
 const dayKey = d => { const x = new Date(d); return `${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`; };
 const weekStart = d => { const x = new Date(d); const wd = (x.getDay() + 6) % 7; x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - wd); return x; };
 
@@ -141,30 +144,32 @@ const profSub = pr => [GENDER[pr.gender], pr.birthYear && `${new Date().getFullY
 // ───────────────────────── VISTAS
 const VIEWS = {
   home() {
-    const s = S(), p = store.plan(s.activePlanId);
-    const now = today(), ws = weekStart(now);
-    const week = s.history.filter(h => new Date(h.date) >= ws);
-    const trainedDays = new Set(week.map(h => (new Date(h.date).getDay() + 6) % 7));
-    const goal = 2;
+    const s = S(), p = store.plan(s.activePlanId) || s.plans[0];
+    const now = today(), goal = s.settings.weeklyGoal || 3;
+    const week = weekSessions(), trainedDays = new Set(week.map(h => (new Date(h.date).getDay() + 6) % 7));
     const dateStr = now.toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });
     let html = '';
-    if (!standalone() && !ui.dismissedInstall) html += `<div class="card install">${I.share}<div><b>Instala la app para no perder datos</b><p>Estás en el navegador. Safari puede borrar los datos si no abres la página en 7 días, y no los comparte con la app instalada. Toca <b>Compartir → Agregar a inicio</b> y usa siempre el ícono.</p></div><button class="iconbtn" data-a="dismissInstall" aria-label="Cerrar">${I.x}</button></div>`;
+    if (!standalone() && !ui.dismissedInstall) html += `<div class="card install">${I.share}<div><b>Instala la app</b><p>Así tus datos no se borran. Toca <b>Compartir → Agregar a inicio</b>.</p></div><button class="iconbtn" data-a="dismissInstall" aria-label="Cerrar">${I.x}</button></div>`;
     const daysSinceBackup = s.settings.lastBackup ? (Date.now() - new Date(s.settings.lastBackup)) / 864e5 : Infinity;
     if (standalone() && s.history.length >= 3 && daysSinceBackup > 30) html += `<div class="card install">${I.shield}<div><b>Guarda un respaldo</b><p>Tus datos viven solo en este teléfono. Exporta un respaldo por si cambias o pierdes el teléfono.</p><button class="btn tinted small" data-a="exportData">Exportar respaldo</button></div></div>`;
-    html += `<div class="card week"><div class="wk-top"><div><p class="eyebrow">Esta semana</p><p class="wk-num"><b>${week.length}</b> de ${goal} sesiones</p></div><div class="ringmini">${ringSvg(Math.min(1, week.length / goal), 54, 6)}</div></div>
-      <div class="days">${DAYS.map((d, i) => `<span class="day ${trainedDays.has(i) ? 'on' : ''} ${i === (now.getDay() + 6) % 7 ? 'today-d' : ''}"><i>${trainedDays.has(i) ? I.check : ''}</i>${d}</span>`).join('')}</div></div>`;
     if (p) {
-      const nSec = p.sections.length, nMov = p.sections.reduce((a, x) => a + x.items.length, 0);
-      html += `<div class="card hero"><div class="hero-img"><img src="img/cover.webp" alt="Ilustración de Anita"></div><div class="hero-body">
-        <p class="eyebrow">Tu plan${isDuo(p) ? ' · en pareja' : ''}</p><h2>${esc(p.name)}</h2><p class="muted">${esc(isDuo(p) ? people(p).map(x => x.name).join(' + ') : (p.subtitle || ''))}</p>
-        <div class="meta"><span>${I.clock}${planMins(p)}</span><span>${I.grid}${nSec} bloques</span><span>${I.figure}${nMov} mov.</span></div>
-        <button class="btn primary big" data-a="start" data-id="${p.id}">${I.play}Comenzar</button>
-        <button class="btn plain" data-a="openPlan" data-id="${p.id}">Ver y editar plan</button></div></div>`;
-      html += group(p.sections.map((sec, i) => row({ icon: `<span class="badge">${BADGE[i] || i + 1}</span>`, title: esc(sec.name), sub: secSub(sec), right: `<span class="muted">${fmtMin(sectionEstimate(p, i, set()))}</span>`, chev: true, a: 'openPlan', data: `data-id="${p.id}"` })), { header: 'Bloques de hoy' });
+      const nSec = p.sections.filter(x => x.items.length).length, eq = equipOf(p), shown = eq.slice(0, 3);
+      const thumbs = [...new Set(p.sections.flatMap(x => x.items.map(it => it.move)))].map(id => MOVE_BY_ID[id]).filter(Boolean).slice(0, 4);
+      const pp0 = isDuo(p) ? people(p) : null;
+      html += `<div class="card today"><div class="today-top"><p class="eyebrow">${s.history.length ? 'Tu entrenamiento' : 'Para empezar'}${isDuo(p) ? ' · en pareja' : ''}</p><div class="thumbstack">${thumbs.map(m => thumb(m, 1, pp0 ? pp0[0].model : undefined)).join('')}</div></div>
+        <h2>${esc(p.name)}</h2><p class="sub">${esc(isDuo(p) ? people(p).map(x => x.name).join(' + ') : (p.subtitle || ''))}</p>
+        <div class="mchips"><span class="mchip">${I.clock}${planMins(p)}</span><span class="mchip">${I.grid}${nSec} ${nSec === 1 ? 'bloque' : 'bloques'}</span>${shown.map(e => `<span class="mchip eq">${esc(e)}</span>`).join('')}${eq.length > 3 ? `<span class="mchip eq">+${eq.length - 3}</span>` : ''}${eq.length ? '' : '<span class="mchip eq">Sin implementos</span>'}</div>
+        <button class="btn primary cta big" data-a="start" data-id="${p.id}">${I.play}Comenzar</button>
+        <button class="btn plain" data-a="openPlan" data-id="${p.id}">Ver plan</button></div>`;
     }
-    html += group([...s.plans.map(pl => row({ icon: `<span class="ri-dot ${pl.id === s.activePlanId ? 'on' : ''}">${pl.id === s.activePlanId ? I.check : ''}</span>`, title: esc(pl.name) + (isDuo(pl) ? ' <span class="pill">Dúo</span>' : ''), sub: `${pl.sections.length} bloques · ${planMins(pl)}`, chev: true, a: 'openPlan', data: `data-id="${pl.id}"` })),
-      row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Crear plan nuevo</span>', a: 'newPlan' })], { header: 'Mis planes', footer: 'Los planes usan movimientos del catálogo. Puedes crear planes individuales o en pareja.' });
-    return { title: `Hola, ${store.active.name || ''}`.trim(), kicker: dateStr, large: true, html };
+    const left = Math.max(0, goal - week.length);
+    html += `<div class="card week"><div class="wk-top"><p class="wk-num"><b>${week.length}</b> de ${goal} esta semana</p><span class="wk-msg">${week.length >= goal ? '¡Meta cumplida!' : week.length ? `Te ${left === 1 ? 'falta 1' : `faltan ${left}`}` : 'Cuando quieras'}</span></div>
+      <div class="days">${DAYS.map((d, i) => `<span class="day ${trainedDays.has(i) ? 'on' : ''} ${i === (now.getDay() + 6) % 7 ? 'today-d' : ''}"><i>${trainedDays.has(i) ? I.check : ''}</i>${d}</span>`).join('')}</div></div>`;
+    const others = s.plans.filter(pl => !p || pl.id !== p.id);
+    html += group([...others.map(pl => row({ icon: `<span class="ri-dot">${I.play}</span>`, title: esc(pl.name) + (isDuo(pl) ? ' <span class="pill">Dúo</span>' : ''), sub: `${pl.sections.length} ${pl.sections.length === 1 ? 'bloque' : 'bloques'} · ${planMins(pl)}`, chev: true, a: 'openPlan', data: `data-id="${pl.id}"` })),
+      row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Crear plan nuevo</span>', a: 'newPlan' })], { header: others.length ? 'Otros planes' : 'Tus planes' });
+    const cap = x => x.charAt(0).toUpperCase() + x.slice(1);
+    return { title: `Hola, ${store.active.name || ''}`.trim(), kicker: cap(dateStr), large: true, html };
   },
 
   plan(t) {
@@ -173,7 +178,7 @@ const VIEWS = {
     const editing = !!ui.editing[p.id], duo = isDuo(p), pp = people(p);
     const right = `<button class="navbtn strong" data-a="toggleEdit" data-id="${p.id}">${editing ? 'OK' : 'Editar'}</button>`;
     let html = `<div class="plan-head"><h1>${esc(p.name)}</h1>${duo ? `<p class="muted">${I.figure} ${esc(pp[0].name)} + ${esc(pp[1].name)}</p>` : (p.subtitle ? `<p class="muted">${esc(p.subtitle)}</p>` : '')}
-      <div class="meta"><span>${I.clock}${planMins(p)}</span>${p.frequency ? `<span>${I.calendar}${esc(p.frequency)}</span>` : ''}${duo ? '<span class="pill">En pareja</span>' : ''}${p.id === S().activePlanId ? `<span class="pill">Plan principal</span>` : ''}</div>
+      <div class="meta"><span>${I.clock}${planMins(p)}</span>${p.frequency ? `<span>${I.calendar}${esc(p.frequency)}</span>` : ''}${duo ? '<span class="pill">En pareja</span>' : ''}</div>
       <div class="btnrow"><button class="btn primary" data-a="start" data-id="${p.id}">${I.play}Comenzar</button><button class="btn tinted icon" data-a="planMenu" data-id="${p.id}" aria-label="Más opciones">${I.more}</button></div>
       ${p.goal ? `<p class="goal">${esc(p.goal)}</p>` : ''}</div>`;
     p.sections.forEach((sec, si) => {
@@ -452,7 +457,7 @@ const A = {
   planMenu: el => {
     const p = store.plan(el.dataset.id), s = S();
     const acts = [];
-    if (s.activePlanId !== p.id) acts.push({ label: 'Usar como plan principal', fn: () => { s.activePlanId = p.id; planSave(); toast('Plan principal actualizado'); } });
+    if (s.activePlanId !== p.id) acts.push({ label: 'Sugerir en Entrenar', fn: () => { s.activePlanId = p.id; planSave(); toast('Aparecerá en Entrenar'); } });
     if (isDuo(p)) acts.push({ label: 'Participantes', fn: () => openSheet(peopleSheetHTML(p.id), { onClose: render }) });
     acts.push({ label: 'Renombrar', fn: () => { const n = prompt('Nombre del plan', p.name); if (n && n.trim()) { p.name = n.trim(); planSave(); } } });
     acts.push({ label: 'Duplicar', fn: () => { const c = clone(p); c.id = uid(); c.name = p.name + ' (copia)'; c.builtin = false; s.plans.push(c); store.save(); push('plan', { id: c.id }); toast('Plan duplicado'); } });
@@ -871,6 +876,7 @@ function startSession(pid, onlySection = null) {
   const p = store.plan(pid);
   if (!p || !p.sections.some(s => s.items.length)) { toast('Este plan no tiene movimientos'); return; }
   unlockAudio(); stopAnim();
+  if (onlySection == null && S().activePlanId !== p.id) { S().activePlanId = p.id; store.save(); } // Entrenar sugiere el último plan usado
   store.persist().then(v => { ui.persisted = v; });
   P.start(p, onlySection);
 }
