@@ -158,5 +158,85 @@
    "m": 1
   },
   "notes": "Front view so torso lean not visible; kettlebell consistent."
+ },
+ {
+  "id": "glute-bridge",
+  "status": "needs-review",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/c98883dc060d549c0e03b22ae6037d1d0bea83f32825270ca3fd309c8c461094.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/ff9d2948bd3f9f635fed82a7c9b393c2f945394cf894c24493d273a261fb5136.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Poses correct for both. Male cut: white sock sole partly lost against white background where mat is reconstructed (frames 1-2). Female clean."
+ },
+ {
+  "id": "single-leg-bridge",
+  "status": "needs-review",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/e92d70148e18f1b70032e1a4c5aa70e26217e95b35e725c561250d10f4934307.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0e31d65ad60de67a503f6d0a38753e5a6afff3676a7f2a28b9d0f666baad9008.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Poses correct. In frame 1 the far leg is hidden behind the near leg (only one leg visible). Male cut: sock bottom slightly clipped by mat reconstruction."
+ },
+ {
+  "id": "banded-bridge",
+  "status": "needs-review",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/f7a2ef0c8155a1ccdf80b3082e1d3825b7bf938356da7c0761ce8f1aeab96138.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/61c74f5740499e692a1f6da7ed03e35f9e43f79840b4facb8e705d640ca61ab5.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Band consistent. Male cut: sock bottom clipped and tiny stray marks on mat near the feet."
+ },
+ {
+  "id": "ring-bridge",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/185f5f5b71ad9a9a3bc1b69e005433a63466b1407c770f26469b5997793111fc.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/02ed3b3d1a7bf18d2989ed0a08d6d442bf524e4d5855d7513e76bfc738a5d779.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Ring seen standing above the knees (handle pokes above), same size every frame; squeeze only subtly visible."
  }
 ]
