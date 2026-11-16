@@ -1,0 +1,84 @@
+[
+ {
+  "id": "db-shoulder-press",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/4f185d32afdf7a095d69fccb620477283210d32a665877e7eae08cc1d1f98458.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/fa1f51b3b6394a09c2b6cae524bdb4f21fd526829015223cac202998a2c2b7c2.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Frame 4-5 dumbbells above head, frame 1 dumbbells slightly outside shoulders; acceptable."
+ },
+ {
+  "id": "lateral-raise",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {
+   "m": "260,588,950,1330"
+  },
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/2f3a983893f8a68e9e4c9273517198158f0ec686a2b48a49ea7df51be5122939.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/88b859158317a08d3a4c8f06ed70d6fc30db94ecdb2687b1252f879f388181ad.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Male needed --cuts because dumbbells of neighbouring figures nearly touch; after cuts clean. Top frame: hands slightly below shoulder line with elbows soft, acceptable."
+ },
+ {
+  "id": "kb-halo",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": true,
+  "pos": [
+   0,
+   2
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/2ad2d7988be903f0e139c81f498c8020bd3a2124e0b2d0a34275c6b66345a1a8.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/be429645cf2ddb47169c05333b3191abced8aa935e1cbd609a81cbf15949bc1e.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Frame 3 (behind the head) shows kettlebell mostly hidden behind head/neck; plausible. Spacing between figures uneven but no touching."
+ },
+ {
+  "id": "biceps-curl",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/6325e401506606d5e7464b0270999b1e98af7970774dd7b46f146a93ff5af979.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/ecf679757710a66798286e1ecabdbe0204bdc3fd1738b7321b0f4b46a41d36b4.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean, even progression, upper arm stays still."
+ }
+]

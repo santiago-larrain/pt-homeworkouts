@@ -1,0 +1,62 @@
+[
+ {
+  "id": "plank",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "right",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, face-down on the mat facing right (head at the right)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0076b9a97612838a08e902521fd4a0fcadb686aee6563e6700f159537b350fd1.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/418ef8b41bb3ec1b91aa0bcd4d6b5034b470e10874e9a8fc31a3fd9a8fed02cd.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Frame 1 is kneeling with forearms down; frames 3-4 hips slightly high then flat. Clean cuts."
+ },
+ {
+  "id": "side-plank-knee",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view from the side of her belly, lying on side, HEAD toward the LEFT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/a5cdd6f9e479997dd664f5b29939e06922f74beafb7c0043e5475bb83ef9f91b.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/abe2c3dbc79b60491aca18a7e2b6716d27e1303dfdb58bbaf6e94bc41ec80cc2.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Upper hand stays on hip frames 1-3, rises in frame 4. Clean cuts."
+ },
+ {
+  "id": "bird-dog",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, on all fours facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d9d138d9d49aeb55c56214458fc06f789cc4aec7ec4416064c4b1a10a332f9d7.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/7b636c2f1c5e208bd117b3456b084ebd816aa4db4b4c3e9c46b8240e7aa8ef00.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Frames 3 and 4 nearly touch in the strip but cut cleanly. Raised leg is the far-side leg in drawing; acceptable."
+ }
+]

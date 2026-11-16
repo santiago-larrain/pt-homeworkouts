@@ -229,7 +229,7 @@ const VIEWS = {
       row({ title: 'Implementos', right: `<span class="muted">${m.equipment.map(e => EQUIPMENT[e]).join(', ')}${m.load ? ` · ${esc(m.load)}` : ''}</span>` }),
       row({ title: 'Dosis sugerida', right: `<span class="muted">${esc(doseText(m.dose))}</span>` })], { header: 'Detalles' });
     html += group(m.tips.map((tp, i) => `<div class="row tip"><span class="num">${i + 1}</span><span class="rt"><span class="rtt">${esc(tp)}</span></span></div>`), { header: 'Técnica' });
-    html += group(keys.map((k, n) => { const ps = m.positions[k]; return row({ icon: `<span class="badge sm">${n + 1}</span>`, title: esc(ps.label), right: `<span class="breath-txt ${ps.breath}">${ps.breath === 'in' ? 'Inhala' : 'Exhala'} · ${esc(ps.verb)}</span>` }); }), { header: 'Respiración', footer: 'Indica cómo respirar para llegar a cada posición. El borde de la imagen es azul y continuo al inhalar (flecha ↑), y rojo y discontinuo al exhalar (flecha ↓).' });
+    html += group(keys.map((k, n) => { const ps = m.positions[k]; return row({ icon: `<span class="badge sm">${n + 1}</span>`, title: esc(ps.label), right: `<span class="breath-txt ${ps.breath}">${ps.breath === 'in' ? 'Inhala' : 'Exhala'} · ${esc(ps.verb)}</span>` }); }), { header: 'Respiración', footer: 'Indica cómo respirar para llegar a cada posición. El borde de la imagen es azul, con un brillo que se expande, al inhalar (flecha ↑), y rojo, con una línea doble fina y un brillo suave, al exhalar (flecha ↓).' });
     html += group([...inPlans.map(x => row({ title: esc(x) })), row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir a un plan</span>', a: 'addToPlan', data: `data-id="${m.id}"` })], { header: 'En tus planes' });
     return { title: m.name, backLabel: nav.tab === 'moves' ? 'Movimientos' : 'Atrás', html, after: () => startAnim(m.id, playing ? null : cur) };
   },
@@ -580,7 +580,7 @@ const A = {
   delSession: el => { const h = S().history, i = h.findIndex(x => x.id === el.dataset.id); const rem = h.splice(i, 1)[0]; store.save(); closeSheet(); render(); undoToast('Sesión eliminada', () => { h.push(rem); planSave(); }); },
   setStep: el => { const st = set(), k = el.dataset.k; st[k] = Math.round(clamp(st[k] + +el.dataset.d * +el.dataset.st, +el.dataset.min, +el.dataset.max) * 10) / 10; afterSetting(); },
   setSeg: el => { set()[el.dataset.k] = el.dataset.v; afterSetting(); },
-  testSound: () => { unlockAudio(); sfx.tick(); setTimeout(sfx.tick, 1000); setTimeout(sfx.tick, 2000); setTimeout(sfx.go, 3000); if (set().voice) setTimeout(() => say('Sentadilla goblet. Diez a doce repeticiones.'), 3500); },
+  testSound: () => { unlockAudio(); sfx.tick(); setTimeout(sfx.tick, 700); setTimeout(() => sfx.tick(true), 1400); setTimeout(sfx.go, 2100); setTimeout(sfx.side, 3000); setTimeout(sfx.rest, 3700); setTimeout(sfx.done, 4800); if (set().voice) setTimeout(() => say('Sentadilla goblet. Diez a doce repeticiones.'), 6200); },
   openMore: () => push('settingsMore'),
   openStorage: () => push('settingsStorage'),
   restorePlans: () => confirmSheet('Los planes incluidos volverán a su versión original. Tus planes propios no cambian.', 'Restaurar planes', () => { DEFAULT_PLANS.forEach(p => store.restoreBuiltin(p.id)); S().hiddenBuiltins = []; store.save(); render(); toast('Planes restaurados'); }),
@@ -604,7 +604,7 @@ const A = {
   // reproductor
   pToggle: () => P.toggle(), pNext: () => P.next(), pPrev: () => P.prev(), pDone: () => P.next(true), pAdd: () => P.addTime(15),
   pDuoDone: el => P.duoDone(el.dataset.w),
-  pClose: () => P.askClose(), pMood: el => { P.mood = el.dataset.v; P.renderDone(); }, pSave: () => P.save(), pDiscard: () => P.discard(),
+  pClose: () => P.askClose(), pSave: () => P.save(),
   pAnimToggle: () => { set().animate = !set().animate; store.save(); P.renderStep(); },
   pSettings: () => P.openSettings(),
 };
@@ -693,9 +693,9 @@ const P = {
         else say(s.title + (unitText(s) ? '. ' + unitText(s) : '') + (s.reps && !unitText(s) ? '. ' + s.reps.replace('–', ' a ') : ''));
       } else if (s.type === 'rest') { sfx.rest(); say(s.betweenSections ? `Descanso. Luego, ${s.section.name}` : 'Descanso'); }
       else if (s.type === 'transition' || s.type === 'ready') { const n = s.type === 'ready' ? s.nextWork : s; if (n && n.move) say(`A continuación: ${n.move.name}`); }
-      else if (s.type === 'switch') say(s.title);
+      else if (s.type === 'switch') { sfx.side(); say(s.title); }
     }
-    this.renderStep();
+    this.renderStep(true);
   },
   update() {
     const now = Date.now();
@@ -716,7 +716,7 @@ const P = {
       }
       this.remain = rem;
       const sec = Math.ceil(rem), bl = set().beepLast;
-      if (bl > 0 && sec <= bl && sec >= 1 && this.lastBeep !== sec) { this.lastBeep = sec; sfx.tick(); }
+      if (bl > 0 && sec <= bl && sec >= 1 && this.lastBeep !== sec) { this.lastBeep = sec; sfx.tick(sec === 1); }
     }
     this.paint();
   },
@@ -770,7 +770,7 @@ const P = {
   },
 
   // ── pintado
-  renderStep() {
+  renderStep(enter = false) {
     const s = this.step, st = set(), el = $('#player'), pp = people(this.plan);
     this.stopFrames();
     const sec = s.section || (s.nextWork && s.nextWork.section), segs = this.segs();
@@ -792,22 +792,25 @@ const P = {
         <div class="p-meter">${s.secs != null ? `<div class="p-ring has-prog">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div>${progHTML(s)}</div>` : `<div class="p-reps"><b>${esc(s.reps.split(' ')[0])}</b><span>${esc(s.reps.split(' ').slice(1).join(' '))}</span><em id="pTime">${clock(0)}</em>${progHTML(s)}</div>`}
           <p class="p-cue">${I.check}${esc(m.cue)}</p></div>`;
     } else {
-      const label = s.type === 'ready' ? 'Prepárate' : s.type === 'rest' ? 'Descanso' : s.type === 'switch' ? s.title : 'Siguiente';
       const n = s.nextWork;
-      const nextCard = (mv, u, k) => `<div class="p-next"><span class="p-next-img ${u.mirror ? 'flip' : ''}"><img src="${imgOf(mv, keyIdx(mv)[0], k == null ? undefined : pp[k].model)}" alt=""></span><span><small>${k == null ? 'A continuación' : esc(pp[k].name)}</small><b>${esc(mv.name)}</b><em>${esc(u.secs != null && u.reps == null ? fmtSecs(u.secs) : (u.reps || ''))}${unitText(u) ? ' · ' + esc(unitText(u)) : ''}</em></span></div>`;
-      let next = '';
-      if (n && n.duo) next = nextCard(n.a.move, n.a, 0) + nextCard(n.b.move, n.b, 1);
-      else if (n) next = nextCard(n.move, n);
-      center = `<div class="p-restlabel">${label}${s.sub ? `<small>${esc(s.sub)}</small>` : ''}${roundTxt}</div>
-        <div class="p-ring rest">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>
-        ${s.type === 'rest' ? `<div class="p-restbtns"><button class="btn tinted dark" data-a="pAdd">+15 s</button><button class="btn tinted dark" data-a="pNext">Saltar</button></div>` : ''}
-        <div class="p-nexts">${next}</div>`;
+      const nextCard = (mv, u, k, cap) => `<div class="p-next"><span class="p-next-img ${u.mirror ? 'flip' : ''}"><img src="${imgOf(mv, keyIdx(mv)[0], k == null ? undefined : pp[k].model)}" alt=""></span><span><small>${k == null ? cap : esc(pp[k].name)}</small><b>${esc(mv.name)}</b><em>${esc(u.secs != null && u.reps == null ? fmtSecs(u.secs) : (u.reps || ''))}${unitText(u) ? ' · ' + esc(unitText(u)) : ''}</em></span></div>`;
+      const nexts = cap => !n ? '' : n.duo ? nextCard(n.a.move, n.a, 0, cap) + nextCard(n.b.move, n.b, 1, cap) : nextCard(n.move, n, null, cap);
+      if (s.type === 'ready') {
+        // cuenta regresiva: cifra grande que «salta» cada segundo
+        center = `<div class="p-ready"><span class="kick">Prepárate</span><div class="p-ring ready">${bigRing()}<div class="p-time" id="pTime">${Math.max(1, Math.ceil(this.remain))}</div></div></div><div class="p-nexts">${nexts('Empiezas con')}</div>`;
+      } else {
+        const label = s.type === 'rest' ? 'Descanso' : s.type === 'switch' ? s.title : 'Siguiente';
+        center = `<div class="p-restlabel">${s.type === 'switch' ? `<span class="p-switchicon">${I.sides}</span>` : ''}${label}${s.sub ? `<small>${esc(s.sub)}</small>` : ''}${roundTxt}</div>
+          <div class="p-ring rest">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>
+          ${s.type === 'rest' ? `<div class="p-restbtns"><button class="btn tinted dark" data-a="pAdd">+15 s</button><button class="btn tinted dark" data-a="pNext">Saltar</button></div>` : ''}
+          <div class="p-nexts">${nexts('A continuación')}</div>`;
+      }
     }
     el.className = `on t-${s.type} ${layout}`;
     el.innerHTML = `<div class="p-top"><button class="p-x" data-a="pClose" aria-label="Terminar">${I.x}</button><div class="p-info"><b>${esc(this.plan.name)}</b></div><button class="p-x" data-a="pSettings" aria-label="Ajustes">${I.gear}</button></div>
       <div class="p-prog-top"><p class="p-blk">${esc(sec ? sec.name : '')}${duoProg}</p><div class="p-segs" role="progressbar" aria-label="Progreso por bloques" aria-valuemin="0" aria-valuemax="100">${segs.map(g => `<i style="flex-grow:${Math.max(g.total, 20)}"><b></b></i>`).join('')}</div></div>
-      <div class="p-center">${center}</div>
-      ${layout ? '' : '<div class="p-ctl" id="pCtl"></div>'}`;
+      <div class="p-center ${enter ? 'enter' : ''}">${center}</div>
+      ${layout ? '' : '<div class="p-ctl" id="pCtl"></div>'}<div class="p-paused" aria-hidden="true">${I.pause}<span>En pausa</span></div>`;
     this.segEls = [...el.querySelectorAll('.p-segs b')];
     this.renderControls(); this.paint();
     if (isWork) {
@@ -830,9 +833,12 @@ const P = {
     const s = this.step; this.paintSegs(); const t = $('#pTime'); if (!t) return;
     if (s.secs != null) {
       const rem = Math.max(0, this.remain);
-      t.textContent = clock(Math.ceil(rem));
+      if (s.type === 'ready') { // cifra entera; se reinicia la animación en cada número
+        const n = Math.max(1, Math.ceil(rem));
+        if (t._n !== n) { t._n = n; t.textContent = n; t.classList.remove('pop'); void t.offsetWidth; t.classList.add('pop'); }
+      } else t.textContent = clock(Math.ceil(rem));
       const fg = $('#player .p-ring .ring-fg'); if (fg) { const c = +fg.dataset.c; fg.style.strokeDashoffset = (c * (1 - rem / s.secs)).toFixed(1); }
-      t.classList.toggle('warn', Math.ceil(rem) <= set().beepLast && rem > 0);
+      t.classList.toggle('warn', s.type !== 'ready' && Math.ceil(rem) <= set().beepLast && rem > 0);
     } else t.textContent = clock((Date.now() - this.stepStart) / 1000);
   },
   // progreso por bloque: cada segmento se llena según el tiempo (estimado en repeticiones manuales) de sus pasos
@@ -867,21 +873,23 @@ const P = {
   },
   renderDone() {
     const el = $('#player'); el.className = 'on t-done';
-    const moods = ['😣', '😐', '🙂', '😄', '🔥'];
-    const note = $('#pNote') ? $('#pNote').value : '';
+    const names = this.duo ? people(this.plan).map(x => x.name) : [store.active.name];
+    const who = names.filter(Boolean).join(' y ');
+    const sum = { secs: Math.round(this.active), worked: this.worked, blocks: this.doneSections.size, planId: this.plan.id, profiles: this.duo ? people(this.plan).map(x => x.profile) : [S().activeProfile] };
+    const week = weekSessions().length + 1, goal = set().weeklyGoal || 3;
     el.innerHTML = `<div class="p-top"><span></span><div class="p-info"><b>${esc(this.plan.name)}</b></div><span></span></div>
-      <div class="p-center done"><div class="p-check">${I.check}</div><h2>¡Entrenamiento completado!</h2>
-      <div class="p-stats"><div><b>${clock(this.active)}</b><span>Duración</span></div><div><b>${this.worked}</b><span>Ejercicios</span></div><div><b>${this.doneSections.size}</b><span>Bloques</span></div></div>
-      <p class="p-q">¿Cómo te sentiste?</p><div class="p-moods">${moods.map(m => `<button class="${this.mood === m ? 'on' : ''}" data-a="pMood" data-v="${m}">${m}</button>`).join('')}</div>
-      <textarea id="pNote" placeholder="Notas (peso, banda, sensaciones…)" rows="2">${esc(note)}</textarea></div>
-      <div class="p-ctl col"><button class="btn primary big" data-a="pSave">Guardar</button><button class="btn plain light" data-a="pDiscard">No guardar</button></div>`;
+      <div class="p-center done"><div class="p-done-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="halo" cx="60" cy="60" r="56"/><circle class="disc" cx="60" cy="60" r="44"/><path class="tick" d="M41 62l14 14 25-29"/></svg></div>
+        <h2 class="rise d1">Listo${who ? ', ' + esc(who) : ''}</h2><p class="sub rise d1">Entrenamiento completado</p>
+        <div class="p-stats rise d2"><div><b>${clock(this.active)}</b><span>Duración</span></div><div><b>${this.doneSections.size}</b><span>${this.doneSections.size === 1 ? 'Bloque' : 'Bloques'}</span></div></div>
+        <p class="p-weekline rise d3">${week >= goal ? '¡Meta semanal cumplida!' : `Esta semana: ${week} de ${goal}`}</p>
+        <div id="pDoneExtra" class="rise d3">${doneExtras(sum)}</div></div>
+      <div class="p-ctl col rise d3"><button class="btn primary big cta" data-a="pSave">Terminar</button></div>`;
   },
   record(partial) {
     S().history.push({ id: uid(), date: new Date(this.sessionStart).toISOString(), planId: this.plan.id, planName: this.plan.name, secs: Math.round(this.active), worked: this.worked, total: this.totalWork, sections: [...this.doneSections], mood: this.mood, note: ($('#pNote') || {}).value || '', partial: !!partial, profiles: this.duo ? people(this.plan).map(x => x.profile) : [S().activeProfile], ...(this.duo ? { people: people(this.plan).map(x => x.name) } : {}) });
     store.save();
   },
   save() { this.record(false); this.close(); toast('Sesión guardada'); },
-  discard() { this.close(); },
   askClose() {
     if (!this.paused) this.toggle();
     actionSheet('¿Terminar el entrenamiento?', [
@@ -896,6 +904,9 @@ const P = {
     this.steps = null; render();
   },
 };
+
+// Gancho para fases 4-5: devuelve HTML (kcal estimadas, hitos, progreso por grupo muscular) que se muestra bajo la meta semanal.
+const doneExtras = sum => '';
 
 // "Ronda 1/3" (solo si el bloque tiene más de una ronda) + puntos del ejercicio dentro de la ronda
 const progHTML = s => {

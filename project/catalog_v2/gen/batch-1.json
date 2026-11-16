@@ -1,0 +1,82 @@
+[
+ {
+  "id": "bodyweight-squat",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/104220dd6154cffdbf3f1ec5fca31486c037ccccab41fcee77b120bb8887bd85.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/81b0c8f86e029cda1f02afeb20641a0306467ebd15815e8115886e15bbee373e.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Frame 1 has arms hanging, as in prompt. Clean cuts."
+ },
+ {
+  "id": "chair-squat",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/b06335adf8f69d8d85b1d73aaa7cadef12d5b422c16f4145a985be8926e4cb2f.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/491a7deb6ba45c7ca8ab6d3d9ab4e2ced8d10e285fcd22d65806ecd956518a7f.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Chair identical in all frames; clean cuts."
+ },
+ {
+  "id": "reverse-lunge",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/fc4a7388053dac4696a93d135dcfa96374aa5e3b6c71ed7417b8e487df14074f.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d6005c866d86a3ba42bc0463d52f922f41531c8fe0eb9e5cd8984f09dced248c.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Front foot drifts slightly between source frames; feet anchor aligns by lowest pixels, check in-app."
+ },
+ {
+  "id": "split-squat",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/68413644c1586affff558e97322c0211abf0b9b6813bf57cd26aecd8b88c323f.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/ccfdfd3469a16d95d0449d96a6508a76683347cdf6aa33d11cb7c9df4ee137c6.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Frame 1 already shows slight knee bend and stance length varies a little between frames (~10%)."
+ }
+]
