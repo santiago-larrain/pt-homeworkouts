@@ -27,6 +27,10 @@ Rama de trabajo: `v2`; se fusiona a `main` (GitHub Pages) al cerrar cada fase ve
    (overlay SVG calculado en `build_anim.py`), filtros por músculo, grupo muscular y equipo, planes incluidos nuevos.
 4. **Cuerpo y calorías**: motor de calorías (MET del Compendium of Physical Activities, corregido por peso/talla/edad/sexo),
    registro manual de peso/talla con gráfico, carga estimada (kg de mancuernas del perfil).
+4b. **Mapa muscular del plan**: figura del cuerpo (frente y espalda) donde cada músculo se tiñe con un gradiente según
+   cuánto lo trabaja el plan (foco = 1, apoyo = 0,5, ponderado por el tiempo/volumen de cada ejercicio). Se muestra en el
+   detalle del plan (beneficios principales de la sesión), en el resumen final y en el progreso semanal. Componente
+   `docs/js/musclemap.js` (SVG con una región por músculo canónico de `project/catalog_v2/NOTES.md`).
 5. **Motivación**: meta semanal (no racha diaria), resumen breve al terminar, hitos, progreso por grupo muscular.
 6. **Recordatorios y Salud**: Atajo de Apple ("Conectar con Apple Salud": lee peso/talla, registra entrenamientos, y
    crea/edita/apaga la cadena de recordatorios desde la app vía `shortcuts://run-shortcut`), más entrada manual.
