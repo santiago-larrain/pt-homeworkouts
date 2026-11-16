@@ -1,6 +1,6 @@
 import { MOVES, MOVE_BY_ID, CATEGORIES, EQUIPMENT } from '../data/catalog.js';
 import { store, uid, clone, todayISO } from './store.js';
-import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, clock, isDuo } from './engine.js';
+import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, clock, isDuo, unitText } from './engine.js';
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
 import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
@@ -88,10 +88,11 @@ function setBreath(box, m, i) {
   const g = box.querySelector('.glow'); if (g) g.className = `glow ${ps.breath}`;
   const b = box.querySelector('.p-breath'); if (b) { b.className = `p-breath ${ps.breath}`; b.innerHTML = breathHTML(ps); }
 }
-function mountRig(box, m, { model, fixed = null, play = true, isPaused } = {}) {
+function mountRig(box, m, { model, fixed = null, play = true, isPaused, mirror = false } = {}) {
   if (!box) return () => {};
   const opts = { fixed, play: play && fixed == null, speed: set().animSpeed, isPaused, onPos: i => setBreath(box, m, i) };
   const an = hasFrames(m.id) ? new FrameAnimator(box, m.id, modelOf(model), { ...opts, nPos: m.positions.length }) : new Animator(box, m.id, modelOf(model), opts);
+  if (mirror && box.firstElementChild) box.firstElementChild.classList.add('flip'); // solo la imagen, nunca el texto ni la respiración
   return () => an.destroy();
 }
 
@@ -642,7 +643,7 @@ const P = {
       if (s.type === 'work') {
         sfx.go();
         if (s.duo) say(s.a.move.id === s.b.move.id ? s.a.move.name : `${pp[0].name}: ${s.a.move.name}. ${pp[1].name}: ${s.b.move.name}`);
-        else say(s.title + (s.sub ? '. ' + s.sub : '') + (s.reps && !s.sub ? '. ' + s.reps.replace('–', ' a ') : ''));
+        else say(s.title + (unitText(s) ? '. ' + unitText(s) : '') + (s.reps && !unitText(s) ? '. ' + s.reps.replace('–', ' a ') : ''));
       } else if (s.type === 'rest') { sfx.rest(); say(s.betweenSections ? `Descanso. Luego, ${s.section.name}` : 'Descanso'); }
       else if (s.type === 'transition' || s.type === 'ready') { const n = s.type === 'ready' ? s.nextWork : s; if (n && n.move) say(`A continuación: ${n.move.name}`); }
       else if (s.type === 'switch') say(s.title);
@@ -732,7 +733,7 @@ const P = {
     let center = '', layout = '';
     if (isWork && s.duo) {
       layout = 'duo-layout';
-      const who = (u, k) => `<div class="duo-cap"><span class="who">${esc(pp[k].name)}</span><b>${esc(u.move.name)}</b><em>${esc(u.secs != null || u.reps == null ? (u.sub || '') : u.reps + (u.sub ? ' · ' + u.sub : ''))}</em></div>`;
+      const who = (u, k) => `<div class="duo-cap"><span class="who">${esc(pp[k].name)}</span><b>${esc(u.move.name)}</b><em>${esc(u.secs != null || u.reps == null ? unitText(u) : u.reps + (unitText(u) ? ' · ' + unitText(u) : ''))}</em></div>`;
       const meter = s.secs != null ? `<div class="p-ring sm">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>` : `<div class="duo-reps"><em id="pTime">${clock(0)}</em></div>`;
       center = `<div class="duo-wrap"><div class="duo-p">${mediaHTML(s.a.move, s.a.pos ?? 0, { id: 'pmA' })}${who(s.a, 0)}</div>
         <div class="duo-mid">${meter}<div class="p-ctl" id="pCtl"></div></div>
@@ -740,13 +741,13 @@ const P = {
     } else if (isWork) {
       const m = s.move;
       center = `${mediaHTML(m, s.pos ?? 0, { id: 'pm0', extra: s.pos == null && m.positions.length > 1 ? `<button class="p-animbtn" data-a="pAnimToggle" aria-label="Animación">${st.animate ? I.pause : I.play}</button>` : '' })}
-        <div class="p-title"><h2>${esc(m.name)}</h2><p>${esc(s.sub || '')}${s.dose && s.dose.note ? ` · ${esc(s.dose.note)}` : ''}</p></div>
+        <div class="p-title"><h2>${esc(m.name)}</h2><p>${s.sideName ? `<span class="side-chip ${s.side === 1 ? 'r' : 'l'}">${esc(s.sideName)}</span>` : ''}${esc([s.sub, ...(s.dose && s.dose.note && s.dose.note !== s.sub ? [s.dose.note] : [])].filter(Boolean).join(' · '))}</p></div>
         <div class="p-meter">${s.secs != null ? `<div class="p-ring">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div></div>` : `<div class="p-reps"><b>${esc(s.reps.split(' ')[0])}</b><span>${esc(s.reps.split(' ').slice(1).join(' '))}</span><em id="pTime">${clock(0)}</em></div>`}
           <p class="p-cue">${I.check}${esc(m.cue)}</p></div>`;
     } else {
       const label = s.type === 'ready' ? 'Prepárate' : s.type === 'rest' ? 'Descanso' : s.type === 'switch' ? s.title : 'Siguiente';
       const n = s.nextWork;
-      const nextCard = (mv, u, k) => `<div class="p-next"><span class="p-next-img"><img src="${imgOf(mv, keyIdx(mv)[0], k == null ? undefined : pp[k].model)}" alt=""></span><span><small>${k == null ? 'A continuación' : esc(pp[k].name)}</small><b>${esc(mv.name)}</b><em>${esc(u.secs != null && u.reps == null ? fmtSecs(u.secs) : (u.reps || ''))}${u.sub ? ' · ' + esc(u.sub) : ''}</em></span></div>`;
+      const nextCard = (mv, u, k) => `<div class="p-next"><span class="p-next-img ${u.mirror ? 'flip' : ''}"><img src="${imgOf(mv, keyIdx(mv)[0], k == null ? undefined : pp[k].model)}" alt=""></span><span><small>${k == null ? 'A continuación' : esc(pp[k].name)}</small><b>${esc(mv.name)}</b><em>${esc(u.secs != null && u.reps == null ? fmtSecs(u.secs) : (u.reps || ''))}${unitText(u) ? ' · ' + esc(unitText(u)) : ''}</em></span></div>`;
       let next = '';
       if (n && n.duo) next = nextCard(n.a.move, n.a, 0) + nextCard(n.b.move, n.b, 1);
       else if (n) next = nextCard(n.move, n);
@@ -762,8 +763,8 @@ const P = {
       ${layout ? '' : '<div class="p-ctl" id="pCtl"></div>'}`;
     this.renderControls(); this.paint();
     if (isWork) {
-      const go = (m, pos, id, model) => this.stops.push(mountRig($('#' + id), m, { model, fixed: pos ?? (st.animate ? null : 0), isPaused: () => this.paused }));
-      if (s.duo) { go(s.a.move, s.a.pos, 'pmA', pp[0].model); go(s.b.move, s.b.pos, 'pmB', pp[1].model); } else go(s.move, s.pos, 'pm0');
+      const go = (m, pos, id, model, mirror) => this.stops.push(mountRig($('#' + id), m, { model, mirror, fixed: pos ?? (st.animate ? null : 0), isPaused: () => this.paused }));
+      if (s.duo) { go(s.a.move, s.a.pos, 'pmA', pp[0].model, s.a.mirror); go(s.b.move, s.b.pos, 'pmB', pp[1].model, s.b.mirror); } else go(s.move, s.pos, 'pm0', undefined, s.mirror);
     }
   },
   renderControls() {

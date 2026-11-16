@@ -27,20 +27,26 @@ export const clock = s => `${Math.floor(s / 60)}:${String(Math.max(0, Math.floor
 
 const SIDES = ['Lado derecho', 'Lado izquierdo'];
 
+// Texto del lado/subtítulo de una unidad: «Lado derecho», «De lado · lado izquierdo», nota…
+export const unitText = u => u.sideName ? (u.sub ? `${u.sub} · ${u.sideName.toLowerCase()}` : u.sideName) : (u.sub || '');
+
 // Expande una dosis en unidades de trabajo (lados, fases). secs = null → repeticiones manuales.
-function unitsFor(d, settings) {
-  const units = [];
+// side: 0 = sin lado, 1 = derecho, 2 = izquierdo. mirror: el segundo lado se muestra con la imagen espejada
+// (solo movimientos `sided` + `mirror`; las alternadas no se espejan).
+function unitsFor(d, settings, move) {
+  const units = [], canMirror = !!(move && move.sided && move.mirror && !d.alternating);
+  const side = (per, s) => ({ side: per ? s + 1 : 0, sideName: per ? SIDES[s] : '', mirror: per && s === 1 && canMirror });
   if (d.type === 'time') {
     const sides = d.perSide ? 2 : 1;
-    for (let s = 0; s < sides; s++) units.push({ secs: d.secs, sub: d.perSide ? SIDES[s] : (d.note || ''), pos: null, side: d.perSide ? s + 1 : 0 });
+    for (let s = 0; s < sides; s++) units.push({ secs: d.secs, sub: d.note || '', pos: null, ...side(d.perSide, s) });
   } else if (d.type === 'reps') {
     const sides = d.perSide ? 2 : 1;
     const auto = settings.repsMode === 'auto';
-    for (let s = 0; s < sides; s++) units.push({ secs: auto ? d.max * settings.secsPerRep : null, repsMax: d.max, reps: repsText(d) + (d.alternating ? ' alternadas' : ''), sub: d.perSide ? SIDES[s] : '', pos: null, side: d.perSide ? s + 1 : 0 });
+    for (let s = 0; s < sides; s++) units.push({ secs: auto ? d.max * settings.secsPerRep : null, repsMax: d.max, reps: repsText(d) + (d.alternating ? ' alternadas' : ''), sub: '', pos: null, ...side(d.perSide, s) });
   } else if (d.type === 'phases') {
     d.phases.forEach(ph => {
       const sides = ph.perSide ? 2 : 1;
-      for (let s = 0; s < sides; s++) units.push({ secs: ph.secs, sub: ph.label + (ph.perSide ? ` · ${SIDES[s].toLowerCase()}` : ''), pos: ph.pos ?? null, side: ph.perSide ? s + 1 : 0 });
+      for (let s = 0; s < sides; s++) units.push({ secs: ph.secs, sub: ph.label, pos: ph.pos ?? null, ...side(ph.perSide, s) });
     });
   }
   return units;
@@ -50,7 +56,7 @@ function unitsFor(d, settings) {
 // govern 'time': manda el tiempo (las repeticiones se convierten a segundos y se toma el mayor).
 // govern 'reps': si alguna hace repeticiones, el paso espera a que ambas toquen "Hecho".
 function duoUnits(item, settings) {
-  const ua = unitsFor(doseOf(item), settings), ub = unitsFor(doseOf(item.b), settings);
+  const ua = unitsFor(doseOf(item), settings, MOVE_BY_ID[item.move]), ub = unitsFor(doseOf(item.b), settings, MOVE_BY_ID[item.b.move]);
   const n = Math.max(ua.length, ub.length), out = [];
   const secsOf = u => u.secs != null ? u.secs : u.repsMax * settings.secsPerRep;
   for (let k = 0; k < n; k++) {
@@ -75,7 +81,7 @@ export function buildSteps(plan, settings, onlySection = null) {
         const move = MOVE_BY_ID[item.move];
         if (!move || (duo && (!item.b || !MOVE_BY_ID[item.b.move]))) return;
         const moveB = duo ? MOVE_BY_ID[item.b.move] : null;
-        const units = duo ? duoUnits(item, settings) : unitsFor(doseOf(item), settings);
+        const units = duo ? duoUnits(item, settings) : unitsFor(doseOf(item), settings, move);
         units.forEach((u, ui) => {
           const prev = steps[steps.length - 1];
           const base = { section: sec, sectionIdx: secIdx, round: r, rounds, move, moveB };
@@ -88,7 +94,7 @@ export function buildSteps(plan, settings, onlySection = null) {
           }
           const w = { ...base, type: 'work', secs: u.secs, title: move.name, itemIdx: ii, items: sec.items.length, key: `${secIdx}|${r}|${ii}|${ui}|work` };
           if (duo) Object.assign(w, { duo: true, a: { ...u.a, move, dose: doseOf(item) }, b: { ...u.b, move: moveB, dose: doseOf(item.b) }, side: u.side });
-          else Object.assign(w, { reps: u.reps, sub: u.sub, pos: u.pos, side: u.side, dose: doseOf(item) });
+          else Object.assign(w, { reps: u.reps, sub: u.sub, sideName: u.sideName, mirror: u.mirror, pos: u.pos, side: u.side, dose: doseOf(item) });
           steps.push(w);
         });
       });

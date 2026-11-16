@@ -403,3 +403,9 @@ u.s { background: var(--yellow); }
 .avatar.m { background: #5B6B86; }
 input.inline.short { width: 110px; }
 input.inline::placeholder { color: var(--label3); }
+
+/* ───────── lados (v1.4): el segundo lado espeja solo la imagen (nunca texto ni respiración) */
+.flip { transform: scaleX(-1); }
+.side-chip { display: inline-flex; align-items: center; gap: 6px; font: 700 14px var(--round); padding: 4px 12px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); margin-right: 6px; }
+.side-chip::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.side-chip.l::before { border-radius: 2px; }
