@@ -238,5 +238,125 @@
    "m": 1
   },
   "notes": "Ring seen standing above the knees (handle pokes above), same size every frame; squeeze only subtly visible."
+ },
+ {
+  "id": "donkey-kick",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "right",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, on all fours on the mat facing right (head at the right)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/fffa4de429f265dccafb0e91a87a537f9ad99b6ff3ddb41d6ba125ab258aca22.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/a8eca6a3e23a2c3ffd5769c21796f9922d76e94845529b5b1a6675ea5abd7a5a.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean cuts. Frame 1 shows only one leg (tabletop, legs overlap)."
+ },
+ {
+  "id": "fire-hydrant",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "from BEHIND, on all fours on the mat with her back to the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/541124bf582c2a8d1d8b514d46839d6abf25eaf0b4c45bedaa95ee9e00bc6c47.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/5b193aa63c78b2a788e85a328ae5ff3fe7f12af3aecf33fe770ac2b55c5e4bb6.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Abduction in frame 4 looks closer to 60-70 degrees than 45; orange (gluteus medius) is small and mostly overlapped by yellow gluteus maximus."
+ },
+ {
+  "id": "clamshell",
+  "status": "needs-review",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d375fa8d86631721d5ba351c46c19363b954bfa886f74af244f8ed29f0719591.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/c8f44d9f340853490bf058fc67e91917f1a9c7bafdd7fb188d0fccb26ca9ab99.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Source strips are correct, but strip_frames.py floor reconstruction leaves white/smudged blotches over the lower leg and feet where the body touches the mat (clearly in f, slightly in m socks). Needs a manual fix or a different cut (try --cuts or regenerate with the figure lying a bit higher on the mat)."
+ },
+ {
+  "id": "side-lying-leg-raise",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/7aca0bf467f044a2e536d6ad47bdec020e00b48a1012286b5c167c573c270a76.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d38bb2d25bdfbc919287eee63bd4c238c03818b4761e22b61a2ab15d67bf1e4f.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Upper leg already extended in frame 1 (as specified, resting on lower leg); clean cuts."
+ },
+ {
+  "id": "kb-deadlift",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/a82569629f7cbdee21bfe9004770e9f48526d380715a5d70f54758d85057797a.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0adca05e481ba63119cbeee91c03951804d1462428630301f97dd35e2153d43d.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Kettlebell consistent; in frame 5 the kettlebell touches the front foot area (slightly forward of mid-feet)."
+ },
+ {
+  "id": "kb-swing",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": true,
+  "pos": [
+   0,
+   2
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/76272b82228e42a7c3ef6c2fdb4586c954bc7b7774b779d1a2eb62d2f011c624.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/ed3c825ce7bcfb98becd2e64112996cc847fc3685106f8566814fd5e2e03cd2c.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Frames 1 and 5 show the kettlebell behind the legs (hidden hands). Frame 1 and 5 feet slightly differ in stance."
  }
 ]
