@@ -26,14 +26,15 @@ actualiza con el fondo del tema (y con el del reproductor mientras se entrena).
 | `--card2` (superficie teñida) | `#FEF0F4` | `#2C1D24` | `#EEF0FC` | `#23263A` |
 | `--label` (texto) | `#2A1D23` | `#FAF1F4` | `#15171D` | `#F2F3F8` |
 | `--label2` (secundario) | `#6B5A62` | `#C4B0B8` | `#596072` | `#A9AFC2` |
-| `--label3` (deshabilitado, no es texto) | `#A99AA1` | `#7F6D75` | `#9CA3B4` | `#6C7287` |
+| `--label3` (bordes, chevrones, placeholders; ≥ 3:1) | `#8E7E86` | `#7F6D75` | `#7C8397` | `#6C7287` |
 | `--accent` (gráficos ≥ 3:1) | `#E0457B` | `#FF6E9C` | `#5B63E8` | `#8E9BFF` |
 | `--accent-ink` (texto y relleno de botón) | `#C42E64` | `#FF6E9C` | `#4B55D6` | `#8E9BFF` |
 | `--on-accent` (texto sobre `--accent-ink`) | `#FFFFFF` | `#2B0D18` | `#FFFFFF` | `#0E1030` |
 
-Contraste medido: `--label` sobre `--bg` ≥ 14:1; `--label2` sobre `--card`/`--bg` ≥ 5.7:1 (claro) y ≥ 8:1 (oscuro);
-`--accent-ink` sobre `--card` 5.4:1 (rosa claro), 5.9:1 (estándar claro), ≥ 6.5:1 (oscuros); `--on-accent` sobre `--accent-ink`
-5.4:1 / 5.9:1 / 7:1+. El `--accent` claro del rosa (`#E0457B`, 4:1) solo se usa en gráficos (anillos, puntos, íconos), nunca en texto.
+Contraste medido en el navegador: `--label` sobre `--bg` ≥ 15:1;
+`--label2` sobre `--card`/`--bg` ≥ 5.7:1 (claro) y ≥ 8.5:1 (oscuro); `--accent-ink` sobre `--card` 5.35:1 (rosa claro), 5.88:1 (estándar claro),
+≥ 6.6:1 (oscuros) y sobre `--bg` ≥ 4.96:1; `--on-accent` sobre `--accent-ink` 5.35:1 / 5.88:1 / 6.8:1 / 7.3:1. El `--accent` del rosa claro
+(`#E0457B`, 3.96:1) solo se usa en gráficos (anillos, puntos, íconos), nunca en texto. `--label3` ≥ 3:1 (no se usa para texto de lectura).
 Respiración: pastilla sólida `--in-solid #1D4FBF` / `--ex-solid #C62F2F` con texto blanco (≥ 5:1); texto suelto `--in` / `--ex`
 (variantes claras en oscuro). Otros tokens de color: `--sep`, `--fill`, `--bar` (material translúcido), `--accent-soft`,
 `--grad-card`, `--bg-glow` (resplandor suave arriba de cada pantalla), `--danger`, `--ok`.

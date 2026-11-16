@@ -23,7 +23,7 @@
   /* — color · tema rosa, claro (por defecto) — */
   --bg: #FAF5F6; --bg-glow: radial-gradient(95% 42% at 50% -4%, rgba(255, 150, 185, .26), transparent 72%);
   --card: #FFFFFF; --card2: #FEF0F4;
-  --label: #2A1D23; --label2: #6B5A62; --label3: #A99AA1;
+  --label: #2A1D23; --label2: #6B5A62; --label3: #8E7E86;
   --sep: rgba(90, 40, 60, .13); --fill: rgba(120, 70, 95, .09); --bar: rgba(250, 245, 246, .84);
   --accent: #E0457B;          /* gráficos: anillos, puntos, íconos (≥ 3:1) */
   --accent-ink: #C42E64;      /* texto sobre fondo y relleno de botones con --on-accent (≥ 4.5:1) */
@@ -46,7 +46,7 @@
 :root[data-theme="estandar"] {
   --bg: #F3F4F8; --bg-glow: radial-gradient(95% 40% at 50% -4%, rgba(110, 120, 240, .16), transparent 72%);
   --card: #FFFFFF; --card2: #EEF0FC;
-  --label: #15171D; --label2: #596072; --label3: #9CA3B4;
+  --label: #15171D; --label2: #596072; --label3: #7C8397;
   --sep: rgba(30, 40, 90, .13); --fill: rgba(70, 80, 140, .09); --bar: rgba(243, 244, 248, .84);
   --accent: #5B63E8; --accent-ink: #4B55D6; --on-accent: #FFFFFF; --accent-soft: rgba(75, 85, 214, .10);
   --grad-card: linear-gradient(155deg, #FFFFFF 0%, #EEF0FC 100%);
@@ -270,7 +270,7 @@ input.inline::placeholder { color: var(--label3); }
 .field:focus { box-shadow: 0 0 0 2px var(--accent); }
 
 /* ───────── 7. CATÁLOGO ───────── */
-.searchbar { display: flex; align-items: center; gap: 6px; background: var(--fill); border-radius: 11px; padding: 0 10px; height: 40px; color: var(--label2); margin-top: var(--s1); }
+.searchbar { display: flex; align-items: center; gap: 6px; background: var(--fill); border-radius: 11px; padding: 0 10px; height: 44px; color: var(--label2); margin-top: var(--s1); }
 .searchbar input { flex: 1; border: 0; background: transparent; outline: none; font-size: var(--fs-base); color: var(--label); min-width: 0; height: 100%; }
 .searchbar input::-webkit-search-cancel-button { -webkit-appearance: none; }
 .chips { display: flex; gap: var(--s2); overflow-x: auto; padding: var(--s3) var(--s4) var(--s1); margin: 0 calc(-1 * var(--s4)); scrollbar-width: none; align-items: center; }

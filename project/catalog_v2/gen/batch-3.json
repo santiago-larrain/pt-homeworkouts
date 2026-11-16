@@ -80,5 +80,87 @@
    "m": 1
   },
   "notes": "Clean, even progression, upper arm stays still."
+ },
+ {
+  "id": "hammer-curl",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {
+   "m": "350,710,1060,1420"
+  },
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/626f6b378425ac10639d986240f2cc1305d9d359349f8aaadd0174928f3b498a.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/f6d2aaf20849d8b57bb00eea5535468f359addd75a232ca18d6f1fa2ecefdf18.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Male needed --cuts (auto cut merged frames 4 and 5); clean afterwards. Dumbbell vertical (thumbs up) in all curled frames."
+ },
+ {
+  "id": "overhead-triceps-ext",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "RIGHT SIDE PROFILE, sitting on a chair facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/814e7d1e2447a82345f8647ab94db0f6f6313cc4cec23b7d2bc20dbae99a7087.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/b45c18e404ddcd11d4954b828ba9f1d56284b6c217b6582b56964209fb7dc7a8.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Dumbbell held upright shows both ends above/below the hands (reads as one vertical dumbbell). Frame 1 dumbbell sits behind head at the far left edge; ponytail partly hidden by arm in some frames."
+ },
+ {
+  "id": "band-triceps-pushdown",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/ecd3d80184b5764f440e2851698568b46633b716a32d0bf46e1cb1261a71df1f.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/a47b1b1c0654dc6395d9d74850d878deb8b260115a07acd6b8ac2e5c4e2e8d8c.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Door frame drawn as a single post with top bar (not two posts), identical in all frames; band anchored at top of door in every frame. Band shown as one flat band from anchor to hands."
+ },
+ {
+  "id": "thoracic-open-book",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "right",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view from the side of her belly, lying on her side, HEAD toward the LEFT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/f4428213a153e32e26e73290c2c897af14ed517c6e04a408c881e6ad6ade685d.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0cd4b1b3170a2710d66fbbc5daf801461151d39fc9362676d749895e10897812.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Used anchor right (knees/feet stay pinned) instead of left, since the open hand extends left in the last frame. Last frame arm rests on the mat extending left; acceptable. Chest rotation is plausible but the camera is more from the back/side than pure front; males wear white socks."
  }
 ]

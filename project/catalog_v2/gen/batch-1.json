@@ -78,5 +78,85 @@
    "m": 1
   },
   "notes": "Frame 1 already shows slight knee bend and stance length varies a little between frames (~10%)."
+ },
+ {
+  "id": "lateral-lunge",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/7ff7e1079dd994256dbac9b212c7c084ffcbcec3459287ddd0922f6ac833b0c4.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/20497d6033c7b1de04821e3ff2347bb2991d5c6a4ca2c5a17368e58a4ec23fdc.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "In frame 2 both feet spread symmetrically (torso centred) rather than only the right leg stepping; with center anchor the straight foot slides slightly. Acceptable."
+ },
+ {
+  "id": "wall-sit",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/85a44003b265d5446d1d17dae56c2a0d221c85b63b2867b03096a2992187c425.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/c0ce9c0c9e9eebb92d9602329446c130cbfccf33faa6d16ff84a0590dd1ebdbc.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Feet are not 40cm from wall in frame 1 (feet closer); grey wall panel present in each frame."
+ },
+ {
+  "id": "calf-raise",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d347e9ebe1f3090f2714a8b7f38c57efa4ce1cbd582b2f0b810fb1de71585f7c.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/50ab6989a386e803184937cc02e5aa4a9f84952556a48d3d600603403972335f.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Heel lift in frame 2 is subtle. Feet anchor aligns toes (lowest pixels)."
+ },
+ {
+  "id": "kb-sumo-squat",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/28e4e5194668ca1bef20b86254bb828c02e15e8ed7718514f0b790659efe07a9.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/25bbdc52ab782e7d0ea388ee773aa6802dc70b4b6d3a2b895dfdd577cb86b261.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Front view so torso lean not visible; kettlebell consistent."
  }
 ]
