@@ -162,5 +162,205 @@
    "m": 1
   },
   "notes": "Used anchor right (knees/feet stay pinned) instead of left, since the open hand extends left in the last frame. Last frame arm rests on the mat extending left; acceptable. Chest rotation is plausible but the camera is more from the back/side than pure front; males wear white socks."
+ },
+ {
+  "id": "hamstring-stretch-supine",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on back, HEAD left, feet right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d1759b547bac33e1652a55e581b706b66db2c829d46db39c1f3580874d3dcc42.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0043ca485ea159505fc14fe226ae8f56de78008175aa4023543236240baf5ad8.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Even progression, band taut, far leg bent flat. Male: the white sock of the far foot lies on the mat and the cutter erases part of its sole outline (small notch), cosmetic only. Final leg angle near 90-100 deg, matches spec."
+ },
+ {
+  "id": "sphinx",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying face-down, HEAD toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/46176c258af7ee592c8d1aa921389bce034e552add4cf2df4002ca17a33c3477.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/a6a9300893549445c190ca51422e193cd43841c2feb316a5c0ed23a2f1d6d78f.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Female frame 1 cut shows a faint pale strip above the mat (cutter artifact, barely visible). Male sock on mat slightly eroded at toes (cosmetic)."
+ },
+ {
+  "id": "seated-twist-chair",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view, facing the camera (prompt v2 with gentle even rotation 0/20/40/60)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/802d65705d54e0afae5b3e60e1c2ac998a73336d1968d0e7862c08ffdaaadb2e.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/fa8cfa78ad6995a470b398c671365be4d691214235c5ae86d695082f84e96abf.png",
+  "attempts": {
+   "f": 2,
+   "m": 1
+  },
+  "notes": "First female attempt twisted to a full side/back view in the last frame with uneven steps; v2 prompt added explicit shoulder rotation angles and is smoother, but frame 4 is still close to 75-80 deg (more than 60). Usable; hips/knees/feet stay frontal. Chair legs slightly differ in shape between frames 1 and 2 of the female strip (chair redrawn), minor."
+ },
+ {
+  "id": "standing-quad-stretch",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/4e99c4870ae18054798caaa5a4c10a16846ea22d70c87d8d1386c1ca76da4fd4.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/225d0fdb9e3a76afbfefa0c80653e83b3453e646444f3bd4dbad1c90e724c415.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Chair (back toward her) identical in all frames; far hand on chair back throughout. Stretch frame: heel near buttock held by near hand."
+ },
+ {
+  "id": "wall-angel",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "FRONT view, facing the camera (no wall panel drawn)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/f12ae8795158ad7ad39e778f71987f40168e2d49a301c727c33ac1f8c950ed31.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/b00eae338971a41bf209bf2b10c2f79a441f15357e5807174486d150209083f7.png",
+  "attempts": {
+   "f": 2,
+   "m": 1
+  },
+  "notes": "First female attempt drew a grey wall panel with a different size/height in each frame (would jump in the animation), so the wall was removed from the prompt (invisible wall). The wall is therefore not shown; the UI/cue should mention it. Arms progress W to Y evenly, torso still. Hands drawn open, palms toward camera."
+ },
+ {
+  "id": "standing-side-bend",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d30999454fc3e31823cdcd9e2b831da23590e4ec5c3fb520d3e92ea330fbae95.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/4d1e3801b62b69b2a0797c07d0da5e648cdce95d151ec23ce2010a3d49dc3846.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean, even progression to the right of the image, feet and hips steady. Head tilts with the torso (natural)."
+ },
+ {
+  "id": "march-in-place",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": true,
+  "pos": [
+   0,
+   1
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/b416ea260d321a0cb5792a218678471b67959b4b23e8a7cebf300f87e4b36de4.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/637c75ee8ce6b47142aca2b89372e7e7514e1fbe93e0d4fbc09c19534e1b67d0.png",
+  "attempts": {
+   "f": 2,
+   "m": 1
+  },
+  "notes": "First female attempt lifted the same (image-right) leg in frames 2 and 4; v2 prompt states frame 4 is the mirror of frame 2 and fixed it (frame 2 lifts image-left leg, frame 4 image-right). Anchor center used because the standing foot changes between frames (feet anchor would shift). Frames 1 and 3 are nearly identical (neutral), by design."
+ },
+ {
+  "id": "low-impact-skater",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": true,
+  "pos": [
+   0,
+   1
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/062b6ecdf32c1b364cccd2478d98a7bad43d68b63eee08c69d1a5b4e342639a7.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/3cae1b9a1c60b44c7779fc07ae53aab4c9494692dcb3a5c04a5d8dca48e1dc1d.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean. Wide step to image-right in frame 2 and to image-left in frame 4, no jump, supporting foot flat; arms swing across. Anchor center since the supporting foot changes sides. Figures are wide (step + arms) but do not touch."
+ },
+ {
+  "id": "mountain-climber-slow",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "right",
+  "cuts": {},
+  "loop": true,
+  "pos": [
+   0,
+   2
+  ],
+  "view": "RIGHT SIDE PROFILE, high plank, head at the right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/83d17e696601214cfaef89db8e806230d7ac53b0b84c806737495bbfc69adde1.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/d3d9643b059ce9dbde444b21774308c446992fe2d97b401c70cc2496b9c64ec9.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean, hands/arms and far leg steady, near knee drives under chest in frame 3. Faint mat shadow ovals under the raised foot in frames 2-3 (female) get cut with the mat, harmless. Male socks on the mat render fine."
+ },
+ {
+  "id": "db-thruster",
+  "status": "ok",
+  "frames": 6,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   5
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/f929ba9308605476c98bddbd84bbcfd25c73ed0e8724cc5c5bf83ed63ec5903f.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/e850737486cd40fa1b4228ed2e9cfde939e24954e0fa14c07796ad5ca51229ec.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Clean, even squat-to-press progression, feet flat. Only the near dumbbell is visible in profile (dumbbells drawn horizontally in front of the shoulders)."
  }
 ]
