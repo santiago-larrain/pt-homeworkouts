@@ -1,0 +1,3061 @@
+[
+  {
+    "id": "bodyweight-squat",
+    "name": "Sentadilla con peso corporal",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Aductores",
+      "Erectores espinales"
+    ],
+    "cue": "Cadera atrás y abajo, talones pegados al suelo",
+    "tips": [
+      "Pies al ancho de los hombros, puntas apenas hacia afuera.",
+      "Rodillas siguen la dirección de las puntas, sin hundirse hacia adentro.",
+      "Pecho alto; baja hasta donde mantengas la espalda neutra."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, bodyweight squat in 5 stages: 1) standing tall, feet shoulder-width apart with toes turned out about 15 degrees, knees straight but soft, arms hanging relaxed at her sides, gaze forward; 2) hips begin to travel back and down, knees bent about 35 degrees, torso leaning forward about 15 degrees, both arms swinging forward to shoulder height with straight elbows; 3) knees bent about 70 degrees, hips pushed back, torso leaning about 25 degrees, arms straight forward at shoulder height, heels flat; 4) knees bent about 95 degrees, thighs about 10 degrees above parallel to the floor, torso leaning about 35 degrees with a long neutral back, shins about 25 degrees from vertical, knees do not pass far beyond the toes; 5) bottom position, thighs parallel to the floor (knees about 105 degrees), torso leaning about 35 degrees, back flat, chest up, arms straight forward at shoulder height, heels flat on the floor. What does NOT move: both feet stay flat and in the same place on the floor line, the back stays straight (no rounding), the head stays in line with the spine. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps on the front of the thighs and the gluteus maximus; helpers in YELLOW: hamstrings on the back of the thighs, adductors on the inner thighs, spinal erectors along the lower back. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "chair-squat",
+    "name": "Sentadilla a la silla",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "silla"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Erectores espinales"
+    ],
+    "cue": "Roza la silla con los glúteos y sube sin impulso",
+    "tips": [
+      "Silla firme, sin ruedas, apoyada contra una pared.",
+      "No te dejes caer: baja controlada hasta rozar el asiento.",
+      "Empuja el suelo con todo el pie para levantarte."
+    ],
+    "positions": [
+      {
+        "label": "De pie",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Roza la silla",
+        "breath": "in",
+        "verb": "baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a plain sturdy wooden dining chair with a seat about 45 cm high, drawn in profile BEHIND her (to the LEFT of her body), seat facing right, backrest at the left, resting on the floor line. Movement, chair squat (sit-to-stand) in 5 stages: 1) standing tall in front of the chair with her back to it, feet hip-width apart, toes slightly out, arms hanging at her sides; 2) hips start to move back toward the chair, knees bent about 35 degrees, torso leaning forward about 15 degrees, both arms rising forward to shoulder height with straight elbows; 3) knees bent about 65 degrees, hips clearly back above the front of the seat, torso leaning about 30 degrees, arms straight forward at shoulder height; 4) knees bent about 80 degrees, buttocks hovering about 5 cm above the seat, torso leaning about 35 degrees with a flat back, arms straight forward; 5) knees about 90 degrees, buttocks lightly touching the front half of the seat without collapsing onto it, shins nearly vertical, torso leaning about 35 degrees, back flat, chest up, arms straight forward, feet flat. What does NOT move: the chair, both feet flat on the floor, the back stays straight and long. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps on the front of the thighs and gluteus maximus; helpers in YELLOW: hamstrings, spinal erectors along the lower back. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "reverse-lunge",
+    "name": "Zancada hacia atrás",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Glúteo medio",
+      "Aductores"
+    ],
+    "cue": "Da un paso largo atrás y baja recto, no hacia adelante",
+    "tips": [
+      "Manos en la cintura o al frente para equilibrarte.",
+      "Rodilla delantera sobre el tobillo, talón firme.",
+      "Empuja con el pie de adelante para volver; alterna lados por series."
+    ],
+    "positions": [
+      {
+        "label": "De pie",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 4.3,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, reverse lunge in 4 stages: 1) standing tall, feet hip-width apart, hands on her hips, torso upright, gaze forward; 2) the FAR leg (farther from the camera) steps straight back about 70 cm and its toes touch the floor, heel raised, both knees begin to bend to about 150 degrees, torso upright; 3) both knees bent: the NEAR leg (the front, planted leg) bent about 60 degrees with the foot flat, the far leg bent about 70 degrees on its toes; torso upright, hips lowering straight down; 4) bottom of the lunge: the NEAR front knee bent about 90 degrees directly above the ankle with the shin vertical, the far back knee bent about 90 degrees hovering about a hand's width above the floor, back heel raised, torso upright with a neutral spine, hands on hips. What does NOT move: the near front foot stays flat in the same place, the torso stays upright without leaning, the hips stay level. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps and gluteus maximus of the near front leg; helpers in YELLOW: hamstrings, gluteus medius, adductors of the near leg and the quadriceps of the far back leg. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "split-squat",
+    "name": "Sentadilla dividida",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Aductores",
+      "Glúteo medio",
+      "Recto femoral"
+    ],
+    "cue": "Sube y baja en vertical, sin mover los pies",
+    "tips": [
+      "Pasos largos: rodilla delantera sobre el tobillo.",
+      "Torso recto, mirada al frente; apóyate en una pared si necesitas equilibrio.",
+      "Empuja con el talón delantero para subir."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 4.0,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, split squat in 4 stages: 1) staggered stance held still: the NEAR foot flat in front, the FAR foot about 80 cm behind it on its toes with the heel up, both knees almost straight (about 170 degrees), torso upright, hands on hips; 2) hips lower straight down, near front knee bent about 45 degrees, far back knee bent about 60 degrees, torso upright; 3) near front knee bent about 75 degrees, far back knee bent about 85 degrees, torso upright, hips still centred between the feet; 4) bottom: near front knee bent about 90 degrees over the ankle with the shin vertical, far back knee bent about 90 degrees and hovering about a hand's width above the floor, torso upright with a neutral spine, hands on hips. What does NOT move: both feet stay exactly where they are (the stance never changes length), the torso stays vertical. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps and gluteus maximus of the near front leg; helpers in YELLOW: adductors, gluteus medius, rectus femoris of the far back leg. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "lateral-lunge",
+    "name": "Zancada lateral",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Aductores",
+      "Glúteo mayor",
+      "Cuádriceps"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Glúteo medio"
+    ],
+    "cue": "Cadera atrás y al lado, pierna de apoyo estirada",
+    "tips": [
+      "Da un paso lateral amplio; ambos pies miran al frente.",
+      "Siéntate sobre la pierna que dobla; la otra queda recta con el pie plano.",
+      "Empuja el suelo con el pie doblado para volver al centro."
+    ],
+    "positions": [
+      {
+        "label": "Centro",
+        "breath": "ex",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Lateral",
+        "breath": "in",
+        "verb": "paso y baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 4.0,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Movement, lateral lunge in 4 stages: 1) standing tall facing the camera, feet together, toes forward, hands clasped at her chest, elbows out; 2) the leg on the RIGHT side of the image takes a wide step to the right of the image (about 1.2 times shoulder width) and the foot lands with toes forward; both knees still almost straight, torso upright; 3) weight shifts to the right-of-image leg: its knee bends about 60 degrees tracking over the second toe, hips move back and to the right, torso leans forward about 20 degrees, the left-of-image leg stays straight with its foot flat; 4) deep position: the right-of-image knee bent about 95 degrees directly over its foot with the thigh nearly parallel to the floor, hips pushed back, torso leaning forward about 30 degrees with a flat back, the left-of-image leg completely straight with the whole foot flat and toes forward, hands clasped at the chest. What does NOT move: the straight leg's foot stays flat and does not turn out, the torso stays facing the camera, the heels stay on the floor. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: adductors (inner thighs), gluteus maximus and quadriceps of the bent leg; helpers in YELLOW: hamstrings and gluteus medius of the bent leg, adductors stretching on the straight leg. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "wall-sit",
+    "name": "Sentadilla isométrica en la pared",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Cuádriceps"
+    ],
+    "support": [
+      "Glúteo mayor",
+      "Aductores"
+    ],
+    "cue": "Espalda pegada a la pared, muslos paralelos",
+    "tips": [
+      "Pies a un paso de la pared, al ancho de la cadera.",
+      "Rodillas sobre los tobillos, no más adelante.",
+      "Respira normal; si tiemblas mucho, sube un poco."
+    ],
+    "positions": [
+      {
+        "label": "De pie",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Sostén",
+        "breath": "in",
+        "verb": "baja y sostén"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 25,
+      "note": "sostén la posición"
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a plain pale grey wall drawn as a thin vertical panel at the LEFT of her body in every frame, touching her back, with the floor line meeting it. Movement, wall sit in 4 stages: 1) standing with her back, buttocks and head touching the wall, feet hip-width apart about 40 cm in front of the wall, arms relaxed at her sides; 2) sliding down the wall, knees bent about 135 degrees, back flat against the wall, arms hanging; 3) knees bent about 110 degrees, thighs about 20 degrees above parallel, back flat on the wall, hands resting on the thighs; 4) held position: knees bent 90 degrees directly above the ankles, shins vertical, thighs exactly parallel to the floor, whole back flat against the wall, hands resting on the thighs, feet flat. What does NOT move: the wall, the feet, the back stays flat against the wall. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps on the front of the thighs; helpers in YELLOW: gluteus maximus, adductors. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "calf-raise",
+    "name": "Elevación de talones",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Gemelos",
+      "Sóleo"
+    ],
+    "support": [
+      "Tibial anterior"
+    ],
+    "cue": "Sube alto en la punta de los pies, baja lento",
+    "tips": [
+      "Apoya una mano en la pared o una silla si pierdes el equilibrio.",
+      "Empuja con la base del dedo gordo, no te vayas hacia afuera.",
+      "Pausa de 1 segundo arriba; baja en 3 segundos."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube en puntas"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 15,
+      "max": 20
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, calf raise in 4 stages: 1) standing tall with both feet flat and hip-width apart, legs straight, hands on her hips; 2) heels lifted about 3 cm off the floor, weight on the balls of the feet, legs straight; 3) heels lifted about 8 cm, ankles plantar-flexed about 30 degrees, legs straight, torso tall; 4) full height: heels lifted as high as possible (about 12 cm), ankles plantar-flexed about 55 degrees, standing on the balls of the feet, legs straight, torso tall and still, hands on hips. What does NOT move: the knees stay straight, the torso stays vertical and still, the hands stay on the hips. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: calf muscles (gastrocnemius and soleus) on the back of the lower legs; helpers in YELLOW: front of the shins (tibialis anterior). Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "kb-sumo-squat",
+    "name": "Sentadilla sumo con kettlebell",
+    "category": "piernas",
+    "group": "piernas",
+    "equipment": [
+      "kettlebell"
+    ],
+    "focus": [
+      "Aductores",
+      "Glúteo mayor",
+      "Cuádriceps"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Erectores espinales"
+    ],
+    "cue": "Pies abiertos, rodillas siguen las puntas",
+    "tips": [
+      "Pies más anchos que los hombros, puntas a unos 45°.",
+      "Sostén el kettlebell con ambas manos colgando entre las piernas, brazos rectos.",
+      "Pecho alto; baja hasta que los muslos queden casi paralelos."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 4.5,
+    "level": 2,
+    "strip": {
+      "frames": 5,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: one cast-iron kettlebell (matt dark grey with a pink handle), the same size in every frame. Movement, kettlebell sumo squat in 5 stages: 1) standing tall facing the camera with a wide stance (about 1.5 times shoulder width), toes turned out about 45 degrees, knees straight but soft, arms straight and hanging down in front holding a kettlebell by its handle with both hands at the level of her upper thighs, kettlebell between her legs; 2) knees begin to bend about 35 degrees, tracking out over the toes, hips lowering, torso upright, arms straight, the kettlebell lowering between the thighs; 3) knees bent about 70 degrees pointing in the same direction as the toes, torso leaning forward about 15 degrees, arms straight, kettlebell at knee height between the thighs; 4) knees bent about 95 degrees, thighs about 10 degrees above parallel, torso leaning forward about 25 degrees with a flat back and chest up, arms straight, kettlebell hanging just above the floor between the feet; 5) bottom: thighs parallel to the floor, knees pushed outward over the toes, heels flat, torso leaning about 25 degrees, back flat, arms straight, kettlebell about 5 cm above the floor between the feet. What does NOT move: the feet stay flat in the same wide stance, the arms stay straight (no pulling with the arms), the back stays flat. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: adductors on the inner thighs, gluteus maximus and quadriceps; helpers in YELLOW: hamstrings, spinal erectors. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "glute-bridge",
+    "name": "Puente de glúteos",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Transverso abdominal"
+    ],
+    "cue": "Empuja con los talones, sube la pelvis sin arquear la espalda",
+    "tips": [
+      "Pies al ancho de la cadera, talones a un palmo del glúteo.",
+      "Arriba: línea recta de hombros a rodillas, costillas abajo.",
+      "Baja lento, vértebra por vértebra."
+    ],
+    "positions": [
+      {
+        "label": "Base",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, glute bridge in 4 stages: 1) lying on her back, knees bent about 90 degrees with feet flat on the mat hip-width apart, arms resting on the mat alongside the body palms down, pelvis and back flat on the mat; 2) pelvis rises about 8 cm, lower back lifting off the mat, knees about 100 degrees, thighs tilting slightly toward the horizontal, shoulders on the mat; 3) pelvis rises further so the thighs are about 25 degrees below the line of the torso, only head, upper back and shoulders touching the mat; 4) top: hips fully lifted so shoulders, hips and knees form one straight diagonal line (hips extended, not over-arched), knees about 95 degrees, shins vertical, glutes squeezed, ribs down, head and shoulders on the mat, arms flat. What does NOT move: the head, shoulders, arms and feet stay in the same place on the mat, the knees stay hip-width apart. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus on the buttocks; helpers in YELLOW: hamstrings on the back of the thighs, transversus abdominis on the abdomen. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "single-leg-bridge",
+    "name": "Puente de glúteos a una pierna",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Glúteo medio",
+      "Transverso abdominal"
+    ],
+    "cue": "Pelvis nivelada, no se cae hacia el lado",
+    "tips": [
+      "Estira la pierna libre alineada con el muslo de apoyo.",
+      "Empuja con el talón del pie de apoyo.",
+      "Si cuesta, vuelve al puente con dos pies."
+    ],
+    "positions": [
+      {
+        "label": "Base",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, single-leg glute bridge in 4 stages: 1) lying on her back, the NEAR leg bent about 90 degrees with the foot flat on the mat, the FAR leg also bent with its foot flat, arms resting alongside the body palms down; 2) the far leg lifts, knee straightening until it points up and to the right at about 45 degrees to the mat; the near foot pushes down and the pelvis rises about 5 cm; 3) the pelvis rises further, the far leg fully straight and held in line with the near thigh, only head, upper back and shoulders still on the mat; 4) top: pelvis fully lifted level (hips square, not tilted), shoulders-hips-near knee in one straight diagonal line, the far leg completely straight and parallel to the near thigh, the near shin vertical, glute squeezed, arms flat. What does NOT move: head, shoulders, arms and the near supporting foot stay in the same place, the hips stay level. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus of the supporting (near) leg; helpers in YELLOW: hamstrings, gluteus medius, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "banded-bridge",
+    "name": "Puente con mini-banda",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat",
+      "mini-banda"
+    ],
+    "focus": [
+      "Glúteo mayor",
+      "Glúteo medio"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Transverso abdominal"
+    ],
+    "cue": "Las rodillas empujan la banda hacia afuera",
+    "tips": [
+      "Banda justo sobre las rodillas, con tensión desde abajo.",
+      "Mantén las rodillas abiertas, sin dejarlas caer hacia adentro.",
+      "Aprieta el glúteo 1 s arriba."
+    ],
+    "positions": [
+      {
+        "label": "Base",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a flat fabric loop mini-band in lilac, same width and colour in every frame, around both thighs just above the knees. Movement, banded glute bridge in 4 stages: 1) lying on her back, knees bent about 90 degrees, feet flat hip-width apart, a loop band stretched just above the knees, arms alongside the body palms down; 2) pelvis rises about 8 cm, knees about 100 degrees, band still taut around the thighs; 3) pelvis rises further, thighs about 25 degrees below the line of the torso, knees pressing outward against the band; 4) top: shoulders, hips and knees in one straight diagonal line, knees about 95 degrees and pushed gently outward against the band, shins vertical, glutes squeezed, ribs down, head and shoulders on the mat. What does NOT move: head, shoulders, arms and feet stay in place, the band stays just above the knees. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus and gluteus medius on the outer upper buttocks; helpers in YELLOW: hamstrings, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "ring-bridge",
+    "name": "Puente con aro entre las rodillas",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat",
+      "aro"
+    ],
+    "focus": [
+      "Glúteo mayor",
+      "Aductores"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Transverso abdominal"
+    ],
+    "cue": "Aprieta el aro mientras subes",
+    "tips": [
+      "Aro entre las rodillas, sin soltarlo en toda la serie.",
+      "Sube con los talones; hombros y pies firmes.",
+      "Si el aro se te cae, aprieta menos y concéntrate en el glúteo."
+    ],
+    "positions": [
+      {
+        "label": "Base",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube y aprieta"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: one Pilates magic circle ring (thin grey metal ring with two soft padded pink handles), the same size in every frame. Movement, Pilates ring bridge in 4 stages: 1) lying on her back, knees bent about 90 degrees with feet flat hip-width apart, a Pilates ring held between the knees, arms resting alongside the body palms down; 2) pelvis rises about 8 cm, ring held between the knees; 3) pelvis rises further, thighs about 25 degrees below the line of the torso, ring slightly squeezed; 4) top: shoulders, hips and knees in one straight diagonal line, ring squeezed visibly flatter between the knees, glutes tight, ribs down, head and shoulders on the mat. What does NOT move: head, shoulders, arms and feet stay in the same place, the ring stays between the knees. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus and adductors on the inner thighs; helpers in YELLOW: hamstrings, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "donkey-kick",
+    "name": "Patada de glúteo en cuadrupedia",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Isquiotibiales",
+      "Transverso abdominal",
+      "Erectores espinales"
+    ],
+    "cue": "Empuja la planta hacia el techo, espalda quieta",
+    "tips": [
+      "Muñecas bajo los hombros, rodillas bajo las caderas.",
+      "Rodilla a 90°; sube hasta que el muslo quede paralelo al suelo.",
+      "No arquees la zona lumbar para subir más."
+    ],
+    "positions": [
+      {
+        "label": "Base",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "patea"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, on all fours on the mat facing right (head at the right)",
+      "ground": "mat",
+      "anchor": "right",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, on all fours on the mat facing right (head at the right). (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, donkey kick on all fours in 4 stages: 1) on hands and knees (tabletop): wrists under the shoulders, knees under the hips, back flat and neutral, neck long gazing at the mat; the FAR leg (the working leg) bent 90 degrees with the thigh vertical under the hip; 2) the far knee stays bent 90 degrees while the thigh swings back about 30 degrees from vertical, foot rising; 3) the far thigh rises further to about 60 degrees from vertical, sole of the foot starting to face the ceiling; 4) top: the far thigh horizontal and in line with the back (hip extended about 15 degrees), knee bent 90 degrees, sole of the foot pointing to the ceiling, hips level and square, lower back flat (not arched), glute squeezed. What does NOT move: both hands, the near knee, the back and the head stay still, the spine stays flat. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus of the working (far) leg; helpers in YELLOW: hamstrings, transversus abdominis, spinal erectors. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "fire-hydrant",
+    "name": "Hidrante (apertura de cadera en cuadrupedia)",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Glúteo medio"
+    ],
+    "support": [
+      "Glúteo mayor",
+      "Transverso abdominal"
+    ],
+    "cue": "Abre la rodilla al lado sin girar la pelvis",
+    "tips": [
+      "Rodilla doblada a 90° todo el tiempo.",
+      "Imagina una pared detrás: la pelvis no rota.",
+      "Sube solo hasta donde la cadera se mantiene cuadrada."
+    ],
+    "positions": [
+      {
+        "label": "Base",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Abre",
+        "breath": "ex",
+        "verb": "abre la rodilla"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "from BEHIND, on all fours on the mat with her back to the camera",
+      "ground": "mat",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: from BEHIND, on all fours on the mat with her back to the camera. Movement, fire hydrant in 4 stages: 1) on hands and knees seen from behind: hands under the shoulders, knees under the hips about hip-width apart, back flat, head neutral; both knees on the mat; 2) the knee on the RIGHT side of the image lifts about 4 cm off the mat, thigh starting to open outward about 15 degrees, knee stays bent 90 degrees; 3) the same knee lifts to about 30 degrees of hip abduction, knee still bent 90 degrees, shin angled toward the left of the image; 4) top: the right-of-image thigh abducted about 45 degrees to the side with the knee bent 90 degrees and the foot staying close to the other leg, pelvis still square and level to the floor, back flat. What does NOT move: both hands, the other knee, the back and the pelvis (it does not tilt or rotate). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus medius on the outer upper side of the hip of the lifting leg; helpers in YELLOW: gluteus maximus, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "clamshell",
+    "name": "Almeja con mini-banda",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat",
+      "mini-banda"
+    ],
+    "focus": [
+      "Glúteo medio"
+    ],
+    "support": [
+      "Glúteo mayor",
+      "Oblicuos"
+    ],
+    "cue": "Abre la rodilla como una almeja, talones juntos",
+    "tips": [
+      "Caderas apiladas, pelvis ligeramente hacia adelante: no ruedes hacia atrás.",
+      "Los pies se mantienen unidos.",
+      "Sube lento y baja más lento."
+    ],
+    "positions": [
+      {
+        "label": "Cerrada",
+        "breath": "in",
+        "verb": "cierra"
+      },
+      {
+        "label": "Abierta",
+        "breath": "ex",
+        "verb": "abre la rodilla"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a flat fabric loop mini-band in lilac around both thighs just above the knees, same width and colour in every frame. Movement, clamshell with band in 4 stages: 1) lying on her side, the lower arm bent under her head as a pillow, hips bent about 45 degrees and knees bent about 90 degrees, knees stacked one over the other, feet together, a loop band just above the knees, the upper hand resting on the mat in front of her chest; 2) the upper knee lifts and opens about 15 degrees away from the lower knee, heels still touching, band slightly stretched; 3) the upper knee opens about 35 degrees, heels still touching, pelvis stays stacked and does not roll back; 4) top: the upper knee opens about 55 degrees like a clamshell, heels still together, band taut, hips still stacked vertically (pelvis not rolled), waist long. What does NOT move: the lower leg, the heels (they stay touching), the hips (they stay stacked), the head and torso. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus medius on the outer upper hip of the upper (top) leg; helpers in YELLOW: gluteus maximus, obliques at the waist. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "side-lying-leg-raise",
+    "name": "Elevación lateral de pierna tendida",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Glúteo medio"
+    ],
+    "support": [
+      "Glúteo mínimo",
+      "Oblicuos",
+      "Tensor de la fascia lata"
+    ],
+    "cue": "Pierna estirada hacia arriba, puntas al frente",
+    "tips": [
+      "Pelvis y torso en una línea; la pierna de abajo doblada para estabilidad.",
+      "Punta del pie al frente o apenas hacia abajo, no hacia el techo.",
+      "Sube hasta 40°; no balancees."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube la pierna"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, side-lying leg raise in 4 stages: 1) lying on her side, the lower arm bent under her head, the lower leg bent about 90 degrees at the knee for stability, the upper leg straight and resting on top of it in line with the torso, upper hand on the mat in front of her chest, body in one line; 2) the straight upper leg lifts about 15 degrees away from the lower leg, toes pointing forward, foot slightly flexed; 3) the upper leg lifts to about 30 degrees, still straight, toes pointing forward; 4) top: the upper leg straight and raised about 40 degrees from the lower leg, toes pointing forward or slightly down, pelvis stacked and not rolled back, torso still, waist long. What does NOT move: the torso, the lower leg, the lower arm, the pelvis (it stays stacked, does not roll back). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus medius on the outer upper hip of the top leg; helpers in YELLOW: gluteus minimus, obliques, tensor fasciae latae at the front of the hip. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "kb-deadlift",
+    "name": "Peso muerto con kettlebell",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "kettlebell"
+    ],
+    "focus": [
+      "Glúteo mayor",
+      "Isquiotibiales"
+    ],
+    "support": [
+      "Erectores espinales",
+      "Dorsal ancho"
+    ],
+    "cue": "Cadera atrás, kettlebell pegado a las piernas",
+    "tips": [
+      "Pies al ancho de la cadera, kettlebell entre los pies.",
+      "Espalda larga y neutra; el movimiento nace en la cadera.",
+      "Al subir, aprieta los glúteos y no te inclines hacia atrás."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 4.3,
+    "level": 2,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: one cast-iron kettlebell (matt dark grey with a pink handle), the same size in every frame. Movement, kettlebell deadlift in 5 stages: 1) standing tall, feet hip-width apart, both arms straight and hanging in front holding the kettlebell by the handle at the level of her upper thighs, close to the body, knees almost straight (about 170 degrees); 2) hips move back, torso hinges forward about 25 degrees, knees bent about 160 degrees, arms straight, kettlebell slides down the thighs; 3) torso hinged about 45 degrees with a flat back, knees bent about 150 degrees, kettlebell at knee height close to the shins, arms straight; 4) torso hinged about 60 degrees with a flat neutral back and neck in line, knees bent about 135 degrees, shins nearly vertical, kettlebell near mid-shin, arms straight; 5) bottom: torso hinged about 70 degrees (back flat, nearly parallel to the floor), knees bent about 120 degrees, kettlebell touching the floor between the feet, arms straight and vertical, hips far back. What does NOT move: the feet stay flat in the same place, the back stays straight (never rounds), the arms stay straight. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus and hamstrings; helpers in YELLOW: spinal erectors along the back, latissimus dorsi. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "kb-swing",
+    "name": "Swing con kettlebell",
+    "category": "piernas",
+    "group": "gluteos",
+    "equipment": [
+      "kettlebell"
+    ],
+    "focus": [
+      "Glúteo mayor",
+      "Isquiotibiales"
+    ],
+    "support": [
+      "Erectores espinales",
+      "Deltoides anterior",
+      "Transverso abdominal"
+    ],
+    "cue": "La cadera lanza el peso: bisagra, no sentadilla",
+    "tips": [
+      "Aprende primero con el peso muerto con kettlebell.",
+      "Brazos rectos y relajados: no levantes con ellos.",
+      "Arriba, cuerpo recto y glúteos apretados, sin inclinarte atrás."
+    ],
+    "positions": [
+      {
+        "label": "Atrás",
+        "breath": "in",
+        "verb": "cadera atrás"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "empuja la cadera"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 7.0,
+    "level": 3,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": true,
+      "pos": [
+        0,
+        2
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: one cast-iron kettlebell (matt dark grey with a pink handle), the same size in every frame. Movement, kettlebell swing in 5 stages: 1) hike position: feet slightly wider than shoulder-width, hips pushed far back, torso hinged forward about 50 degrees with a flat back, knees bent about 140 degrees, both straight arms holding the kettlebell swung back between the thighs; 2) the hips begin to drive forward, torso rising to about 25 degrees, knees extending to about 160 degrees, the kettlebell passing low in front of the thighs on straight arms; 3) top of the swing: body fully upright and straight with glutes squeezed, knees straight, both straight arms holding the kettlebell out in front at chest height (arms about 80 degrees from the torso, horizontal), shoulders away from the ears; 4) the kettlebell falls back on straight arms to about waist height, torso beginning to hinge forward about 15 degrees, knees slightly bent; 5) kettlebell dropping back between the thighs, torso hinged forward about 40 degrees, hips moving back, knees bent about 145 degrees, arms straight. What does NOT move: both feet stay flat in the same place, the back stays straight and flat at every stage (never rounds), the arms stay straight. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus maximus and hamstrings; helpers in YELLOW: spinal erectors, front deltoids, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "plank",
+    "name": "Plancha en antebrazos",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Transverso abdominal",
+      "Recto abdominal"
+    ],
+    "support": [
+      "Oblicuos",
+      "Serrato anterior",
+      "Glúteo mayor",
+      "Deltoides anterior"
+    ],
+    "cue": "Una sola línea de la cabeza a los talones",
+    "tips": [
+      "Codos bajo los hombros, antebrazos paralelos.",
+      "Aprieta glúteos y abdomen; no hundas la cadera ni la subas.",
+      "Empieza con rodillas apoyadas si cuesta y avanza a la plancha completa."
+    ],
+    "positions": [
+      {
+        "label": "Prepara",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Sostén",
+        "breath": "ex",
+        "verb": "sube y sostén"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 25,
+      "note": "respira sin trancar el aire"
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, face-down on the mat facing right (head at the right)",
+      "ground": "mat",
+      "anchor": "right",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, face-down on the mat facing right (head at the right). (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, forearm plank in 4 stages: 1) kneeling on the mat with her forearms flat on the mat, elbows directly under her shoulders, thighs vertical, torso and thighs forming a diagonal from shoulders to knees at about 30 degrees to the mat, gaze at the mat; 2) hips rise slightly, one knee-line still on the mat, torso about 15 degrees to the mat, forearms flat; 3) knees lift off the mat, legs straight with toes tucked under, hips still a little high (about 20 degrees above the straight line); 4) full forearm plank: elbows exactly under the shoulders with 90-degree bend, forearms flat and parallel, body one straight line from head to heels (about 10 degrees to the mat), legs straight, toes tucked, neck neutral gazing at the mat between the hands, abdomen and glutes tight. What does NOT move: the forearms and elbows stay in the same place on the mat, the toes stay in place, the neck stays in line with the spine. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: transversus abdominis and rectus abdominis along the abdomen; helpers in YELLOW: obliques, serratus anterior, gluteus maximus, front deltoids. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "side-plank-knee",
+    "name": "Plancha lateral con rodillas",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Oblicuos",
+      "Cuadrado lumbar"
+    ],
+    "support": [
+      "Glúteo medio",
+      "Transverso abdominal",
+      "Deltoides lateral"
+    ],
+    "cue": "Eleva la cadera hasta alinear hombro, cadera y rodilla",
+    "tips": [
+      "Codo justo bajo el hombro, antebrazo en el mat.",
+      "Rodillas dobladas y apiladas; empuja el suelo con el antebrazo.",
+      "No dejes caer el pecho hacia adelante: abre el pecho al frente."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube la cadera"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 20,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, side plank on the knees in 4 stages: 1) lying on her side, propped on the lower forearm with the elbow directly under the shoulder, knees bent about 90 degrees and stacked, hips resting on the mat, upper hand on her upper hip, torso upright from the elbow at about 60 degrees; 2) hips lift about 5 cm off the mat, supported by the forearm and the lower knee, upper hand on the hip; 3) hips lift about 12 cm, the lower side of the waist shortening, torso, hips and thighs starting to line up; 4) top: hips fully lifted so shoulders, hips and knees form one straight line (knees bent about 90 degrees and on the mat, feet behind), the upper arm reaching straight up toward the ceiling, chest open facing the camera, neck neutral. What does NOT move: the lower forearm and elbow stay in the same place, the knees stay on the mat, the head stays in line with the spine. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: obliques and quadratus lumborum on the side of the waist; helpers in YELLOW: gluteus medius, transversus abdominis, lateral deltoid of the supporting shoulder. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "bird-dog",
+    "name": "Perro de caza",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Erectores espinales",
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Transverso abdominal",
+      "Deltoides anterior",
+      "Glúteo medio"
+    ],
+    "cue": "Brazo y pierna opuestos, pelvis quieta",
+    "tips": [
+      "Espalda plana como una mesa; imagina una taza de agua sobre ella.",
+      "Estira largo, no alto: brazo y pierna en línea con el torso.",
+      "Vuelve sin tocar el suelo si puedes; alterna lados."
+    ],
+    "positions": [
+      {
+        "label": "Mesa",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Estira",
+        "breath": "ex",
+        "verb": "estira brazo y pierna"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "alternating": true
+    },
+    "sided": false,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, on all fours on the mat facing right (head at the right)",
+      "ground": "mat",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, on all fours on the mat facing right (head at the right). (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, bird dog in 4 stages: 1) tabletop: hands flat on the mat under the shoulders, knees under the hips, arms and thighs vertical, back flat and neutral, neck long gazing at the mat; 2) the FAR arm lifts forward about 30 degrees above the mat and the NEAR leg slides straight back with the toes touching the mat, the back stays flat; 3) the far arm reaches forward to about 60 degrees and the near leg lifts until it is about 30 degrees from the mat, hips level; 4) full extension: the far arm straight forward in line with the ear and the near leg straight back, both exactly horizontal and in one line with the back, hips level and square, no arch in the lower back, gaze down. What does NOT move: the near hand and the far knee stay on the mat, the back stays flat and level, the hips do not rotate. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: spinal erectors along the back and gluteus maximus of the extended leg; helpers in YELLOW: transversus abdominis, front deltoid of the extended arm, gluteus medius. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "curl-up",
+    "name": "Abdominal corto (curl-up)",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Recto abdominal"
+    ],
+    "support": [
+      "Oblicuos",
+      "Transverso abdominal"
+    ],
+    "cue": "Levanta solo cabeza y hombros, cuello relajado",
+    "tips": [
+      "Manos bajo la zona lumbar para mantener su curva natural.",
+      "Mirada al techo, mentón sin pegar al pecho.",
+      "Sube poco (unos 10 cm): la calidad importa más que la altura."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "levanta hombros"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "right",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, curl-up (McGill style) in 4 stages: 1) lying on her back, the NEAR knee bent about 90 degrees with the foot flat, the FAR leg straight on the mat, hands palms down under the curve of the lower back, head and shoulders resting on the mat; 2) head and shoulder blades begin to lift about 3 cm, neck neutral, elbows on the mat; 3) head and shoulders lift about 6 cm, the upper back curling slightly; 4) top: head and shoulder blades lifted about 10 cm off the mat with the neck long and in line, gaze toward the ceiling, lower back still flat and the hands still under it, elbows on the mat. What does NOT move: the pelvis, the legs and the lower back (they stay on the mat), the elbows stay on the mat. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: rectus abdominis on the front of the abdomen; helpers in YELLOW: obliques, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "reverse-crunch",
+    "name": "Elevación de pelvis (abdominal inferior)",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Recto abdominal",
+      "Transverso abdominal"
+    ],
+    "support": [
+      "Oblicuos",
+      "Psoas"
+    ],
+    "cue": "Enrolla la pelvis hacia las costillas, sin balanceo",
+    "tips": [
+      "Cabeza y hombros relajados en el mat; manos planas a los lados.",
+      "Sube la pelvis unos centímetros: no lances las piernas.",
+      "Baja controlado sin soltar la zona lumbar."
+    ],
+    "positions": [
+      {
+        "label": "Mesa",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Enrolla",
+        "breath": "ex",
+        "verb": "sube la pelvis"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, reverse crunch in 4 stages: 1) lying on her back in tabletop: thighs vertical (hips bent 90 degrees), knees bent 90 degrees with shins parallel to the floor, lower back flat on the mat, hands flat alongside the hips, head resting; 2) knees start to travel toward the chest, thighs tilting about 15 degrees toward the head, the tailbone not yet lifting; 3) the pelvis begins to curl, tailbone lifting about 3 cm off the mat, knees moving over the chest, thighs about 30 degrees toward the head; 4) top: the pelvis curled up about 8 cm with the tailbone off the mat, knees bent 90 degrees and held over the chest (thighs about 35 degrees tilted toward the head), lower back rounded off the mat, head, neck and shoulders and hands still on the mat. What does NOT move: the head, shoulders, arms and upper back stay flat on the mat. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: rectus abdominis (lower part) and transversus abdominis; helpers in YELLOW: obliques, psoas. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "toe-taps",
+    "name": "Toques de punta en mesa",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Transverso abdominal"
+    ],
+    "support": [
+      "Recto abdominal",
+      "Psoas"
+    ],
+    "cue": "Lumbar pegada: baja una pierna a la vez",
+    "tips": [
+      "Baja el pie con la rodilla doblada a 90° hasta rozar el mat.",
+      "Si la espalda se arquea, baja menos.",
+      "Exhala al bajar y vuelve a la mesa; alterna."
+    ],
+    "positions": [
+      {
+        "label": "Mesa",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Toca",
+        "breath": "ex",
+        "verb": "baja el pie"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12,
+      "alternating": true
+    },
+    "sided": false,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, tabletop toe taps in 4 stages: 1) lying on her back in tabletop: thighs vertical, knees bent 90 degrees, shins parallel to the floor, both feet lifted, lower back flat on the mat, arms flat alongside the body; 2) the FAR leg begins to lower: thigh tilts about 20 degrees toward the feet, knee still bent 90 degrees, the near leg stays in tabletop; 3) the far thigh tilts about 40 degrees from vertical, foot descending; 4) toes of the far foot touch the mat with the thigh about 60 degrees from vertical and the knee still bent 90 degrees, the NEAR leg still in tabletop, lower back completely flat on the mat, arms flat. What does NOT move: the near leg (stays in tabletop), the back, the head and the arms. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: transversus abdominis deep in the abdomen; helpers in YELLOW: rectus abdominis, psoas. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "superman",
+    "name": "Superman alterno (brazo y pierna opuestos)",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Erectores espinales",
+      "Glúteo mayor"
+    ],
+    "support": [
+      "Trapecio medio",
+      "Trapecio inferior",
+      "Isquiotibiales"
+    ],
+    "cue": "Alarga, no arquees: la mirada al suelo",
+    "tips": [
+      "Frente apoyada en una toalla doblada; cuello largo.",
+      "Levanta brazo y pierna opuestos solo unos centímetros.",
+      "Aprieta glúteos; no tires del cuello hacia atrás."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "levanta brazo y pierna"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "alternating": true
+    },
+    "sided": false,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying face-down on the mat with her HEAD toward the LEFT, arms stretched forward toward the left",
+      "ground": "mat",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying face-down on the mat with her HEAD toward the LEFT, arms stretched forward toward the left. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, alternating superman in 4 stages: 1) lying face down, forehead on the mat, both arms stretched straight forward past the head, both legs straight and together, whole body relaxed on the mat; 2) the FAR arm and the NEAR leg begin to lift about 3 cm off the mat, neck neutral; 3) the far arm and the near leg lift about 8 cm, glute squeezing, head still low; 4) top: the far arm and near leg lifted about 12 cm and in a long line, head and neck neutral in line with the spine (gaze at the mat, chin slightly tucked), the other arm and leg resting on the mat, hips pressing into the mat. What does NOT move: the pelvis, the resting arm and leg, the head (it stays low, not lifting). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: spinal erectors along the lower back and gluteus maximus of the lifted leg; helpers in YELLOW: middle and lower trapezius between the shoulder blades, hamstrings. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "db-pullover",
+    "name": "Pullover con mancuerna",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "mancuernas",
+      "mat"
+    ],
+    "focus": [
+      "Dorsal ancho"
+    ],
+    "support": [
+      "Pectoral mayor",
+      "Serrato anterior",
+      "Tríceps"
+    ],
+    "cue": "Brazos casi rectos, la mancuerna dibuja un arco",
+    "tips": [
+      "Sostén una mancuerna con ambas manos como un reloj de arena.",
+      "Codos suaves; baja hasta donde el rango sea cómodo para el hombro.",
+      "Costillas abajo: no arquees la espalda al bajar."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      },
+      {
+        "label": "Atrás",
+        "breath": "in",
+        "verb": "baja detrás de la cabeza"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: one small hex dumbbell (pink rubber coating), the same size in every frame, held with both hands. Movement, dumbbell pullover in 4 stages: 1) lying on her back, knees bent about 90 degrees with feet flat, both hands holding one dumbbell upright by its top end directly above her chest, arms nearly straight (elbows bent about 15 degrees), lower back flat; 2) the dumbbell travels in an arc back toward the head, arms about 100 degrees from the torso, elbows bent about 15 degrees; 3) the arms lower to about 125 degrees from the torso, the dumbbell above and behind her face; 4) bottom: the arms lowered to about 150 degrees from the torso (not touching the mat), the dumbbell held behind and above her head, elbows still softly bent about 15 degrees, ribs down and the lower back flat. What does NOT move: the head, torso, hips and feet stay flat, the elbows keep the same soft bend all the time. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: latissimus dorsi on the sides of the back under the arms; helpers in YELLOW: pectoralis major, serratus anterior, triceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "bent-over-row",
+    "name": "Remo inclinado con mancuernas",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "mancuernas"
+    ],
+    "focus": [
+      "Dorsal ancho",
+      "Romboides"
+    ],
+    "support": [
+      "Trapecio medio",
+      "Deltoides posterior",
+      "Bíceps",
+      "Erectores espinales"
+    ],
+    "cue": "Codos hacia la cadera, espalda larga",
+    "tips": [
+      "Bisagra de cadera con espalda neutra, rodillas suaves.",
+      "Lleva los codos atrás, juntando las escápulas sin encoger los hombros.",
+      "Baja los brazos lento, sin que el torso suba y baje."
+    ],
+    "positions": [
+      {
+        "label": "Brazos largos",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Remo",
+        "breath": "ex",
+        "verb": "codos atrás"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, bent-over dumbbell row in 4 stages: 1) hinged forward: feet hip-width apart, knees bent about 155 degrees, torso inclined about 45 degrees with a flat back and neck in line, both arms hanging straight down under the shoulders each holding a dumbbell, palms facing each other; 2) elbows begin to bend about 45 degrees and move backward, the dumbbells rising toward the knees, torso fixed; 3) elbows travel back and up, bent about 90 degrees, dumbbells at the lower ribs, shoulder blades moving together; 4) top of the row: elbows pulled back past the torso and bent about 100 degrees, dumbbells beside the lower ribs, shoulder blades squeezed together, torso still inclined 45 degrees with a flat back, neck neutral. What does NOT move: the legs, the hips, the torso angle (45 degrees) and the neck. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: latissimus dorsi and rhomboids between the shoulder blades; helpers in YELLOW: middle trapezius, rear deltoid, biceps, spinal erectors. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "one-arm-row-chair",
+    "name": "Remo a un brazo apoyada en la silla",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "mancuernas",
+      "silla"
+    ],
+    "focus": [
+      "Dorsal ancho",
+      "Romboides"
+    ],
+    "support": [
+      "Trapecio medio",
+      "Deltoides posterior",
+      "Bíceps"
+    ],
+    "cue": "Mano libre en la silla, tira el codo hacia la cadera",
+    "tips": [
+      "Silla contra una pared para que no se mueva.",
+      "Espalda plana, cadera atrás, rodilla delantera suave.",
+      "El codo pasa pegado al cuerpo, sin girar el torso."
+    ],
+    "positions": [
+      {
+        "label": "Brazo largo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Remo",
+        "breath": "ex",
+        "verb": "codo atrás"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a plain sturdy wooden chair with a seat about 45 cm high, in front of her (to the RIGHT), seat facing left toward her, with its backrest against a plain grey wall at the far right; one small hex dumbbell (pink rubber coating). Movement, one-arm dumbbell row with chair support in 4 stages: 1) standing hinged forward with the FAR hand resting on the seat of a chair in front of her (to the right), torso inclined about 45 degrees with a flat back, knees bent about 155 degrees, the NEAR arm hanging straight down from the shoulder holding a dumbbell; 2) the near elbow begins to bend about 45 degrees and moves backward, dumbbell rising to knee height; 3) the near elbow travels back, bent about 90 degrees, dumbbell at the lower ribs; 4) top: the near elbow pulled back past the torso and bent about 100 degrees, dumbbell beside the lower ribs, shoulder blade squeezed back, torso still inclined 45 degrees and not rotated, far hand still on the chair seat. What does NOT move: the legs, the torso angle, the supporting hand on the chair, the chair. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: latissimus dorsi and rhomboids of the working (near) side; helpers in YELLOW: middle trapezius, rear deltoid, biceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "band-row",
+    "name": "Remo sentada con banda",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "banda",
+      "mat"
+    ],
+    "focus": [
+      "Dorsal ancho",
+      "Romboides"
+    ],
+    "support": [
+      "Trapecio medio",
+      "Deltoides posterior",
+      "Bíceps"
+    ],
+    "cue": "Pecho alto, junta las escápulas",
+    "tips": [
+      "Sentada con la espalda larga, rodillas apenas dobladas.",
+      "Banda por las plantas de los pies.",
+      "Codos pegados a las costillas al jalar."
+    ],
+    "positions": [
+      {
+        "label": "Brazos largos",
+        "breath": "in",
+        "verb": "extiende"
+      },
+      {
+        "label": "Remo",
+        "breath": "ex",
+        "verb": "jala los codos atrás"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, sitting on the mat facing right",
+      "ground": "mat",
+      "anchor": "right",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, sitting on the mat facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a long flat elastic resistance band in lilac, the same width and colour in every frame. Movement, seated band row in 4 stages: 1) sitting tall on the mat with legs extended forward, knees slightly bent about 160 degrees, a band looped around the soles of both feet, both hands holding the band ends, arms straight forward at chest height, back long and upright; 2) elbows begin to bend about 45 degrees and slide back, band stretching; 3) elbows bent about 90 degrees with the hands at the sternum, shoulder blades moving together, torso still upright; 4) end of the row: elbows pulled back beside the ribs and bent about 100 degrees, hands at the lower ribs, shoulder blades squeezed together, chest high, torso upright and not leaning back. What does NOT move: the legs, the feet, the hips and the torso (it stays upright, no leaning back). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: latissimus dorsi and rhomboids across the middle of the back; helpers in YELLOW: middle trapezius, rear deltoid, biceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "band-pull-apart",
+    "name": "Apertura de banda (pull-apart)",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "banda"
+    ],
+    "focus": [
+      "Deltoides posterior",
+      "Romboides"
+    ],
+    "support": [
+      "Trapecio medio",
+      "Infraespinoso"
+    ],
+    "cue": "Abre la banda llevando las manos a los lados",
+    "tips": [
+      "Banda al ancho de los hombros, brazos rectos al frente.",
+      "Junta las escápulas sin subir los hombros.",
+      "Vuelve lento; la banda nunca se afloja del todo."
+    ],
+    "positions": [
+      {
+        "label": "Al frente",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Abierta",
+        "breath": "ex",
+        "verb": "abre los brazos"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: a long flat elastic resistance band in lilac, the same width and colour in every frame. Movement, band pull-apart in 5 stages: 1) standing tall facing the camera with feet hip-width apart, arms stretched straight forward toward the camera at shoulder height (hands drawn foreshortened in front of the chest, shoulder-width apart), a band held taut horizontally between the hands; 2) the hands move apart about 15 cm each, arms still pointing forward, band stretching; 3) the arms swing out to about 45 degrees from the front, elbows almost straight, band stretched across the chest; 4) the arms open to about 80 degrees from the front, nearly a straight line out to the sides at shoulder height (T shape), band stretched fully across the chest, shoulder blades squeezed together, shoulders low; 5) full pull-apart: arms in a T at shoulder height, hands far apart, elbows slightly bent, band stretched across the chest, chest open, ribs down, shoulders away from the ears. What does NOT move: the feet, the torso, the neck (the shoulders do not shrug). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: rear deltoids and rhomboids across the upper back; helpers in YELLOW: middle trapezius, infraespinatus behind the shoulder blades. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "reverse-fly",
+    "name": "Pájaro con mancuernas",
+    "category": "espalda",
+    "group": "espalda",
+    "equipment": [
+      "mancuernas"
+    ],
+    "focus": [
+      "Deltoides posterior",
+      "Romboides"
+    ],
+    "support": [
+      "Trapecio medio",
+      "Infraespinoso"
+    ],
+    "cue": "Abre los brazos como alas, codos suaves",
+    "tips": [
+      "Cadera atrás, espalda plana, mirada al suelo.",
+      "Sube hasta la altura de los hombros, no más.",
+      "Mancuernas livianas: el movimiento es de las escápulas."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Abierta",
+        "breath": "ex",
+        "verb": "abre los brazos"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 5,
+      "view": "from BEHIND, standing with her back to the camera and her torso hinged forward away from the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: from BEHIND, standing with her back to the camera and her torso hinged forward away from the camera. Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, bent-over dumbbell reverse fly in 5 stages: 1) standing hinged forward seen from behind, feet hip-width apart, knees bent about 155 degrees, torso inclined about 45 degrees with a flat back, both arms hanging straight down under the shoulders holding a dumbbell each, palms facing each other; 2) the arms rise sideways about 25 degrees from the vertical, elbows bent about 15 degrees; 3) arms at about 50 degrees to the sides, elbows bent about 15 degrees; 4) arms at about 75 degrees to the sides, elbows bent about 15 degrees, shoulder blades beginning to squeeze; 5) top: arms raised out to the sides to about 90 degrees from the vertical, level with the torso (a wide T), elbows bent about 15 degrees, shoulder blades squeezed together, neck neutral, torso still inclined 45 degrees. What does NOT move: the legs, the hips, the torso angle and the neck. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: rear deltoids on the back of the shoulders and rhomboids between the shoulder blades; helpers in YELLOW: middle trapezius, infraspinatus. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "incline-pushup",
+    "name": "Flexión inclinada con silla",
+    "category": "torso",
+    "group": "pecho",
+    "equipment": [
+      "silla"
+    ],
+    "focus": [
+      "Pectoral mayor"
+    ],
+    "support": [
+      "Tríceps",
+      "Deltoides anterior",
+      "Serrato anterior",
+      "Transverso abdominal"
+    ],
+    "cue": "Cuerpo en una tabla, codos a 45°",
+    "tips": [
+      "Manos en el borde del asiento, silla contra una pared.",
+      "Cuerpo recto de cabeza a talones; aprieta abdomen y glúteos.",
+      "Baja el pecho al asiento y empuja sin encoger los hombros."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "empuja"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja el pecho"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a plain sturdy wooden dining chair with a seat about 45 cm high, in front of her (to the RIGHT), seat facing left, backrest against a plain pale grey wall at the far right, resting on the floor line. Movement, incline push-up on a chair in 4 stages: 1) high incline plank: hands on the front edge of the chair seat shoulder-width apart, arms straight (elbows nearly locked but soft), body one straight line from head to heels inclined about 35 degrees to the floor, feet on the floor behind, neck neutral; 2) elbows bend about 40 degrees, chest lowering about 8 cm toward the seat, body still one straight line; 3) elbows bent about 70 degrees, elbows angled about 45 degrees from the ribs, chest about halfway down; 4) bottom: elbows bent about 90 degrees with the upper arms about 45 degrees from the torso, chest hovering about 5 cm from the seat edge, body still one straight line from head to heels, neck neutral. What does NOT move: the feet, the hands and the chair (they stay fixed); the body stays straight with no sagging hips. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: pectoralis major on the chest; helpers in YELLOW: triceps, front deltoids, serratus anterior, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "knee-pushup",
+    "name": "Flexión con rodillas apoyadas",
+    "category": "torso",
+    "group": "pecho",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Pectoral mayor"
+    ],
+    "support": [
+      "Tríceps",
+      "Deltoides anterior",
+      "Serrato anterior",
+      "Transverso abdominal"
+    ],
+    "cue": "Línea recta de la cabeza a las rodillas",
+    "tips": [
+      "Manos un poco más anchas que los hombros, codos a 45°.",
+      "Cadera alineada: ni arriba ni hundida.",
+      "Baja hasta que el pecho roce un puño de distancia del suelo."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "empuja"
+      },
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja el pecho"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right (head at the right)",
+      "ground": "mat",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right (head at the right). (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, knee push-up in 4 stages: 1) high plank on the knees: hands flat on the mat under the shoulders, arms straight (elbows soft), body one straight line from head to knees inclined about 25 degrees to the mat, shins on the mat with the ankles crossed behind, neck neutral; 2) elbows bend about 40 degrees, chest lowering about 6 cm; 3) elbows bent about 70 degrees, upper arms about 45 degrees from the torso; 4) bottom: elbows bent about 90 degrees with the upper arms about 45 degrees from the torso, chest about one fist from the mat, body still one straight line from head to knees, neck neutral. What does NOT move: the hands and the knees stay on the mat, the body stays one straight line. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: pectoralis major on the chest; helpers in YELLOW: triceps, front deltoids, serratus anterior, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "floor-fly",
+    "name": "Aperturas en el suelo",
+    "category": "torso",
+    "group": "pecho",
+    "equipment": [
+      "mancuernas",
+      "mat"
+    ],
+    "focus": [
+      "Pectoral mayor"
+    ],
+    "support": [
+      "Deltoides anterior",
+      "Bíceps"
+    ],
+    "cue": "Brazos en arco, el suelo limita el rango",
+    "tips": [
+      "Codos suaves (unos 20°) todo el recorrido.",
+      "Baja hasta que los brazos toquen el suelo; no rebotes.",
+      "Imagina abrazar un árbol al subir."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "abre"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "cierra"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "TOP-DOWN view looking straight down at her lying on her back on the mat (head toward the top of the frame, feet toward the bottom)",
+      "ground": "mat",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: TOP-DOWN view looking straight down at her lying on her back on the mat (head toward the top of the frame, feet toward the bottom). Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, dumbbell floor fly in 4 stages: 1) lying on her back seen from above, knees bent, a dumbbell in each hand with the arms pointing straight up toward the camera above the chest (drawn foreshortened: the two hands close together over the middle of the chest), elbows soft about 20 degrees; 2) the arms open outward and downward to about 30 degrees from vertical, the hands visibly moving apart, elbows soft; 3) the arms open to about 60 degrees from vertical, upper arms and forearms forming a gentle arc, hands about shoulder-width plus apart; 4) bottom: arms fully open out to the sides resting at floor level in a T shape about 90 degrees from the torso, the backs of the upper arms touching the mat, elbows soft about 20 degrees, dumbbells at the ends of the arms, palms facing up/in. What does NOT move: the head, the torso, the hips and the legs stay still on the mat. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: pectoralis major on the chest; helpers in YELLOW: front deltoids, biceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "band-chest-press",
+    "name": "Press de pecho con banda en la puerta",
+    "category": "torso",
+    "group": "pecho",
+    "equipment": [
+      "banda",
+      "puerta"
+    ],
+    "focus": [
+      "Pectoral mayor"
+    ],
+    "support": [
+      "Tríceps",
+      "Deltoides anterior",
+      "Serrato anterior"
+    ],
+    "cue": "Empuja al frente, codos a 45°",
+    "tips": [
+      "Banda anclada en el marco de la puerta a la altura del pecho (ancla segura).",
+      "Pie adelantado, tronco firme: no te inclines.",
+      "Termina con los brazos estirados sin bloquear los codos."
+    ],
+    "positions": [
+      {
+        "label": "Pecho",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Extendido",
+        "breath": "ex",
+        "verb": "empuja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a long flat elastic resistance band in lilac, the same width and colour in every frame. a plain white interior door frame drawn as two thin brown vertical lines with a top bar, fixed in the same place in every frame. Movement, band chest press from a door anchor in 4 stages: 1) staggered stance with the FAR foot forward and the NEAR foot behind, knees slightly bent, torso upright; the band anchored in the door at chest height behind her (at the LEFT) runs around her back under the armpits to both hands, which are held at chest level with the elbows bent about 90 degrees, forearms pointing forward; 2) hands press forward about 15 cm, elbows bent about 70 degrees, band stretching; 3) arms halfway: elbows bent about 45 degrees, hands at the middle of the chest height in front of her; 4) full press: arms extended forward and nearly straight (elbows soft), hands in front of the chest at chest height, band stretched taut behind her to the door, torso still upright without leaning, shoulders low. What does NOT move: the legs, the feet, the door and the anchor, the torso (it does not lean). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: pectoralis major on the chest; helpers in YELLOW: triceps, front deltoids, serratus anterior. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "ring-chest-press",
+    "name": "Aro: apretar frente al pecho",
+    "category": "torso",
+    "group": "pecho",
+    "equipment": [
+      "aro"
+    ],
+    "focus": [
+      "Pectoral mayor"
+    ],
+    "support": [
+      "Deltoides anterior",
+      "Serrato anterior"
+    ],
+    "cue": "Aprieta el aro con las palmas, codos arriba",
+    "tips": [
+      "Aro a la altura del pecho, codos a la altura de las manos.",
+      "Aprieta lento y sostén 1 segundo.",
+      "Hombros abajo, cuello largo."
+    ],
+    "positions": [
+      {
+        "label": "Relajado",
+        "breath": "in",
+        "verb": "suelta"
+      },
+      {
+        "label": "Aprieta",
+        "breath": "ex",
+        "verb": "aprieta el aro"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: one Pilates magic circle ring (thin grey metal ring with two soft padded pink handles), the same size when relaxed in every frame. Movement, Pilates ring chest squeeze in 4 stages: 1) standing tall facing the camera, feet hip-width apart, a Pilates ring held horizontally in front of the chest with a palm on each side of the ring, upper arms about 70 degrees out from the torso, elbows bent about 90 degrees, the ring in its full round shape; 2) she starts squeezing, the ring becoming slightly flattened (about 90 percent of its width); 3) the ring clearly squeezed, about 75 percent of its width, elbows lifting slightly; 4) full squeeze: the ring flattened to about 60 percent of its width into an oval, palms pressing inward, elbows at chest height pointing out, chest muscles tight, shoulders low and relaxed, neck long. What does NOT move: the feet, the torso and the head. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: pectoralis major on the chest; helpers in YELLOW: front deltoids, serratus anterior. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "db-shoulder-press",
+    "name": "Press de hombros sentada",
+    "category": "torso",
+    "group": "hombros",
+    "equipment": [
+      "mancuernas",
+      "silla"
+    ],
+    "focus": [
+      "Deltoides anterior",
+      "Deltoides lateral"
+    ],
+    "support": [
+      "Tríceps",
+      "Trapecio superior",
+      "Serrato anterior"
+    ],
+    "cue": "Empuja arriba y un poco al frente, costillas abajo",
+    "tips": [
+      "Sentada con la espalda apoyada y pies firmes.",
+      "Palmas enfrentadas o ligeramente hacia adelante: lo que sea cómodo para el hombro.",
+      "No arquees la espalda ni subas los hombros a las orejas."
+    ],
+    "positions": [
+      {
+        "label": "Hombros",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "empuja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 5,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: a plain sturdy wooden dining chair with a seat about 45 cm high, the same in every frame, resting on the floor line; a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, seated dumbbell shoulder press in 5 stages: 1) seated tall on the chair facing the camera, feet flat hip-width apart, a dumbbell in each hand held at shoulder height with palms facing each other, elbows bent about 90 degrees and slightly in front of the body, back straight; 2) the dumbbells rise about 12 cm, elbows bent about 70 degrees, palms facing each other; 3) the dumbbells at head height, elbows bent about 40 degrees, forearms vertical; 4) the arms nearly straight overhead (elbows about 10 degrees from straight), dumbbells above the shoulders slightly toward the midline, upper arms near the ears, ribs down, shoulders away from the ears; 5) top: arms fully extended overhead with soft elbows, dumbbells touching or nearly touching above the head, neck long, ribs down, back straight with no arch. What does NOT move: the chair, the feet, the torso (no arching or leaning). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: front and side deltoids on the shoulders; helpers in YELLOW: triceps, upper trapezius, serratus anterior. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "lateral-raise",
+    "name": "Elevación lateral",
+    "category": "torso",
+    "group": "hombros",
+    "equipment": [
+      "mancuernas"
+    ],
+    "focus": [
+      "Deltoides lateral"
+    ],
+    "support": [
+      "Trapecio superior",
+      "Supraespinoso"
+    ],
+    "cue": "Lidera con los codos hasta la altura de los hombros",
+    "tips": [
+      "Codos suaves, palmas hacia abajo.",
+      "Sube solo hasta la altura de los hombros.",
+      "Mancuernas livianas: sin balanceo ni encoger los hombros."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube a los lados"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, dumbbell lateral raise in 5 stages: 1) standing tall facing the camera, feet hip-width apart, a dumbbell in each hand with the arms hanging at the sides, elbows soft, palms facing the thighs; 2) arms lift sideways to about 20 degrees from the body, elbows soft, shoulders low; 3) arms at about 45 degrees from the body, elbows leading, shoulders still low; 4) arms at about 70 degrees from the body; 5) top: both arms raised out to the sides to exactly shoulder height (90 degrees), elbows slightly bent about 15 degrees and slightly higher than the hands, palms facing down, shoulders low and relaxed, torso still. What does NOT move: the feet, the torso (it does not lean or sway), the neck and the shoulders (they do not shrug). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: lateral deltoids on the sides of the shoulders; helpers in YELLOW: upper trapezius, supraspinatus. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "kb-halo",
+    "name": "Halo con kettlebell",
+    "category": "torso",
+    "group": "hombros",
+    "equipment": [
+      "kettlebell"
+    ],
+    "focus": [
+      "Deltoides anterior",
+      "Deltoides lateral"
+    ],
+    "support": [
+      "Manguito rotador",
+      "Trapecio medio",
+      "Transverso abdominal",
+      "Tríceps"
+    ],
+    "cue": "Círculo alrededor de la cabeza, costillas quietas",
+    "tips": [
+      "Sostén el kettlebell por los cuernos, con la campana hacia abajo, pegado al pecho.",
+      "Pasa cerca de la cabeza sin tocarla; codos pegados al círculo.",
+      "Aprieta el abdomen; no arquees la espalda al pasar por detrás."
+    ],
+    "positions": [
+      {
+        "label": "Al frente",
+        "breath": "in",
+        "verb": "frente al mentón"
+      },
+      {
+        "label": "Detrás",
+        "breath": "ex",
+        "verb": "pasa por detrás"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 40,
+      "note": "alterna el sentido cada 20 s"
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 4.3,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": true,
+      "pos": [
+        0,
+        2
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: one cast-iron kettlebell (matt dark grey with a pink handle), held bell-down by the horns, the same size in every frame. Movement, kettlebell halo (circles around the head) in 4 stages: 1) standing tall facing the camera, feet hip-width apart, holding a kettlebell upside-down (bell hanging below) by its horns with both hands at chin height just in front of the chest, elbows bent and pointing down; 2) the kettlebell circles to beside the head on the RIGHT side of the image, at ear height about 10 cm away from the head, elbows bent, torso still; 3) the kettlebell passes behind the head: it is behind the neck at the back of the shoulders, elbows pointing forward and slightly down, ribs down; 4) the kettlebell comes round to beside the head on the LEFT side of the image at ear height, elbows bent, ready to return in front of the chin. What does NOT move: the feet, the torso and the neck (the head and chest do not tilt). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: front and side deltoids around the shoulders; helpers in YELLOW: rotator cuff, middle trapezius, transversus abdominis, triceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "biceps-curl",
+    "name": "Curl de bíceps",
+    "category": "brazos",
+    "group": "brazos",
+    "equipment": [
+      "mancuernas"
+    ],
+    "focus": [
+      "Bíceps"
+    ],
+    "support": [
+      "Braquial",
+      "Antebrazos"
+    ],
+    "cue": "Codos pegados al cuerpo, sube y baja lento",
+    "tips": [
+      "Codos fijos junto a las costillas.",
+      "Palmas hacia arriba al subir; sin balancear el torso.",
+      "Baja en 3 segundos, sin dejar caer los brazos."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, dumbbell biceps curl in 5 stages: 1) standing tall in profile, feet hip-width apart, knees soft, a dumbbell in each hand with the arms hanging straight down, palms facing forward, elbows beside the ribs; 2) elbows bend about 40 degrees, forearms rising, upper arms still beside the ribs; 3) elbows bent about 80 degrees, forearms horizontal, upper arms still vertical beside the ribs; 4) elbows bent about 120 degrees, dumbbells rising toward the shoulders, upper arms still vertical; 5) top: elbows bent about 145 degrees (fully curled), dumbbells at the front of the shoulders, upper arms still vertical beside the ribs, torso not leaning back, shoulders low. What does NOT move: the upper arms and elbows (they stay beside the ribs), the torso and the legs. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: biceps on the front of the upper arms; helpers in YELLOW: brachialis, forearm flexors. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "hammer-curl",
+    "name": "Curl martillo",
+    "category": "brazos",
+    "group": "brazos",
+    "equipment": [
+      "mancuernas"
+    ],
+    "focus": [
+      "Braquial",
+      "Bíceps"
+    ],
+    "support": [
+      "Antebrazos"
+    ],
+    "cue": "Agarre neutro, pulgares arriba",
+    "tips": [
+      "Mancuernas como un martillo: palmas enfrentadas todo el recorrido.",
+      "Codos pegados, sin balancear.",
+      "Aprieta arriba 1 segundo."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, dumbbell hammer curl in 5 stages: 1) standing tall in profile, feet hip-width apart, knees soft, a dumbbell in each hand held vertically like a hammer (thumbs pointing forward), arms hanging straight down, elbows beside the ribs; 2) elbows bend about 40 degrees, dumbbells held vertically, upper arms still; 3) elbows bent about 80 degrees, forearms horizontal, dumbbells vertical with thumbs up; 4) elbows bent about 120 degrees, dumbbells rising toward the shoulders; 5) top: elbows bent about 145 degrees, dumbbells vertical in front of the shoulders with thumbs up, upper arms still vertical beside the ribs, torso still. What does NOT move: the upper arms and elbows, the torso and the legs. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: brachialis and biceps on the front of the upper arms; helpers in YELLOW: forearm muscles (brachioradialis). Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "overhead-triceps-ext",
+    "name": "Extensión de tríceps sobre la cabeza",
+    "category": "brazos",
+    "group": "brazos",
+    "equipment": [
+      "mancuernas",
+      "silla"
+    ],
+    "focus": [
+      "Tríceps"
+    ],
+    "support": [
+      "Deltoides anterior",
+      "Transverso abdominal"
+    ],
+    "cue": "Codos apuntando arriba, solo se mueve el antebrazo",
+    "tips": [
+      "Una mancuerna sostenida con ambas manos.",
+      "Codos cerca de las orejas; no los abras.",
+      "Costillas abajo: no arquees la espalda."
+    ],
+    "positions": [
+      {
+        "label": "Detrás",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "extiende"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 5,
+      "view": "RIGHT SIDE PROFILE, sitting on a chair facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, sitting on a chair facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a plain sturdy wooden dining chair with a seat about 45 cm high, the same in every frame, resting on the floor line seen from the side with its seat facing right; one small hex dumbbell (pink rubber coating) held upright with both hands. Movement, seated overhead dumbbell triceps extension in 5 stages: 1) seated tall on the chair, feet flat, arms overhead with the elbows bent about 100 degrees and the upper arms vertical beside the ears, one dumbbell held upright with both hands behind the head, forearms pointing down behind her; 2) elbows extend about 25 degrees, forearms rising, upper arms still vertical; 3) elbows bent about 60 degrees, dumbbell rising behind the head, upper arms still vertical; 4) elbows bent about 25 degrees, dumbbell above the back of the head; 5) top: arms fully extended overhead with soft elbows, the dumbbell directly above the head, upper arms beside the ears, ribs down, back straight. What does NOT move: the chair, the upper arms and elbows (they stay vertical beside the ears), the torso. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: triceps on the back of the upper arms; helpers in YELLOW: front deltoids, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "band-triceps-pushdown",
+    "name": "Extensión de tríceps con banda en la puerta",
+    "category": "brazos",
+    "group": "brazos",
+    "equipment": [
+      "banda",
+      "puerta"
+    ],
+    "focus": [
+      "Tríceps"
+    ],
+    "support": [
+      "Antebrazos",
+      "Transverso abdominal"
+    ],
+    "cue": "Codos pegados al cuerpo, empuja hacia abajo",
+    "tips": [
+      "Banda anclada arriba, en la parte alta de la puerta (ancla segura).",
+      "Pie adelantado, torso firme, codos fijos.",
+      "Estira del todo abajo y vuelve controlado."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Abajo",
+        "breath": "ex",
+        "verb": "empuja hacia abajo"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a long flat elastic resistance band in lilac, the same width and colour in every frame. a plain white interior door frame drawn as two thin brown vertical lines with a top bar, fixed in the same place in every frame. Movement, band triceps pushdown from a door anchor in 4 stages: 1) standing tall in profile facing right toward a door, knees slightly bent, elbows beside the ribs and bent about 90 degrees, forearms horizontal pointing forward, hands holding the two ends of the band that goes up to the anchor at the top of the door in front of her (at the RIGHT, above head height); 2) forearms push down, elbows extend to about 120 degrees, upper arms still beside the ribs; 3) elbows extended to about 150 degrees, the hands pointing down in front of the thighs; 4) bottom: arms fully straight (soft elbows) pointing down along the thighs, hands beside the thighs, band stretched up to the anchor, upper arms still beside the ribs, torso upright. What does NOT move: the elbows and upper arms (they stay pinned to the ribs), the legs, the door and the anchor. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: triceps on the back of the upper arms; helpers in YELLOW: forearm muscles, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "thoracic-open-book",
+    "name": "Libro abierto (rotación torácica)",
+    "category": "movilidad",
+    "group": "movilidad",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Erectores espinales",
+      "Oblicuos"
+    ],
+    "support": [
+      "Pectoral mayor",
+      "Deltoides posterior",
+      "Romboides"
+    ],
+    "cue": "Sigue la mano con la mirada; rodillas pegadas",
+    "tips": [
+      "Tendida de lado, rodillas dobladas y apiladas, brazos al frente.",
+      "Abre el brazo de arriba como las páginas de un libro, sin separar las rodillas.",
+      "Exhala al abrir; no fuerces el hombro: ve hasta donde llegues."
+    ],
+    "positions": [
+      {
+        "label": "Cerrado",
+        "breath": "in",
+        "verb": "cierra"
+      },
+      {
+        "label": "Abierto",
+        "breath": "ex",
+        "verb": "abre el brazo"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 10,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 2.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view from the side of her belly, she lies on her side on the mat with her HEAD toward the LEFT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, thoracic open book rotation in 4 stages: 1) lying on her side, head resting on the lower arm, hips and knees bent about 90 degrees with the knees stacked, both arms stretched straight forward toward the camera at chest height with the palms together; 2) the top arm lifts and starts to arc up toward the ceiling, the chest beginning to rotate about 30 degrees, eyes following the hand; 3) the top arm points straight up to the ceiling, the chest rotated about 70 degrees, the knees still stacked; 4) open book: the top arm opened all the way to the far side behind her, resting on the mat (or as close as it goes), chest rotated about 100 degrees to face the ceiling, head turned to follow the hand, the knees still stacked and pinned together. What does NOT move: the knees and the hips (they stay stacked and pinned), the lower arm. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: spinal erectors and obliques of the mid-back, the rotation is in the mid back; helpers in YELLOW: pectoralis major being opened, rear deltoid, rhomboids. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "wall-angel",
+    "name": "Ángeles en la pared",
+    "category": "movilidad",
+    "group": "movilidad",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Trapecio inferior",
+      "Trapecio medio",
+      "Serrato anterior"
+    ],
+    "support": [
+      "Deltoides posterior",
+      "Manguito rotador"
+    ],
+    "cue": "Espalda y brazos pegados a la pared, desliza sin dolor",
+    "tips": [
+      "Talones a un pie de la pared; espalda baja casi apoyada.",
+      "Codos y dorso de las manos buscan la pared; si no llegas, ve hasta donde puedas.",
+      "Desliza lento, costillas abajo."
+    ],
+    "positions": [
+      {
+        "label": "W",
+        "breath": "in",
+        "verb": "baja a W"
+      },
+      {
+        "label": "Y",
+        "breath": "ex",
+        "verb": "desliza arriba"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 40
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 2.5,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: a plain pale grey wall drawn as a very light panel right behind her body in every frame. Movement, wall angel in 5 stages: 1) standing with her back, head and buttocks against a plain wall (drawn as a very pale grey panel behind her), feet about 30 cm from the wall, arms in a W: upper arms about 45 degrees out from the torso, elbows bent 90 degrees, backs of the hands toward the wall, elbows low; 2) the arms slide up the wall, upper arms about 70 degrees from the torso, elbows bent about 90 degrees; 3) the upper arms about 100 degrees from the torso, elbows bent about 100 degrees, hands at ear height; 4) the arms about 140 degrees from the torso, elbows bent about 140 degrees, hands above the head; 5) top: arms overhead in a Y, about 165 degrees from the torso, elbows almost straight, backs of the hands and arms still touching the wall, ribs down, chin level. What does NOT move: the legs, the torso, the head (all stay touching the wall), the ribs stay down. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: lower and middle trapezius and serratus anterior around the shoulder blades; helpers in YELLOW: rear deltoids and the rotator cuff. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "hamstring-stretch-supine",
+    "name": "Isquiotibiales tendida con banda",
+    "category": "elongacion",
+    "group": "movilidad",
+    "equipment": [
+      "mat",
+      "banda"
+    ],
+    "focus": [
+      "Isquiotibiales"
+    ],
+    "support": [
+      "Gemelos",
+      "Glúteo mayor"
+    ],
+    "cue": "Pierna estirada hacia el techo, espalda baja en el mat",
+    "tips": [
+      "Banda (o toalla) alrededor del arco del pie.",
+      "Rodilla casi estirada: no necesitas bloquearla.",
+      "Respira lento; con cada exhalación acerca un poco la pierna."
+    ],
+    "positions": [
+      {
+        "label": "Sube",
+        "breath": "in",
+        "verb": "sube la pierna"
+      },
+      {
+        "label": "Estira",
+        "breath": "ex",
+        "verb": "acerca la pierna"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 30,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 2.3,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a long flat elastic resistance band in lilac, the same width and colour in every frame. Movement, supine hamstring stretch with a band in 4 stages: 1) lying on her back, the FAR leg bent with the foot flat on the mat, the NEAR leg also bent in the air at hip 90 degrees with the shin parallel to the floor, a band looped around the near foot with both hands holding its ends above the chest; 2) the near knee begins to straighten, the near thigh tilting about 80 degrees from the mat, band taut; 3) the near leg almost straight (knee about 165 degrees) pointing up at about 85 degrees from the mat; 4) stretch: the near leg straight (soft knee) pulled by the band to about 100 degrees from the mat (a little toward the head), the foot flexed, the far foot flat on the mat, head, back and hips flat on the mat, arms easy holding the band. What does NOT move: the head, back, hips and the far leg stay flat on the mat. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: hamstrings on the back of the thigh of the raised near leg; helpers in YELLOW: calf muscle and gluteus maximus. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "sphinx",
+    "name": "Esfinge",
+    "category": "movilidad",
+    "group": "movilidad",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Erectores espinales",
+      "Recto abdominal"
+    ],
+    "support": [
+      "Serrato anterior",
+      "Psoas"
+    ],
+    "cue": "Apoya los antebrazos, pecho abierto, cuello largo",
+    "tips": [
+      "Codos bajo los hombros, hombros lejos de las orejas.",
+      "Pelvis pesada en el mat; sube solo hasta donde no moleste la espalda.",
+      "Respira hacia las costillas."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Esfinge",
+        "breath": "ex",
+        "verb": "abre el pecho"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 30
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 2.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, lying face-down on the mat with her HEAD toward the RIGHT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, lying face-down on the mat with her HEAD toward the RIGHT. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, sphinx pose in 4 stages: 1) lying face down on the mat, forehead down, legs straight and relaxed, forearms flat on the mat beside the chest with the elbows bent about 90 degrees; 2) the head and chest lift about 5 cm, forearms pressing into the mat, elbows under the shoulders; 3) the chest lifts further, torso about 20 degrees from the mat; 4) sphinx: torso lifted about 35 degrees from the mat, elbows directly under the shoulders, forearms parallel, chest open, shoulders low and away from the ears, hips and thighs relaxed on the mat, gaze forward, long neck. What does NOT move: the hips, the legs and the forearms (they stay on the mat). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: spinal erectors and the front of the abdomen being gently opened; helpers in YELLOW: serratus anterior, hip flexors (psoas). Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "seated-twist-chair",
+    "name": "Giro de columna sentada en silla",
+    "category": "movilidad",
+    "group": "movilidad",
+    "equipment": [
+      "silla"
+    ],
+    "focus": [
+      "Oblicuos",
+      "Erectores espinales"
+    ],
+    "support": [
+      "Glúteo mayor",
+      "Romboides"
+    ],
+    "cue": "Crece hacia arriba y gira desde el torso",
+    "tips": [
+      "Sentada alta, pies planos, rodillas juntas.",
+      "Una mano en el respaldo, la otra en la rodilla opuesta; sin tirar.",
+      "Gira al exhalar; mira hacia atrás por encima del hombro."
+    ],
+    "positions": [
+      {
+        "label": "Centro",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Giro",
+        "breath": "ex",
+        "verb": "gira"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 20,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 2.3,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Props, identical size, colour and position in every frame unless stated: a plain sturdy wooden dining chair with a seat about 45 cm high, the same in every frame, resting on the floor line, seen facing the camera. Movement, seated spinal twist on a chair in 4 stages: 1) seated tall on the chair facing the camera, feet flat and together, knees together, hands resting on the thighs, spine long; 2) she begins to turn the torso toward the right of the image about 20 degrees, one hand moving to the chair back; 3) the torso turned about 40 degrees to the right of the image, the head following, hips still facing the camera; 4) full twist: torso turned about 60 degrees toward the right of the image, the arm nearer the right holding the backrest behind her and the other hand on the outside of the opposite thigh, head turned looking over the shoulder, spine long, hips and knees still facing the camera. What does NOT move: the hips, the knees and the feet (they stay facing the camera). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: obliques on the sides of the waist and the spinal erectors; helpers in YELLOW: gluteus maximus, rhomboids. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "standing-quad-stretch",
+    "name": "Cuádriceps de pie",
+    "category": "elongacion",
+    "group": "movilidad",
+    "equipment": [
+      "silla"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Recto femoral"
+    ],
+    "support": [
+      "Psoas"
+    ],
+    "cue": "Rodillas juntas, glúteo apretado",
+    "tips": [
+      "Una mano apoyada en el respaldo de la silla.",
+      "Talón al glúteo, muslo vertical; no tires de la rodilla hacia atrás.",
+      "Pelvis hacia adentro (como guardando la cola)."
+    ],
+    "positions": [
+      {
+        "label": "De pie",
+        "breath": "in",
+        "verb": "prepara"
+      },
+      {
+        "label": "Estira",
+        "breath": "ex",
+        "verb": "talón al glúteo"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 30,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 2.3,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: the back and top of a plain wooden dining chair in profile in front of her (to the RIGHT), the same in every frame. Movement, standing quadriceps stretch with chair support in 4 stages: 1) standing tall in profile facing right, the FAR hand resting on the back of a chair in front of her, the near arm hanging, both legs straight, feet together; 2) the NEAR knee bends about 60 degrees, the heel lifting behind her, thigh still vertical; 3) the near knee bent about 110 degrees, the near hand reaching back to hold the ankle; 4) stretch: the near knee bent about 140 degrees with the heel close to the buttock held by the near hand, the thigh vertical beside the other thigh (knees together), pelvis tucked slightly and glutes tight, torso upright, far hand on the chair back. What does NOT move: the standing (far) leg, the chair, the torso (it stays upright, no arching). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps and rectus femoris on the front of the thigh of the bent near leg; helpers in YELLOW: psoas at the front of the hip. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "standing-side-bend",
+    "name": "Inclinación lateral de pie",
+    "category": "elongacion",
+    "group": "movilidad",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Oblicuos",
+      "Dorsal ancho"
+    ],
+    "support": [
+      "Cuadrado lumbar",
+      "Tríceps"
+    ],
+    "cue": "Alárgate hacia arriba y luego hacia el lado",
+    "tips": [
+      "Pies al ancho de la cadera, pelvis quieta.",
+      "Toma una muñeca con la otra mano y estira hacia el lado.",
+      "No te inclines hacia adelante: el torso queda en un plano."
+    ],
+    "positions": [
+      {
+        "label": "Arriba",
+        "breath": "in",
+        "verb": "alárgate"
+      },
+      {
+        "label": "Lateral",
+        "breath": "ex",
+        "verb": "inclínate"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 20,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 2.3,
+    "level": 1,
+    "strip": {
+      "frames": 5,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        4
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FIVE frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Movement, standing side bend stretch in 5 stages: 1) standing tall facing the camera, feet hip-width apart, both arms stretched overhead with the hands clasped (one hand holding the other wrist), torso tall; 2) the torso starts to tilt toward the right of the image about 10 degrees, arms still overhead; 3) the torso tilted about 20 degrees toward the right of the image, arms overhead, hips still; 4) the torso tilted about 30 degrees toward the right of the image, one smooth curve from the hips to the fingertips, the left-of-image side of the waist stretched and long, hips still centred, chest facing the camera, no forward lean; 5) full stretch: the torso tilted about 35 degrees to the right of the image, arms overhead and tilted with it, the left-of-image side of the waist lengthened, hips not shifting, both feet flat. What does NOT move: the feet and the hips (they stay still), the chest keeps facing the camera. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: obliques and latissimus dorsi along the side being stretched; helpers in YELLOW: quadratus lumborum, triceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "march-in-place",
+    "name": "Marcha en el lugar",
+    "category": "cardio",
+    "group": "cardio",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Psoas"
+    ],
+    "support": [
+      "Glúteo mayor",
+      "Transverso abdominal",
+      "Gemelos"
+    ],
+    "cue": "Rodillas arriba, brazos alternados, ritmo suave",
+    "tips": [
+      "Eleva la rodilla hasta la cadera, sin saltar.",
+      "Brazos doblados que se mueven al ritmo, opuestos a las piernas.",
+      "Pecho alto; aterriza suave sobre el pie completo."
+    ],
+    "positions": [
+      {
+        "label": "Pie abajo",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Rodilla arriba",
+        "breath": "ex",
+        "verb": "sube la rodilla"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 40
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": true,
+      "pos": [
+        0,
+        1
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Movement, marching in place in 4 stages: 1) standing tall facing the camera, feet hip-width apart, arms bent at the elbows about 90 degrees close to the body, relaxed; 2) the leg on the LEFT side of the image lifts: hip bent about 80 degrees, thigh nearly horizontal, knee bent 90 degrees, foot hanging under the knee; the arm on the RIGHT side of the image swings forward bent 90 degrees at chest height and the other arm moves back; 3) both feet on the floor again, standing tall, arms bent at the sides, momentarily level; 4) the leg on the RIGHT side of the image lifts: hip bent about 80 degrees, thigh nearly horizontal, knee bent 90 degrees; the arm on the LEFT side of the image swings forward bent 90 degrees at chest height and the other arm moves back. What does NOT move: the torso (it stays upright and tall), the supporting foot (flat on the floor). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps and hip flexors of the lifted leg; helpers in YELLOW: gluteus maximus, transversus abdominis, calves. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "low-impact-skater",
+    "name": "Patinador sin salto",
+    "category": "cardio",
+    "group": "cardio",
+    "equipment": [
+      "ninguno"
+    ],
+    "focus": [
+      "Glúteo medio",
+      "Glúteo mayor",
+      "Cuádriceps"
+    ],
+    "support": [
+      "Aductores",
+      "Oblicuos",
+      "Gemelos"
+    ],
+    "cue": "Paso lateral largo, la pierna de atrás cruza detrás",
+    "tips": [
+      "Sin salto: da un paso amplio y toca la punta atrás.",
+      "Rodilla de apoyo flexionada y alineada con el pie.",
+      "Brazos balancean al lado contrario, torso levemente inclinado."
+    ],
+    "positions": [
+      {
+        "label": "Centro",
+        "breath": "in",
+        "verb": "al centro"
+      },
+      {
+        "label": "Paso lateral",
+        "breath": "ex",
+        "verb": "paso y cruza"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 40
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 5.0,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view, facing the camera",
+      "ground": "floor-line",
+      "anchor": "center",
+      "loop": true,
+      "pos": [
+        0,
+        1
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: FRONT view, facing the camera. Movement, low-impact skater steps (no jump) in 4 stages: 1) standing tall facing the camera on both feet, feet hip-width apart, arms hanging relaxed, knees soft; 2) she steps wide to the RIGHT of the image on the right-of-image leg, which lands with the knee bent about 40 degrees; the left-of-image leg is lifted off the floor and swings behind and across the standing leg with the toes tapping the floor; torso leaning about 20 degrees, the arms swinging across her body toward the left of the image; 3) she pushes off the right-of-image leg and brings the feet back to standing tall facing the camera, arms returning to her sides; 4) she steps wide to the LEFT of the image on the left-of-image leg, which lands with the knee bent about 40 degrees; the right-of-image leg is lifted behind and across the standing leg with the toes tapping the floor; torso leaning about 20 degrees, the arms swinging across her body toward the right of the image. What does NOT move: the supporting foot stays flat (never leaves the floor in a jump), the head stays level. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: gluteus medius, gluteus maximus and quadriceps of the standing leg; helpers in YELLOW: adductors, obliques, calves. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "mountain-climber-slow",
+    "name": "Escalador lento",
+    "category": "cardio",
+    "group": "cardio",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Recto abdominal",
+      "Psoas",
+      "Cuádriceps"
+    ],
+    "support": [
+      "Transverso abdominal",
+      "Deltoides anterior",
+      "Serrato anterior",
+      "Tríceps"
+    ],
+    "cue": "Plancha firme, rodilla al pecho sin saltar",
+    "tips": [
+      "Manos bajo los hombros, cuerpo en una línea.",
+      "Lleva una rodilla al pecho con control y cambia sin rebotar.",
+      "Cadera estable: no la subas ni la hundas."
+    ],
+    "positions": [
+      {
+        "label": "Plancha",
+        "breath": "in",
+        "verb": "vuelve"
+      },
+      {
+        "label": "Rodilla al pecho",
+        "breath": "ex",
+        "verb": "lleva la rodilla"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 30,
+      "note": "ritmo lento y controlado"
+    },
+    "sided": false,
+    "mirror": true,
+    "met": 5.0,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "RIGHT SIDE PROFILE, in a high plank on the mat facing right (head at the right)",
+      "ground": "mat",
+      "anchor": "right",
+      "loop": true,
+      "pos": [
+        0,
+        2
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background; a long lavender yoga mat runs along the bottom across the whole width. FOUR frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, in a high plank on the mat facing right (head at the right). (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Movement, slow mountain climber in 4 stages: 1) high plank: hands flat on the mat under the shoulders, arms straight, body one straight line from head to heels (about 20 degrees to the mat), legs straight, toes on the mat, neck neutral; 2) the NEAR knee drives forward: hip bent about 50 degrees, knee bent about 90 degrees, foot lifted about 15 cm, hips still level; 3) the near knee reaches its closest point under the chest, hip bent about 100 degrees, knee bent about 110 degrees, toes close to the mat, back flat, the far leg straight behind; 4) the near leg returns back to the straight plank: the leg extending, the toes touching the mat behind, the body again in a single line. What does NOT move: the hands and the arms, the far leg (straight with toes on the mat), the back and the hips (no bouncing). Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: rectus abdominis, psoas and quadriceps of the driving leg; helpers in YELLOW: transversus abdominis, front deltoids, serratus anterior, triceps. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  },
+  {
+    "id": "db-thruster",
+    "name": "Sentadilla con press (thruster)",
+    "category": "cardio",
+    "group": "cardio",
+    "equipment": [
+      "mancuernas"
+    ],
+    "focus": [
+      "Cuádriceps",
+      "Glúteo mayor",
+      "Deltoides anterior"
+    ],
+    "support": [
+      "Tríceps",
+      "Isquiotibiales",
+      "Transverso abdominal"
+    ],
+    "cue": "Sube de la sentadilla empujando las mancuernas arriba",
+    "tips": [
+      "Mancuernas apoyadas en los hombros, codos al frente.",
+      "Baja hasta muslos paralelos; al subir, aprovecha el impulso para el press.",
+      "Termina con brazos estirados y costillas abajo."
+    ],
+    "positions": [
+      {
+        "label": "Sentadilla",
+        "breath": "in",
+        "verb": "baja"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube y empuja"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 6.0,
+    "level": 2,
+    "strip": {
+      "frames": 6,
+      "view": "RIGHT SIDE PROFILE, facing right",
+      "ground": "floor-line",
+      "anchor": "feet",
+      "loop": false,
+      "pos": [
+        0,
+        5
+      ],
+      "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. SIX frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, dumbbell thruster in 6 stages: 1) bottom of the squat: thighs parallel to the floor, knees bent about 105 degrees, torso leaning forward about 30 degrees, both dumbbells resting at the front of the shoulders with the elbows pointing forward and low, heels flat; 2) rising: knees bent about 80 degrees, hips rising, dumbbells still at the shoulders, torso leaning about 25 degrees; 3) rising further: knees bent about 130 degrees, torso leaning about 10 degrees, dumbbells still at the shoulders; 4) standing: legs straight, hips extended, torso upright, dumbbells at the shoulders and just beginning to rise past the chin, elbows bent about 80 degrees; 5) the dumbbells pass the forehead, arms bent about 40 degrees, legs straight, torso upright; 6) top: legs straight, arms fully extended overhead with soft elbows and the dumbbells directly above the shoulders, biceps beside the ears, ribs down, torso tall. What does NOT move: the feet stay flat in the same place, the back stays straight. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps, gluteus maximus and front deltoids; helpers in YELLOW: triceps, hamstrings, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
+    }
+  }
+]
