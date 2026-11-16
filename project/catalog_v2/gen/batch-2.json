@@ -58,5 +58,305 @@
    "m": 1
   },
   "notes": "Frames 3 and 4 nearly touch in the strip but cut cleanly. Raised leg is the far-side leg in drawing; acceptable."
+ },
+ {
+  "id": "curl-up",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "right",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/623dd67d98b2a8d555821ce926e1f74842d811aa28c119af9ee106da09baf7bd.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/782f2d604bd5c11c65776995f5b2459845e658ba3b82a1054f6ca00267b5d969.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Head/shoulder lift is subtle (about 10 cm as asked, but small on screen). Near knee bent, far leg straight. Clean cuts."
+ },
+ {
+  "id": "reverse-crunch",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/3239be5f2d2dc9da81a3ebd13380dda80d9d80602954f2fd982927a8dc33dcbd.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/513d033be1ae950888d04084702276a21b10a94272cc4a7c078522c16b39b617.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Pelvis curl is subtle; mostly the thighs tilt toward the head across frames. Usable. Clean cuts."
+ },
+ {
+  "id": "toe-taps",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/e63fecc1084357c22486d55dfcdf5c459e3d0b33f0cfd599c9159299bbd54808.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/343e0c4c70beba962126f10cfab1d9543d1d5af2bbcc122cba635687bbc96290.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good: far leg lowers with knee at 90 degrees to touch toes, near leg stays tabletop. Male matches frame by frame."
+ },
+ {
+  "id": "superman",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying face-down on the mat with her HEAD toward the LEFT, arms stretched forward toward the left",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/43c5e57287aa5c5165ff1d804859adf1e64a6b0b19c0c9a9c9d754bcf34193bb.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/80e295bede5cc24e6dc2a1745e2457587a1608d1fd14b368077bb217931004a6.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Figure is very flat/wide so frames are small (about 470x130). Lifts both far arm and near leg progressively; at the top head is slightly raised. Clean cuts."
+ },
+ {
+  "id": "db-pullover",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, lying on her back on the mat with her HEAD toward the LEFT and her feet toward the RIGHT",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/91f016ee5eaae47c85b842d501222ca5986da67dda62826ac0af902a40def2d1.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/38920877e9798b37079b01762410faabda72d925f2bd4d894ef8c2a979f30773.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Dumbbell is held upright in frame 1 and turns as the arc progresses (natural). Male matches."
+ },
+ {
+  "id": "bent-over-row",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/c6796b80734e2f8a21e3f19fb507475e2225a1759a3903fbda545a5ea7e58204.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/2f784765d590609c6484ec89fcbfa881cbcb27b11a4d94f9525217e694887a24.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Only the near arm is clearly visible (far arm hidden), as expected in profile. Male wears black sneakers."
+ },
+ {
+  "id": "one-arm-row-chair",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/ab469be3da4b34d3b869702cb0b50d623b1a455ddd35fe69e7dc726c0a54dd81.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/2e2744476e31d29c661cd638cc52d961387c433c0e078f9bdb86de3b618cc031.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Chair identical in all frames; no grey wall drawn (not needed). Male matches."
+ },
+ {
+  "id": "band-row",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "right",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, sitting on the mat facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/1101f131569f056d69ff42fc3b9368202383a611c1b915d89a1f5a599f2ba2cc.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/8ee709b17a7572c7c0c38edc23d37ebd3a2537c66e0c484a7ab2753f06561f08.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Female knees look more bent than the 160 degrees asked (about 140), male legs nearly straight; both constant across frames. Band loop around soles OK."
+ },
+ {
+  "id": "band-pull-apart",
+  "status": "needs-review",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0cedd435d18b85bd3272dd68beb72a0f646bb11824071d3129b129aec09ca8a8.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/839dde8245cec04898d2631e9949c2523b87cc3f7b5fd18aea76da0b03e28eaf.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Motion and band are good. Muscle overlays are drawn on the FRONT of the shoulders/chest (front view) instead of rear delts/rhomboids, which are not visible from the front: anatomically imprecise."
+ },
+ {
+  "id": "reverse-fly",
+  "status": "ok",
+  "frames": 5,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   4
+  ],
+  "view": "THREE-QUARTER VIEW FROM BEHIND-RIGHT, bent over with torso inclined 45 degrees, hips pushed back, head hanging in line with the spine",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/461f5822895d1630ecf0780ff063eab02a50afb671a1cfe907f8dd352eddcfb3.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/493b6c0d337a5d8cd8c0109454b5dfc795508857d33df4db77e9b51ed5d3b131.png",
+  "attempts": {
+   "f": 3,
+   "m": 1
+  },
+  "notes": "Attempts 1 and 2 (pure rear view) drew her standing nearly upright with distorted proportions; attempt 3 changed the camera to THREE-QUARTER FROM BEHIND-RIGHT with the torso bent 45 degrees. Good result. Arms rise on both sides; torso and legs fixed."
+ },
+ {
+  "id": "incline-pushup",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/581600d92c19f91b31c6f8d48c9c4bf4e68b14dd70d379e25c5a0fcb39bd2007.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0b966f8a773e03e434931c93910af09d5bbbb313e62116e73984ec0fc9ff06ea.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good progression, body straight. The pale wall is drawn behind the chair in every frame, leaving a thin grey sliver at the right edge of each cut frame; in frame 4 the head almost touches the chair back/wall. Feet and chair fixed."
+ },
+ {
+  "id": "knee-pushup",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right (head at the right)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/fe6b2539e352293ca533652915699f11d436ee7e458e7e854096782844ac8d45.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/e28fe8139cb263f37a26bdf7b102c9882ab5612344bc03e84fdd5ac4267c73e3.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Ankles crossed, body straight head to knees, elbows reach about 90 degrees. Male wears white socks."
+ },
+ {
+  "id": "floor-fly",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "center",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "TOP-DOWN view looking straight down at her lying on her back on the mat (head toward the top of the frame, feet toward the bottom)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/de2a7e64b28ebe50eb8eebc005d5f2013cbe2483ba9e51fec9f800abf2edb8ab.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/57d8350bcd30d16e5584ea5d84198b8ad2b1a1533ed1a4c48a08fd8f5bfda34e.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Top-down view works. The mat is drawn as a separate rectangle behind each figure (not a long strip), so the cut frames carry their own mat; in frame 4 the arms extend past the mat edges. Hands at the start sit near the chin rather than over mid-chest (foreshortened)."
+ },
+ {
+  "id": "band-chest-press",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "left",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "RIGHT SIDE PROFILE, facing right",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/1f3b33d4175272045a978093128cfcd99ae6eba0e0c6d9ef31327723ca2b78f6.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/8b88aac46be945743cbcf1cc4afe86de2d7ac8a4c7c6cadeaa78410369c91df4.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Door frame and anchor identical in each frame, aligned by the left edge. Handles/band wrap around the back as asked; stance staggered; torso upright. Male matches."
+ },
+ {
+  "id": "ring-chest-press",
+  "status": "ok",
+  "frames": 4,
+  "anchor": "feet",
+  "cuts": {},
+  "loop": false,
+  "pos": [
+   0,
+   3
+  ],
+  "view": "FRONT view, facing the camera",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/30fd934aa955c829bb2e7311f80c9dadc9aab5d3ab67931cfd00653ec3a67362.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/82831906879f685e16c3c775446b3e68e240688a098c191ddf3a35e572296183.png",
+  "attempts": {
+   "f": 1,
+   "m": 1
+  },
+  "notes": "Good. Ring flattens progressively from round to oval; hands on handles, elbows lift. Male matches."
  }
 ]
