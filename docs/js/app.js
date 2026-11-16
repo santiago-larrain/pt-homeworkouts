@@ -1,4 +1,5 @@
 import { MOVES, MOVE_BY_ID, CATEGORIES, EQUIPMENT } from '../data/catalog.js';
+import { DEFAULT_PLANS } from '../data/plans.js';
 import { store, uid, clone, todayISO } from './store.js';
 import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, clock, isDuo, unitText } from './engine.js';
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
@@ -10,6 +11,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
+const APP_VERSION = '1.5';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -253,46 +255,77 @@ const VIEWS = {
 
   settings() {
     const st = set();
+    const g = n => `${n} ${n === 1 ? 'sesión' : 'sesiones'}`;
     let html = '';
     html += group(S().profiles.map(pr => row({ icon: `<span class="avatar ${pr.gender}">${esc((pr.name || '?').trim().charAt(0).toUpperCase())}</span>`, title: esc(pr.name), sub: esc(profSub(pr)), right: pr.id === S().activeProfile ? '<span class="pill">Activo</span>' : '', chev: true, a: 'editProfile', data: `data-id="${pr.id}"` })),
-      { header: 'Perfiles', footer: 'El género define el modelo de las animaciones. El perfil activo es el de los planes individuales; en los planes en pareja eliges quién es cada persona.' });
-    html += soundGroup(st) + timesGroup(st);
+      { header: 'Perfiles', footer: 'El perfil activo es quien entrena en los planes individuales. Su género define los dibujos y el tema automático.' });
     html += group([
-      row({ title: 'Ejercicios por repeticiones', right: seg('setSeg', 'data-k="repsMode"', [['manual', 'Manual'], ['auto', 'Con tiempo']], st.repsMode) }),
-      row({ title: 'Segundos por repetición', sub: 'Para el modo «Con tiempo» y los planes en pareja', right: stepper('setStep', 'data-k="secsPerRep" data-min="1" data-max="8" data-st="1"', `${st.secsPerRep} s`) }),
-    ], { header: 'Repeticiones', footer: st.repsMode === 'manual' ? 'Manual: haces tus repeticiones a tu ritmo y tocas «Hecho».' : 'Con tiempo: el reloj avanza solo (repeticiones máximas × segundos).' });
-    html += group([row({ title: 'Ritmo compartido', right: seg('setSeg', 'data-k="duoGovern"', [['time', 'Manda el tiempo'], ['reps', 'Mandan las reps']], st.duoGovern) })],
-      { header: 'Planes en pareja', footer: st.duoGovern === 'time' ? 'Ambas personas trabajan el mismo tiempo: las repeticiones se convierten a segundos y se usa el ejercicio más largo.' : 'Si alguna hace repeticiones, el reloj espera a que las dos toquen «Hecho».' });
+      row({ title: 'Meta semanal', sub: 'Sesiones por semana', right: stepper('setStep', 'data-k="weeklyGoal" data-min="1" data-max="7" data-st="1"', g(st.weeklyGoal)) }),
+      row({ title: 'Preparación', sub: 'Cuenta regresiva antes de empezar', right: stepper('setStep', 'data-k="getReady" data-min="0" data-max="30" data-st="1"', `${st.getReady} s`) }),
+      row({ title: 'Descanso entre ejercicios', right: stepper('setStep', 'data-k="transition" data-min="0" data-max="60" data-st="5"', `${st.transition} s`) }),
+      row({ title: 'Descanso entre bloques', right: stepper('setStep', 'data-k="sectionRest" data-min="0" data-max="180" data-st="15"', `${st.sectionRest} s`) }),
+      segRow('Ritmo en pareja', st.duoGovern === 'time' ? 'Las repeticiones se pasan a segundos y se usa el ejercicio más largo.' : 'Si alguien hace repeticiones, el reloj espera a que ambas toquen «Hecho».', 'duoGovern', [['time', 'Manda el tiempo'], ['reps', 'Mandan las reps']], st.duoGovern),
+      row({ title: 'Más opciones', sub: 'Cambio de lado, repeticiones, pantalla', a: 'openMore', chev: true }),
+    ], { header: 'Entrenamiento', footer: 'Los cambios se aplican de inmediato, también durante un entrenamiento (botón ⚙︎ del reproductor).' });
+    html += soundGroup(st);
     html += group([
-      row({ title: 'Mantener pantalla encendida', right: toggle('set:wakeLock', st.wakeLock) }),
+      segRow('Tema', 'Auto usa rosa para perfiles de mujer y estándar para hombres.', 'theme', [['auto', 'Auto'], ['rosa', 'Rosa'], ['estandar', 'Estándar']], st.theme),
+      segRow('Modo', null, 'appearance', [['auto', 'Automático'], ['light', 'Claro'], ['dark', 'Oscuro']], st.appearance),
       row({ title: 'Animar movimientos', sub: 'Alterna las posiciones durante el ejercicio', right: toggle('set:animate', st.animate) }),
-      row({ title: 'Velocidad de la animación', right: stepper('setStep', 'data-k="animSpeed" data-min="0.8" data-max="4" data-st="0.4"', `${st.animSpeed.toFixed(1)} s`) }),
-      row({ title: 'Tema', right: seg('setSeg', 'data-k="theme"', [['auto', 'Auto'], ['rosa', 'Rosa'], ['estandar', 'Estándar']], st.theme) }),
-      row({ title: 'Modo', right: seg('setSeg', 'data-k="appearance"', [['auto', 'Auto'], ['light', 'Claro'], ['dark', 'Oscuro']], st.appearance) }),
-    ], { header: 'Pantalla', footer: 'El modelo de las animaciones depende del género de cada perfil.' });
-    const persisted = ui.persisted;
+      row({ title: 'Velocidad', sub: 'Segundos por posición en la animación', right: stepper('setStep', 'data-k="animSpeed" data-min="0.8" data-max="4" data-st="0.4"', `${st.animSpeed.toFixed(1)} s`) }),
+    ], { header: 'Apariencia' });
     html += group([
+      row({ title: 'Exportar respaldo', sub: st.lastBackup ? `Último: ${new Date(st.lastBackup).toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Aún no has exportado uno', a: 'exportData', chev: true }),
+      row({ title: 'Importar respaldo', a: 'importData', chev: true }),
+      row({ title: 'Almacenamiento', sub: 'Dónde se guardan tus datos', a: 'openStorage', chev: true }),
+      row({ title: 'Restaurar planes originales', a: 'restorePlans', chev: true }),
+      row({ title: '<span class="danger">Borrar todos los datos</span>', a: 'resetAll' }),
+    ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas. Exporta un respaldo de vez en cuando.' });
+    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: `<span class="muted">${APP_VERSION}</span>` })], { header: 'Acerca de' });
+    return { title: 'Ajustes', large: true, html };
+  },
+
+  settingsMore() {
+    const st = set();
+    let html = group([
+      row({ title: 'Cambio de lado', right: stepper('setStep', 'data-k="switchSides" data-min="0" data-max="20" data-st="1"', `${st.switchSides} s`) }),
+      row({ title: 'Cambio de posición', sub: 'Entre fases de un mismo ejercicio', right: stepper('setStep', 'data-k="phaseGap" data-min="0" data-max="15" data-st="1"', `${st.phaseGap} s`) }),
+      row({ title: 'Descanso entre rondas', sub: st.roundRest ? 'Igual para todos los bloques' : 'El de cada bloque del plan', right: stepper('setStep', 'data-k="roundRest" data-min="0" data-max="180" data-st="15"', st.roundRest ? `${st.roundRest} s` : 'Plan') }),
+    ], { header: 'Tiempos' });
+    html += group([
+      segRow('Ejercicios por repeticiones', st.repsMode === 'manual' ? 'Haces tus repeticiones a tu ritmo y tocas «Hecho».' : 'El reloj avanza solo (repeticiones máximas × segundos).', 'repsMode', [['manual', 'Manual'], ['auto', 'Con tiempo']], st.repsMode),
+      row({ title: 'Segundos por repetición', sub: 'Para «Con tiempo» y para planes en pareja', right: stepper('setStep', 'data-k="secsPerRep" data-min="1" data-max="8" data-st="1"', `${st.secsPerRep} s`) }),
+    ], { header: 'Repeticiones' });
+    html += group([
+      row({ title: 'Mantener pantalla encendida', sub: 'Durante el entrenamiento', right: toggle('set:wakeLock', st.wakeLock) }),
+      row({ title: 'Sonar en modo silencio', sub: 'Apagado: los sonidos se mezclan con tu música y respetan el silencio', right: toggle('set:ignoreSilent', st.ignoreSilent) }),
+    ], { header: 'Pantalla y sonido' });
+    return { title: 'Más opciones', backLabel: 'Ajustes', html };
+  },
+
+  settingsStorage() {
+    const st = set(), persisted = ui.persisted;
+    const html = group([
       row({ title: 'Dónde se guardan', right: `<span class="muted">${standalone() ? 'App instalada' : 'Navegador'}</span>` }),
       row({ title: 'Protección contra borrado', right: `<span class="${persisted ? 'ok' : 'muted'}">${persisted == null ? '…' : persisted ? 'Activa' : (standalone() ? 'Instalada (sin límite)' : 'No')}</span>` }),
       row({ title: 'Último respaldo', right: `<span class="muted">${st.lastBackup ? new Date(st.lastBackup).toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Nunca'}</span>` }),
-      row({ title: 'Exportar respaldo', sub: 'Guarda planes, historial y ajustes en un archivo', a: 'exportData', chev: true }),
-      row({ title: 'Importar respaldo', a: 'importData', chev: true }),
-      row({ title: '<span class="danger">Borrar todos los datos</span>', a: 'resetAll' }),
-    ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas, y no caduca mientras uses la app instalada en la pantalla de inicio. En Safari (sin instalar), el iPhone puede borrar los datos tras 7 días sin abrirla. Safari y la app instalada no comparten datos.' });
-    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.5</span>' })], { header: 'Acerca de' });
-    return { title: 'Ajustes', large: true, html };
+    ], { footer: 'Todo se guarda solo en este teléfono, sin cuentas, y no caduca mientras uses la app instalada en la pantalla de inicio. En Safari (sin instalar), el iPhone puede borrar los datos tras 7 días sin abrirla. Safari y la app instalada no comparten datos.' });
+    return { title: 'Almacenamiento', backLabel: 'Ajustes', html };
   },
 };
+
+// fila con título (y ayuda) y un control segmentado a todo el ancho debajo
+const segRow = (title, sub, k, opts, cur) => `<div class="row stack"><span class="rt"><span class="rtt">${title}</span>${sub ? `<span class="rts">${sub}</span>` : ''}</span>${seg('setSeg', `data-k="${k}"`, opts, cur)}</div>`;
 
 function soundGroup(st) {
   return group([
     row({ title: 'Sonidos', right: toggle('set:sound', st.sound) }),
-    row({ title: 'Pitidos antes de terminar', sub: 'Últimos segundos de cada ejercicio y descanso', right: stepper('setStep', 'data-k="beepLast" data-min="0" data-max="10" data-st="1"', st.beepLast ? `${st.beepLast} s` : 'No') }),
-    row({ title: 'Volumen', right: `<input type="range" min="0.1" max="1" step="0.1" value="${st.volume}" data-in="set:volume" class="slider">` }),
-    row({ title: 'Sonar en modo silencio', sub: 'Si está apagado, los sonidos se mezclan con tu música', right: toggle('set:ignoreSilent', st.ignoreSilent) }),
+    row({ title: 'Volumen', right: `<input type="range" min="0.1" max="1" step="0.1" value="${st.volume}" data-in="set:volume" class="slider" aria-label="Volumen">` }),
+    row({ title: 'Pitidos finales', sub: 'Últimos segundos de cada ejercicio y descanso', right: stepper('setStep', 'data-k="beepLast" data-min="0" data-max="10" data-st="1"', st.beepLast ? `${st.beepLast} s` : 'No') }),
     row({ title: 'Voz guía', sub: 'Anuncia cada ejercicio en voz alta', right: toggle('set:voice', st.voice) }),
+    row({ title: 'Hápticos', sub: 'Vibración breve en los cambios. En iPhone el navegador no la permite.', right: toggle('set:haptics', st.haptics) }),
     row({ title: 'Probar sonido', a: 'testSound', right: I.speaker, cls: 'accent-row' }),
-  ], { header: 'Sonido' });
+  ], { header: 'Sonido y voz' });
 }
 function timesGroup(st) {
   return group([
@@ -302,7 +335,7 @@ function timesGroup(st) {
     row({ title: 'Cambio de posición', sub: 'Entre fases de un mismo ejercicio', right: stepper('setStep', 'data-k="phaseGap" data-min="0" data-max="15" data-st="1"', `${st.phaseGap} s`) }),
     row({ title: 'Descanso entre rondas', sub: st.roundRest ? 'Igual para todos los bloques' : 'El de cada bloque del plan', right: stepper('setStep', 'data-k="roundRest" data-min="0" data-max="180" data-st="15"', st.roundRest ? `${st.roundRest} s` : 'Plan') }),
     row({ title: 'Descanso entre bloques', right: stepper('setStep', 'data-k="sectionRest" data-min="0" data-max="180" data-st="15"', `${st.sectionRest} s`) }),
-  ], { header: 'Tiempos', footer: 'Los cambios se aplican de inmediato, también durante un entrenamiento en curso (botón ⚙︎ del reproductor).' });
+  ], { header: 'Tiempos' });
 }
 
 function catalogList() {
@@ -548,6 +581,9 @@ const A = {
   setStep: el => { const st = set(), k = el.dataset.k; st[k] = Math.round(clamp(st[k] + +el.dataset.d * +el.dataset.st, +el.dataset.min, +el.dataset.max) * 10) / 10; afterSetting(); },
   setSeg: el => { set()[el.dataset.k] = el.dataset.v; afterSetting(); },
   testSound: () => { unlockAudio(); sfx.tick(); setTimeout(sfx.tick, 1000); setTimeout(sfx.tick, 2000); setTimeout(sfx.go, 3000); if (set().voice) setTimeout(() => say('Sentadilla goblet. Diez a doce repeticiones.'), 3500); },
+  openMore: () => push('settingsMore'),
+  openStorage: () => push('settingsStorage'),
+  restorePlans: () => confirmSheet('Los planes incluidos volverán a su versión original. Tus planes propios no cambian.', 'Restaurar planes', () => { DEFAULT_PLANS.forEach(p => store.restoreBuiltin(p.id)); S().hiddenBuiltins = []; store.save(); render(); toast('Planes restaurados'); }),
   exportData: () => {
     const blob = new Blob([store.exportJSON()], { type: 'application/json' });
     const name = `respaldo-entrenamiento-${new Date().toISOString().slice(0, 10)}.json`;
@@ -886,5 +922,5 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme
 
 applyTheme();
 render();
-store.persist().then(v => { ui.persisted = v; if (top().v === 'settings') render(); });
+store.persist().then(v => { ui.persisted = v; if (top().v === 'settingsStorage') render(); });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
