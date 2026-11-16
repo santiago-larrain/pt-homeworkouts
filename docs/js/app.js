@@ -152,7 +152,7 @@ const VIEWS = {
     const daysSinceBackup = s.settings.lastBackup ? (Date.now() - new Date(s.settings.lastBackup)) / 864e5 : Infinity;
     if (standalone() && s.history.length >= 3 && daysSinceBackup > 30) html += `<div class="card install">${I.shield}<div><b>Guarda un respaldo</b><p>Tus datos viven solo en este teléfono. Exporta un respaldo por si cambias o pierdes el teléfono.</p><button class="btn tinted small" data-a="exportData">Exportar respaldo</button></div></div>`;
     html += `<div class="card week"><div class="wk-top"><div><p class="eyebrow">Esta semana</p><p class="wk-num"><b>${week.length}</b> de ${goal} sesiones</p></div><div class="ringmini">${ringSvg(Math.min(1, week.length / goal), 54, 6)}</div></div>
-      <div class="days">${DAYS.map((d, i) => `<span class="day ${trainedDays.has(i) ? 'on' : ''} ${i === (now.getDay() + 6) % 7 ? 'today' : ''}"><i>${trainedDays.has(i) ? I.check : ''}</i>${d}</span>`).join('')}</div></div>`;
+      <div class="days">${DAYS.map((d, i) => `<span class="day ${trainedDays.has(i) ? 'on' : ''} ${i === (now.getDay() + 6) % 7 ? 'today-d' : ''}"><i>${trainedDays.has(i) ? I.check : ''}</i>${d}</span>`).join('')}</div></div>`;
     if (p) {
       const nSec = p.sections.length, nMov = p.sections.reduce((a, x) => a + x.items.length, 0);
       html += `<div class="card hero"><div class="hero-img"><img src="img/cover.webp" alt="Ilustración de Anita"></div><div class="hero-body">
@@ -262,7 +262,8 @@ const VIEWS = {
       row({ title: 'Mantener pantalla encendida', right: toggle('set:wakeLock', st.wakeLock) }),
       row({ title: 'Animar movimientos', sub: 'Alterna las posiciones durante el ejercicio', right: toggle('set:animate', st.animate) }),
       row({ title: 'Velocidad de la animación', right: stepper('setStep', 'data-k="animSpeed" data-min="0.8" data-max="4" data-st="0.4"', `${st.animSpeed.toFixed(1)} s`) }),
-      row({ title: 'Apariencia', right: seg('setSeg', 'data-k="theme"', [['auto', 'Auto'], ['light', 'Clara'], ['dark', 'Oscura']], st.theme) }),
+      row({ title: 'Tema', right: seg('setSeg', 'data-k="theme"', [['auto', 'Auto'], ['rosa', 'Rosa'], ['estandar', 'Estándar']], st.theme) }),
+      row({ title: 'Modo', right: seg('setSeg', 'data-k="appearance"', [['auto', 'Auto'], ['light', 'Claro'], ['dark', 'Oscuro']], st.appearance) }),
     ], { header: 'Pantalla', footer: 'El modelo de las animaciones depende del género de cada perfil.' });
     const persisted = ui.persisted;
     html += group([
@@ -273,7 +274,7 @@ const VIEWS = {
       row({ title: 'Importar respaldo', a: 'importData', chev: true }),
       row({ title: '<span class="danger">Borrar todos los datos</span>', a: 'resetAll' }),
     ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas, y no caduca mientras uses la app instalada en la pantalla de inicio. En Safari (sin instalar), el iPhone puede borrar los datos tras 7 días sin abrirla. Safari y la app instalada no comparten datos.' });
-    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.4</span>' })], { header: 'Acerca de' });
+    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.5</span>' })], { header: 'Acerca de' });
     return { title: 'Ajustes', large: true, html };
   },
 };
@@ -486,7 +487,7 @@ const A = {
   secStep: el => { const sec = store.plan(el.dataset.p).sections[+el.dataset.s], k = el.dataset.k; sec[k] = clamp((sec[k] || 0) + +el.dataset.d * +el.dataset.st, +el.dataset.min, +el.dataset.max); store.save(); refreshSheet(sectionSheetHTML(el.dataset.p, +el.dataset.s)); },
   personProfile: el => { const p = store.plan(el.dataset.p); p.people = people(p).map(x => ({ profile: x.profile })); p.people[+el.dataset.k].profile = el.dataset.v; store.save(); refreshSheet(peopleSheetHTML(p.id)); },
   editProfile: el => openSheet(profileSheetHTML(el.dataset.id), { onClose: render }),
-  profGender: el => { profOf(el.dataset.id).gender = el.dataset.v; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
+  profGender: el => { profOf(el.dataset.id).gender = el.dataset.v; store.save(); applyTheme(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   profLevel: el => { profOf(el.dataset.id).loads[el.dataset.k] = el.dataset.v; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   profStep: el => { const L = profOf(el.dataset.id).loads, k = el.dataset.k; L[k] = Math.round(clamp((L[k] || 0) + +el.dataset.d * +el.dataset.st, 0, +el.dataset.max) * 10) / 10; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   doseType: el => {
@@ -608,14 +609,19 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => {
   const el = e.target; const k = el.dataset.in; if (!k || el.type !== 'checkbox') return;
   if (k.startsWith('set:')) { set()[k.slice(4)] = el.checked; if (k === 'set:voice' && el.checked) unlockAudio(); afterSetting(); return; }
-  if (k === 'prof:active') { if (el.checked) S().activeProfile = el.dataset.id; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); return; }
+  if (k === 'prof:active') { if (el.checked) S().activeProfile = el.dataset.id; store.save(); applyTheme(); refreshSheet(profileSheetHTML(el.dataset.id)); return; }
   if (k.startsWith('dose:')) { const h = holderOf(el); h.dose = clone(doseOf(h)); h.dose[k.slice(5)] = el.checked; store.save(); refreshItem(el); }
 });
 
+// Tema visual (rosa | estandar) y modo (light | dark). 'auto' de tema: rosa si el perfil activo es mujer, estándar si es hombre.
+const THEME_BG = { rosa: { light: '#FAF5F6', dark: '#140E12' }, estandar: { light: '#F3F4F8', dark: '#0E0F14' } };
+const resolveTheme = () => { const t = set().theme; return t === 'rosa' || t === 'estandar' ? t : (store.active.gender === 'm' ? 'estandar' : 'rosa'); };
+const resolveMode = () => { const m = set().appearance; return m === 'dark' || m === 'light' ? m : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); };
 function applyTheme() {
-  const t = set().theme; document.documentElement.dataset.theme = t;
-  const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
-  $('meta[name="theme-color"]').setAttribute('content', dark ? '#000000' : '#F7F5F6');
+  const th = resolveTheme(), mode = resolveMode(), root = document.documentElement;
+  if (root.dataset.theme !== th) root.dataset.theme = th;
+  if (root.dataset.mode !== mode) root.dataset.mode = mode;
+  const meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', document.body.classList.contains('playing') ? '#0E0A0D' : THEME_BG[th][mode]);
 }
 
 // ───────────────────────── REPRODUCTOR
@@ -627,7 +633,7 @@ const P = {
     this.totalWork = this.steps.filter(s => s.type === 'work').length;
     this.i = 0; this.worked = 0; this.mood = null; this.paused = false; this.active = 0; this.doneSections = new Set();
     this.sessionStart = Date.now(); this.lastTick = Date.now();
-    $('#player').classList.add('on'); document.body.classList.add('playing');
+    $('#player').classList.add('on'); document.body.classList.add('playing'); applyTheme();
     this.enter(0);
     clearInterval(this.timer); this.timer = setInterval(() => this.update(), 100);
     this.requestWake();
@@ -845,7 +851,7 @@ const P = {
   close() {
     clearInterval(this.timer); this.stopFrames(); this.releaseWake();
     try { speechSynthesis.cancel(); } catch (e) { }
-    $('#player').className = ''; $('#player').innerHTML = ''; document.body.classList.remove('playing');
+    $('#player').className = ''; $('#player').innerHTML = ''; document.body.classList.remove('playing'); applyTheme();
     this.steps = null; render();
   },
 };

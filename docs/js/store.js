@@ -2,7 +2,7 @@
 import { DEFAULT_PLANS } from '../data/plans.js';
 
 const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
-export const VERSION = 2;     // 2 = perfiles (v1.4)
+export const VERSION = 3;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5)
 
 export const DEFAULT_SETTINGS = {
   name: 'Anita',
@@ -26,7 +26,11 @@ export const DEFAULT_SETTINGS = {
   wakeLock: true,
   animate: true,        // alterna posición 1 ↔ 2 como animación
   animSpeed: 1.6,       // segundos por posición
-  theme: 'auto',
+  theme: 'auto',        // 'auto' (rosa si el perfil activo es mujer, estándar si es hombre) | 'rosa' | 'estandar'
+  appearance: 'auto',   // modo claro/oscuro: 'auto' | 'light' | 'dark'
+  weeklyGoal: 3,        // sesiones por semana
+  haptics: true,        // vibración breve (Android; iOS Safari la ignora)
+  reminders: { on: false, days: [1, 3, 5], time: '19:00' }, // fase 6 (sin uso todavía)
 };
 
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -46,7 +50,16 @@ function migrate(s) {
   if (!s.profiles.some(p => p.id === s.activeProfile)) s.activeProfile = s.profiles[0].id;
   const [a, b] = s.profiles;
   s.plans.forEach(p => { if (p.mode === 'duo' && !(p.people && p.people.length === 2 && p.people.every(x => x && x.profile))) p.people = [{ profile: a.id }, { profile: (b || a).id }]; });
-  s.version = VERSION;
+}
+
+// v2 → v3: antes `theme` era 'auto'|'light'|'dark' (modo); ahora `theme` es el tema visual y `appearance` el modo.
+function migrateSettings(st) {
+  if (st.theme === 'light' || st.theme === 'dark') { st.appearance = st.theme; st.theme = 'auto'; }
+  if (!['auto', 'rosa', 'estandar'].includes(st.theme)) st.theme = 'auto';
+  if (!['auto', 'light', 'dark'].includes(st.appearance)) st.appearance = 'auto';
+  st.weeklyGoal = Math.min(7, Math.max(1, Math.round(+st.weeklyGoal) || 3));
+  st.haptics = st.haptics !== false;
+  st.reminders = { ...DEFAULT_SETTINGS.reminders, ...(st.reminders || {}) };
 }
 
 function initial() {
@@ -60,11 +73,14 @@ export const store = {
     try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) { s = null; }
     if (!s || !Array.isArray(s.plans)) s = initial();
     s.settings = { ...DEFAULT_SETTINGS, ...(s.settings || {}) };
+    const settingsOld = (s.version || 1) < VERSION;
+    migrateSettings(s.settings);
     s.history = s.history || [];
     s.hiddenBuiltins = s.hiddenBuiltins || [];
     s.plans.forEach(p => { if (!p.mode) p.mode = 'solo'; });
-    const migrated = (s.version || 1) < VERSION || !Array.isArray(s.profiles);
+    const migrated = settingsOld || !Array.isArray(s.profiles);
     if (migrated) migrate(s);
+    s.version = VERSION;
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
     if (!s.plans.some(p => p.id === s.activePlanId)) s.activePlanId = s.plans[0] ? s.plans[0].id : null;

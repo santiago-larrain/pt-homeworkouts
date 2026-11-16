@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <title>Entrena · Anita</title>
   <meta name="description" content="Planes de entrenamiento en casa con temporizador, galería de movimientos e historial.">
-  <meta name="theme-color" content="#F7F5F6">
+  <meta name="theme-color" content="#FAF5F6">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -13,6 +13,16 @@
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
+  <script>
+    // aplica tema y modo antes de pintar (evita el parpadeo); js/app.js lo vuelve a calcular con la misma regla
+    try {
+      var st = JSON.parse(localStorage.getItem('ptw.state.v1')) || {}, se = st.settings || {}, pr = (st.profiles || []).filter(function (p) { return p.id === st.activeProfile; })[0] || (st.profiles || [])[0] || {};
+      var th = se.theme === 'rosa' || se.theme === 'estandar' ? se.theme : (pr.gender === 'm' || (!pr.gender && se.model === 'm') ? 'estandar' : 'rosa');
+      var ap = se.appearance || (se.theme === 'dark' || se.theme === 'light' ? se.theme : 'auto');
+      var dk = ap === 'dark' || (ap !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = th; document.documentElement.dataset.mode = dk ? 'dark' : 'light';
+    } catch (e) { }
+  </script>
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
