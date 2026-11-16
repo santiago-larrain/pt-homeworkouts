@@ -1,7 +1,8 @@
 // Estado persistente en el dispositivo (localStorage). Sin servidor ni cuentas.
 import { DEFAULT_PLANS } from '../data/plans.js';
 
-const KEY = 'ptw.state.v1';
+const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
+export const VERSION = 2;     // 2 = perfiles (v1.4)
 
 export const DEFAULT_SETTINGS = {
   name: 'Anita',
@@ -17,7 +18,7 @@ export const DEFAULT_SETTINGS = {
   sectionRest: 60,      // descanso entre bloques
   roundRest: 0,         // descanso entre rondas: 0 = el de cada bloque del plan
   duoGovern: 'time',    // planes en pareja: 'time' (manda el tiempo) | 'reps' (mandan las repeticiones)
-  model: 'f',           // dibujos: 'f' (mujer) | 'm' (hombre, si hay imágenes)
+  model: 'f',           // (obsoleto desde v1.4: el modelo sale del género del perfil) se conserva por compatibilidad
   lastBackup: null,
   repsMode: 'manual',   // 'manual' (botón Hecho) | 'auto' (temporizado)
   secsPerRep: 3,
@@ -29,6 +30,24 @@ export const DEFAULT_SETTINGS = {
 };
 
 const clone = o => JSON.parse(JSON.stringify(o));
+export const newProfile = (id, name, gender) => ({ id, name, gender, weights: [], loads: { dumbbellKg: 0, kettlebellKg: 0, band: 'media', miniBand: 'media' } });
+export const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+
+// v1 → v2: perfiles. Perfil 1 sale de settings.model/name; perfil 2 = pareja (del primer plan en pareja, si existe).
+function migrate(s) {
+  if (!Array.isArray(s.profiles) || !s.profiles.length) {
+    const g1 = s.settings.model === 'm' ? 'm' : 'f', nm = (s.settings.name || '').trim();
+    const duo = s.plans.find(p => p.mode === 'duo' && Array.isArray(p.people) && p.people[1] && p.people[1].name !== undefined);
+    const q = duo ? duo.people[1] : null;
+    s.profiles = [newProfile('p1', nm && nm !== 'Anita' ? nm : (g1 === 'f' ? 'Anita' : 'Perfil 1'), g1),
+      newProfile('p2', (q && q.name && String(q.name).trim()) || 'Pareja', q && q.model === 'f' ? 'f' : 'm')];
+  }
+  s.profiles.forEach(pr => { pr.gender = pr.gender === 'm' ? 'm' : 'f'; pr.weights = pr.weights || []; pr.loads = { ...newProfile('', '', 'f').loads, ...(pr.loads || {}) }; });
+  if (!s.profiles.some(p => p.id === s.activeProfile)) s.activeProfile = s.profiles[0].id;
+  const [a, b] = s.profiles;
+  s.plans.forEach(p => { if (p.mode === 'duo' && !(p.people && p.people.length === 2 && p.people.every(x => x && x.profile))) p.people = [{ profile: a.id }, { profile: (b || a).id }]; });
+  s.version = VERSION;
+}
 
 function initial() {
   return { settings: { ...DEFAULT_SETTINGS }, plans: clone(DEFAULT_PLANS), activePlanId: DEFAULT_PLANS[0].id, history: [], hiddenBuiltins: [] };
@@ -44,13 +63,18 @@ export const store = {
     s.history = s.history || [];
     s.hiddenBuiltins = s.hiddenBuiltins || [];
     s.plans.forEach(p => { if (!p.mode) p.mode = 'solo'; });
+    const migrated = (s.version || 1) < VERSION || !Array.isArray(s.profiles);
+    if (migrated) migrate(s);
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
     if (!s.plans.some(p => p.id === s.activePlanId)) s.activePlanId = s.plans[0] ? s.plans[0].id : null;
     this.state = s;
+    if (migrated) this.save();
     return s;
   },
   save() { try { localStorage.setItem(KEY, JSON.stringify(this.state)); } catch (e) { console.warn(e); } },
+  profile(id) { return this.state.profiles.find(p => p.id === id) || this.state.profiles[0]; },
+  get active() { return this.profile(this.state.activeProfile); },
   plan(id) { return this.state.plans.find(p => p.id === id); },
   restoreBuiltin(id) {
     const orig = DEFAULT_PLANS.find(p => p.id === id); if (!orig) return;
@@ -59,11 +83,11 @@ export const store = {
     this.save();
   },
   isBuiltin(id) { return DEFAULT_PLANS.some(p => p.id === id); },
-  exportJSON() { return JSON.stringify({ app: 'pt-homeworkouts', version: 1, exportedAt: new Date().toISOString(), ...this.state }, null, 2); },
+  exportJSON() { return JSON.stringify({ app: 'pt-homeworkouts', exportedAt: new Date().toISOString(), ...this.state }, null, 2); },
   importJSON(txt) {
     const d = JSON.parse(txt);
     if (!Array.isArray(d.plans)) throw new Error('Archivo no válido');
-    this.state = { settings: { ...DEFAULT_SETTINGS, ...d.settings }, plans: d.plans, activePlanId: d.activePlanId, history: d.history || [], hiddenBuiltins: d.hiddenBuiltins || [] };
+    this.state = { version: d.version === VERSION ? VERSION : 1, settings: { ...DEFAULT_SETTINGS, ...d.settings }, plans: d.plans, activePlanId: d.activePlanId, history: d.history || [], hiddenBuiltins: d.hiddenBuiltins || [], profiles: d.profiles, activeProfile: d.activeProfile };
     this.save(); this.load();
   },
   // Pide al navegador no borrar los datos (Safari puede borrar datos de sitios no usados en 7 días;

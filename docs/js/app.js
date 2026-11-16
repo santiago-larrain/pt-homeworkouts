@@ -1,5 +1,5 @@
 import { MOVES, MOVE_BY_ID, CATEGORIES, EQUIPMENT } from '../data/catalog.js';
-import { store, uid, clone } from './store.js';
+import { store, uid, clone, todayISO } from './store.js';
 import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, clock, isDuo } from './engine.js';
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
 import { I } from './icons.js';
@@ -72,7 +72,7 @@ const weekStart = d => { const x = new Date(d); const wd = (x.getDay() + 6) % 7;
 
 // ── animación: fotogramas del mismo personaje (js/frames.js, data/anim.js); el modelo vectorial de js/rig/
 //    queda solo como respaldo para movimientos sin fotogramas.
-const modelOf = model => model || set().model || 'f';
+const modelOf = model => model || store.active.gender || 'f';
 const keyIdx = m => m.positions.map((p, i) => p.mid ? -1 : i).filter(i => i >= 0);
 const imgOf = (m, i, model) => hasFrames(m.id) ? frameURL(m.id, modelOf(model), posFrame(m.id, i, m.positions.length)) : stillURL(m.id, modelOf(model), i);
 const thumb = (m, n = 1, model) => `<span class="thumb"><img src="${imgOf(m, keyIdx(m)[n - 1] ?? 0, model)}" alt="" loading="lazy"></span>`;
@@ -128,7 +128,14 @@ function actionSheet(title, actions) {
 function confirmSheet(title, label, fn) { actionSheet(title, [{ label, destructive: true, fn }]); }
 
 // ───────────────────────── participantes (planes en pareja)
-const people = p => (p.people && p.people.length === 2) ? p.people : [{ name: set().name || 'Persona 1', model: 'f' }, { name: 'Pareja', model: 'm' }];
+// participantes de un plan en pareja: cada persona referencia un perfil ({profile:id}); el modelo sale de su género
+const people = p => {
+  const pr = S().profiles, ids = (p.people && p.people.length === 2 && p.people.every(x => x.profile)) ? p.people.map(x => x.profile) : [S().activeProfile, (pr.find(x => x.id !== S().activeProfile) || pr[0]).id];
+  return ids.map(id => { const x = store.profile(id); return { profile: x.id, name: x.name, model: x.gender }; });
+};
+const defaultPeople = () => { const pr = S().profiles, a = store.active; return [{ profile: a.id }, { profile: (pr.find(x => x.id !== a.id) || a).id }]; };
+const GENDER = { f: 'Mujer', m: 'Hombre' }, LEVEL = [['suave', 'Suave'], ['media', 'Media'], ['fuerte', 'Fuerte']];
+const profSub = pr => [GENDER[pr.gender], pr.birthYear && `${new Date().getFullYear() - pr.birthYear} años`, pr.heightCm && `${pr.heightCm} cm`, pr.weights.length && `${pr.weights[pr.weights.length - 1].kg} kg`].filter(Boolean).join(' · ');
 
 // ───────────────────────── VISTAS
 const VIEWS = {
@@ -156,7 +163,7 @@ const VIEWS = {
     }
     html += group([...s.plans.map(pl => row({ icon: `<span class="ri-dot ${pl.id === s.activePlanId ? 'on' : ''}">${pl.id === s.activePlanId ? I.check : ''}</span>`, title: esc(pl.name) + (isDuo(pl) ? ' <span class="pill">Dúo</span>' : ''), sub: `${pl.sections.length} bloques · ${planMins(pl)}`, chev: true, a: 'openPlan', data: `data-id="${pl.id}"` })),
       row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Crear plan nuevo</span>', a: 'newPlan' })], { header: 'Mis planes', footer: 'Los planes usan movimientos del catálogo. Puedes crear planes individuales o en pareja.' });
-    return { title: `Hola, ${set().name || ''}`.trim(), kicker: dateStr, large: true, html };
+    return { title: `Hola, ${store.active.name || ''}`.trim(), kicker: dateStr, large: true, html };
   },
 
   plan(t) {
@@ -241,7 +248,8 @@ const VIEWS = {
   settings() {
     const st = set();
     let html = '';
-    html += group([row({ title: 'Tu nombre', right: `<input class="inline" data-in="name" value="${esc(st.name)}" placeholder="Nombre" autocomplete="off">` })], { header: 'Perfil' });
+    html += group(S().profiles.map(pr => row({ icon: `<span class="avatar ${pr.gender}">${esc((pr.name || '?').trim().charAt(0).toUpperCase())}</span>`, title: esc(pr.name), sub: esc(profSub(pr)), right: pr.id === S().activeProfile ? '<span class="pill">Activo</span>' : '', chev: true, a: 'editProfile', data: `data-id="${pr.id}"` })),
+      { header: 'Perfiles', footer: 'El género define el modelo de las animaciones. El perfil activo es el de los planes individuales; en los planes en pareja eliges quién es cada persona.' });
     html += soundGroup(st) + timesGroup(st);
     html += group([
       row({ title: 'Ejercicios por repeticiones', right: seg('setSeg', 'data-k="repsMode"', [['manual', 'Manual'], ['auto', 'Con tiempo']], st.repsMode) }),
@@ -250,12 +258,11 @@ const VIEWS = {
     html += group([row({ title: 'Ritmo compartido', right: seg('setSeg', 'data-k="duoGovern"', [['time', 'Manda el tiempo'], ['reps', 'Mandan las reps']], st.duoGovern) })],
       { header: 'Planes en pareja', footer: st.duoGovern === 'time' ? 'Ambas personas trabajan el mismo tiempo: las repeticiones se convierten a segundos y se usa el ejercicio más largo.' : 'Si alguna hace repeticiones, el reloj espera a que las dos toquen «Hecho».' });
     html += group([
-      row({ title: 'Modelo', right: seg('setSeg', 'data-k="model"', [['f', 'Mujer'], ['m', 'Hombre']], st.model) }),
       row({ title: 'Mantener pantalla encendida', right: toggle('set:wakeLock', st.wakeLock) }),
       row({ title: 'Animar movimientos', sub: 'Alterna las posiciones durante el ejercicio', right: toggle('set:animate', st.animate) }),
       row({ title: 'Velocidad de la animación', right: stepper('setStep', 'data-k="animSpeed" data-min="0.8" data-max="4" data-st="0.4"', `${st.animSpeed.toFixed(1)} s`) }),
       row({ title: 'Apariencia', right: seg('setSeg', 'data-k="theme"', [['auto', 'Auto'], ['light', 'Clara'], ['dark', 'Oscura']], st.theme) }),
-    ], { header: 'Pantalla', footer: 'Todos los ejercicios usan el mismo modelo animado. En los planes en pareja cada persona elige su modelo.' });
+    ], { header: 'Pantalla', footer: 'El modelo de las animaciones depende del género de cada perfil.' });
     const persisted = ui.persisted;
     html += group([
       row({ title: 'Dónde se guardan', right: `<span class="muted">${standalone() ? 'App instalada' : 'Navegador'}</span>` }),
@@ -265,7 +272,7 @@ const VIEWS = {
       row({ title: 'Importar respaldo', a: 'importData', chev: true }),
       row({ title: '<span class="danger">Borrar todos los datos</span>', a: 'resetAll' }),
     ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas, y no caduca mientras uses la app instalada en la pantalla de inicio. En Safari (sin instalar), el iPhone puede borrar los datos tras 7 días sin abrirla. Safari y la app instalada no comparten datos.' });
-    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.3</span>' })], { header: 'Acerca de' });
+    html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: '<span class="muted">1.4</span>' })], { header: 'Acerca de' });
     return { title: 'Ajustes', large: true, html };
   },
 };
@@ -374,10 +381,29 @@ function sectionSheetHTML(pid, si) {
 }
 
 function peopleSheetHTML(pid) {
-  const p = store.plan(pid), pp = people(p);
+  const p = store.plan(pid), pp = people(p), opts = S().profiles.map(x => [x.id, esc(x.name)]);
   return `<div class="sheet-head"><span></span><h2>Participantes</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body">
-    ${pp.map((x, k) => group([row({ title: 'Nombre', right: `<input class="inline" data-in="personName" data-p="${pid}" data-k="${k}" value="${esc(x.name)}">` }), row({ title: 'Dibujos', right: seg('personModel', `data-p="${pid}" data-k="${k}"`, [['f', 'Mujer'], ['m', 'Hombre']], x.model) })], { header: k === 0 ? 'Persona 1 · imagen de arriba' : 'Persona 2 · imagen de abajo' })).join('')}
-    <p class="gf">Cada persona puede hacer un ejercicio distinto en el mismo turno: edita cada ejercicio del plan y elige la persona arriba.</p></div>`;
+    ${pp.map((x, k) => group([row({ title: 'Perfil', right: seg('personProfile', `data-p="${pid}" data-k="${k}"`, opts, x.profile) }), row({ title: 'Dibujos', right: `<span class="muted">${GENDER[x.model]}</span>` })], { header: k === 0 ? 'Persona 1 · imagen de arriba' : 'Persona 2 · imagen de abajo' })).join('')}
+    <p class="gf">El nombre, el género y las cargas se editan en Ajustes → Perfiles. Cada persona puede hacer un ejercicio distinto en el mismo turno: edita cada ejercicio del plan y elige la persona arriba.</p></div>`;
+}
+
+// ── perfiles
+const profOf = id => store.profile(id);
+function profileSheetHTML(id) {
+  const pr = profOf(id), L = pr.loads, last = pr.weights.length ? pr.weights[pr.weights.length - 1].kg : '';
+  const base = `data-id="${id}"`, kg = v => v ? `${v} kg` : 'Sin';
+  return `<div class="sheet-head"><span></span><h2>${esc(pr.name || 'Perfil')}</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body">
+    ${group([row({ title: 'Nombre', right: `<input class="inline" data-in="profName" ${base} value="${esc(pr.name)}" placeholder="Nombre" autocomplete="off" maxlength="24">` }),
+      row({ title: 'Género', sub: 'Define el modelo de las animaciones', right: seg('profGender', base, [['f', 'Mujer'], ['m', 'Hombre']], pr.gender) }),
+      row({ title: 'Perfil activo', sub: 'Se usa en los planes individuales', right: toggle('prof:active', pr.id === S().activeProfile, base) })])}
+    ${group([row({ title: 'Año de nacimiento', right: `<input class="inline short" type="number" inputmode="numeric" data-in="profNum" data-k="birthYear" ${base} value="${pr.birthYear ?? ''}" placeholder="Opcional" min="1920" max="${new Date().getFullYear()}">` }),
+      row({ title: 'Estatura (cm)', right: `<input class="inline short" type="number" inputmode="decimal" data-in="profNum" data-k="heightCm" ${base} value="${pr.heightCm ?? ''}" placeholder="Opcional" min="80" max="250">` }),
+      row({ title: 'Peso actual (kg)', right: `<input class="inline short" type="number" inputmode="decimal" step="0.1" data-in="profWeight" ${base} value="${last}" placeholder="Opcional" min="20" max="400">` })],
+      { header: 'Datos corporales', footer: 'Opcionales. Al cambiar el peso se guarda con la fecha de hoy.' })}
+    ${group([row({ title: 'Mancuernas', right: stepper('profStep', `${base} data-k="dumbbellKg" data-st="0.5" data-max="40"`, kg(L.dumbbellKg)) }),
+      row({ title: 'Kettlebell', right: stepper('profStep', `${base} data-k="kettlebellKg" data-st="1" data-max="48"`, kg(L.kettlebellKg)) }),
+      row({ title: 'Banda de brazos', right: seg('profLevel', `${base} data-k="band"`, LEVEL, L.band) }),
+      row({ title: 'Mini banda (piernas)', right: seg('profLevel', `${base} data-k="miniBand"`, LEVEL, L.miniBand) })], { header: 'Cargas', footer: 'Lo que usas normalmente; sirve para sugerir y estimar.' })}</div>`;
 }
 
 let picker = null;
@@ -398,7 +424,7 @@ function planSave() { store.save(); render(); }
 const newItem = (id, duo) => duo ? { move: id, dose: clone(MOVE_BY_ID[id].dose), b: { move: id, dose: clone(MOVE_BY_ID[id].dose) } } : { move: id, dose: clone(MOVE_BY_ID[id].dose) };
 function toDuo(p) {
   const c = clone(p); c.id = uid(); c.mode = 'duo'; c.builtin = false; c.name = `${p.name} · en pareja`;
-  c.people = [{ name: set().name || 'Persona 1', model: 'f' }, { name: 'Pareja', model: 'm' }];
+  c.people = defaultPeople();
   c.sections.forEach(sec => sec.items.forEach(it => { it.dose = clone(doseOf(it)); it.b = { move: it.move, dose: clone(it.dose) }; }));
   return c;
 }
@@ -457,7 +483,11 @@ const A = {
   delSection: el => { const p = store.plan(el.dataset.p), i = +el.dataset.s; closeSheet(); setTimeout(() => confirmSheet(`¿Eliminar «${p.sections[i].name}»?`, 'Eliminar bloque', () => { p.sections.splice(i, 1); planSave(); }), 300); },
   secKind: el => { const sec = store.plan(el.dataset.p).sections[+el.dataset.s]; sec.kind = el.dataset.v; if (sec.kind === 'circuit' && !sec.rounds) sec.rounds = 3; store.save(); refreshSheet(sectionSheetHTML(el.dataset.p, +el.dataset.s)); },
   secStep: el => { const sec = store.plan(el.dataset.p).sections[+el.dataset.s], k = el.dataset.k; sec[k] = clamp((sec[k] || 0) + +el.dataset.d * +el.dataset.st, +el.dataset.min, +el.dataset.max); store.save(); refreshSheet(sectionSheetHTML(el.dataset.p, +el.dataset.s)); },
-  personModel: el => { const p = store.plan(el.dataset.p); p.people = people(p); p.people[+el.dataset.k].model = el.dataset.v; store.save(); refreshSheet(peopleSheetHTML(p.id)); },
+  personProfile: el => { const p = store.plan(el.dataset.p); p.people = people(p).map(x => ({ profile: x.profile })); p.people[+el.dataset.k].profile = el.dataset.v; store.save(); refreshSheet(peopleSheetHTML(p.id)); },
+  editProfile: el => openSheet(profileSheetHTML(el.dataset.id), { onClose: render }),
+  profGender: el => { profOf(el.dataset.id).gender = el.dataset.v; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
+  profLevel: el => { profOf(el.dataset.id).loads[el.dataset.k] = el.dataset.v; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
+  profStep: el => { const L = profOf(el.dataset.id).loads, k = el.dataset.k; L[k] = Math.round(clamp((L[k] || 0) + +el.dataset.d * +el.dataset.st, 0, +el.dataset.max) * 10) / 10; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   doseType: el => {
     const h = holderOf(el), m = MOVE_BY_ID[h.move], v = el.dataset.v;
     if (v === 'time') h.dose = { type: 'time', secs: 30 }; else if (v === 'reps') h.dose = { type: 'reps', min: 10, max: 12 }; else h.dose = clone(m.dose.type === 'phases' ? m.dose : doseOf(h));
@@ -540,7 +570,7 @@ function createPlan(mode) {
   const name = prompt(mode === 'duo' ? 'Nombre del plan en pareja' : 'Nombre del nuevo plan', mode === 'duo' ? 'Entrenamos juntos' : 'Mi plan');
   if (!name || !name.trim()) return;
   const p = { id: uid(), name: name.trim(), subtitle: '', frequency: '', mode, sections: [{ id: uid(), name: 'Bloque 1', kind: 'circuit', rounds: 3, rest: 45, items: [] }] };
-  if (mode === 'duo') p.people = [{ name: set().name || 'Persona 1', model: 'f' }, { name: 'Pareja', model: 'm' }];
+  if (mode === 'duo') p.people = defaultPeople();
   S().plans.push(p); store.save(); ui.editing[p.id] = true;
   nav.tab = 'train'; push('plan', { id: p.id });
 }
@@ -556,9 +586,13 @@ function afterSetting() {
 const INPUT = {
   search: el => { ui.q = el.value; $('#catList').innerHTML = catalogList(); },
   pickerSearch: el => { picker.q = el.value; $('#pickList').innerHTML = pickerList(); },
-  name: el => { set().name = el.value.trim(); store.save(); },
-  secName: el => { store.plan(el.dataset.p).sections[+el.dataset.s].name = el.value; store.save(); },
-  personName: el => { const p = store.plan(el.dataset.p); p.people = people(p); p.people[+el.dataset.k].name = el.value; store.save(); },
+  profName: el => { profOf(el.dataset.id).name = el.value.trim() || 'Perfil'; store.save(); },
+  profNum: el => { const pr = profOf(el.dataset.id), v = parseFloat(el.value); if (v > 0) pr[el.dataset.k] = el.dataset.k === 'birthYear' ? Math.round(v) : v; else delete pr[el.dataset.k]; store.save(); },
+  profWeight: el => { // agrega el peso con la fecha de hoy (reemplaza el de hoy si ya existía)
+    const pr = profOf(el.dataset.id), v = Math.round(parseFloat(el.value) * 10) / 10, d = todayISO();
+    pr.weights = pr.weights.filter(w => w.date !== d);
+    if (v > 0) pr.weights.push({ date: d, kg: v }); pr.weights.sort((a, b) => a.date < b.date ? -1 : 1); store.save();
+  },  secName: el => { store.plan(el.dataset.p).sections[+el.dataset.s].name = el.value; store.save(); },
 };
 
 document.addEventListener('click', e => {
@@ -573,6 +607,7 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => {
   const el = e.target; const k = el.dataset.in; if (!k || el.type !== 'checkbox') return;
   if (k.startsWith('set:')) { set()[k.slice(4)] = el.checked; if (k === 'set:voice' && el.checked) unlockAudio(); afterSetting(); return; }
+  if (k === 'prof:active') { if (el.checked) S().activeProfile = el.dataset.id; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); return; }
   if (k.startsWith('dose:')) { const h = holderOf(el); h.dose = clone(doseOf(h)); h.dose[k.slice(5)] = el.checked; store.save(); refreshItem(el); }
 });
 
@@ -770,7 +805,7 @@ const P = {
       <div class="p-ctl col"><button class="btn primary big" data-a="pSave">Guardar</button><button class="btn plain light" data-a="pDiscard">No guardar</button></div>`;
   },
   record(partial) {
-    S().history.push({ id: uid(), date: new Date(this.sessionStart).toISOString(), planId: this.plan.id, planName: this.plan.name, secs: Math.round(this.active), worked: this.worked, total: this.totalWork, sections: [...this.doneSections], mood: this.mood, note: ($('#pNote') || {}).value || '', partial: !!partial, ...(this.duo ? { people: people(this.plan).map(x => x.name) } : {}) });
+    S().history.push({ id: uid(), date: new Date(this.sessionStart).toISOString(), planId: this.plan.id, planName: this.plan.name, secs: Math.round(this.active), worked: this.worked, total: this.totalWork, sections: [...this.doneSections], mood: this.mood, note: ($('#pNote') || {}).value || '', partial: !!partial, profiles: this.duo ? people(this.plan).map(x => x.profile) : [S().activeProfile], ...(this.duo ? { people: people(this.plan).map(x => x.name) } : {}) });
     store.save();
   },
   save() { this.record(false); this.close(); toast('Sesión guardada'); },

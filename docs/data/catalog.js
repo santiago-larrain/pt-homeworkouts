@@ -96,6 +96,7 @@ export const MOVES = [
       { label: 'Arriba', breath: 'ex', verb: 'sube', img: img('b-stance-rdl', 1) },
       { label: 'Bisagra', breath: 'in', verb: 'baja', img: img('b-stance-rdl', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'reps', min: 10, max: 10, perSide: true }, load: '3 kg', imageStatus: 'final',
   },
   {
@@ -107,6 +108,7 @@ export const MOVES = [
       { label: 'Base', breath: 'in', verb: 'prepara', img: img('monster-walk', 1) },
       { label: 'Paso', breath: 'ex', verb: 'paso lateral', img: img('monster-walk', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'reps', min: 10, max: 10, perSide: true, unit: 'pasos' }, load: 'banda tobillos', imageStatus: 'final',
   },
   {
@@ -141,6 +143,7 @@ export const MOVES = [
       { label: 'Gira', breath: 'ex', verb: 'abre', img: img('band-external-rotation', 2), mid: true },
       { label: 'Afuera', breath: 'ex', verb: 'abre', img: img('band-external-rotation', 3) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'reps', min: 10, max: 10, perSide: true }, imageStatus: 'vector',
   },
   {
@@ -175,6 +178,7 @@ export const MOVES = [
       { label: 'Piernas arriba', breath: 'ex', verb: 'aprieta y respira', img: img('ring-legs-side', 1) },
       { label: 'De lado', breath: 'ex', verb: 'eleva la pierna', img: img('ring-legs-side', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'phases', phases: [{ label: 'Piernas arriba', secs: 20, pos: 0 }, { label: 'De lado', secs: 15, pos: 1, perSide: true }] }, imageStatus: 'final',
   },
   {
@@ -186,6 +190,7 @@ export const MOVES = [
       { label: 'Apoya', breath: 'in', verb: 'antebrazo en el marco', img: img('doorway-pec', 1) },
       { label: 'Avanza', breath: 'ex', verb: 'abre el pecho', img: img('doorway-pec', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'time', secs: 30, perSide: true }, imageStatus: 'vector',
   },
   {
@@ -197,6 +202,7 @@ export const MOVES = [
       { label: 'Centro', breath: 'ex', verb: 'suelta', img: img('child-pose-lateral', 1) },
       { label: 'Lateral', breath: 'in', verb: 'alcanza', img: img('child-pose-lateral', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'phases', phases: [{ label: 'Centro', secs: 30, pos: 0 }, { label: 'Lateral', secs: 15, pos: 1, perSide: true }] }, imageStatus: 'vector',
   },
   {
@@ -208,6 +214,7 @@ export const MOVES = [
       { label: 'Lunge', breath: 'ex', verb: 'cadera adelante', img: img('kneeling-hip-flexor', 1) },
       { label: 'Toma el pie', breath: 'in', verb: 'talón al glúteo', img: img('kneeling-hip-flexor', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'time', secs: 30, perSide: true }, imageStatus: 'final',
   },
   {
@@ -219,6 +226,7 @@ export const MOVES = [
       { label: 'Cruza', breath: 'in', verb: 'tobillo sobre rodilla', img: img('figure-4', 1) },
       { label: 'Acerca', breath: 'ex', verb: 'muslo al pecho', img: img('figure-4', 2) },
     ],
+    sided: true, mirror: true,
     dose: { type: 'time', secs: 30, perSide: true }, imageStatus: 'final',
   },
 ];
