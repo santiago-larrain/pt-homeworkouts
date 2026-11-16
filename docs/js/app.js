@@ -7,7 +7,7 @@ import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
 import { FrameAnimator, hasFrames, frameURL, posFrame } from './frames.js';
 import { sessionKcal, kcalText } from './calories.js';
-import { entriesOf, localISO, streakWeeks as streakWeeksOf } from './progress.js';
+import { entriesOf, localISO, streakWeeks as streakWeeksOf, weekCounts, newMilestones, MILESTONES, MILESTONE_BY_ID } from './progress.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -168,7 +168,7 @@ const profSub = pr => [GENDER[pr.gender], pr.birthYear && `${new Date().getFullY
 const VIEWS = {
   home() {
     const s = S(), p = store.plan(s.activePlanId) || s.plans[0];
-    const now = today(), goal = s.settings.weeklyGoal || 3;
+    const now = today(), goal = goalOf(s.activeProfile);
     const week = weekSessions(), trainedDays = new Set(week.map(h => (new Date(h.date).getDay() + 6) % 7));
     const dateStr = now.toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });
     let html = '';
@@ -187,7 +187,8 @@ const VIEWS = {
     }
     const left = Math.max(0, goal - week.length);
     html += `<div class="card week"><div class="wk-top"><p class="wk-num"><b>${week.length}</b> de ${goal} esta semana</p><span class="wk-msg">${week.length >= goal ? '¡Meta cumplida!' : week.length ? `Te ${left === 1 ? 'falta 1' : `faltan ${left}`}` : 'Cuando quieras'}</span></div>
-      <div class="days">${DAYS.map((d, i) => `<span class="day ${trainedDays.has(i) ? 'on' : ''} ${i === (now.getDay() + 6) % 7 ? 'today-d' : ''}"><i>${trainedDays.has(i) ? I.check : ''}</i>${d}</span>`).join('')}</div></div>`;
+      <div class="wk-bar" role="img" aria-label="${week.length} de ${goal} sesiones esta semana"><i style="width:${Math.min(100, Math.round(week.length / goal * 100))}%"></i></div>
+      <div class="days">${DAYS.map((d, i) => `<span class="day ${trainedDays.has(i) ? 'on' : ''} ${i === (now.getDay() + 6) % 7 ? 'today-d' : ''}"><i>${trainedDays.has(i) ? I.check : ''}</i>${d}</span>`).join('')}</div>${streakLine(s.activeProfile)}</div>`;
     const others = s.plans.filter(pl => !p || pl.id !== p.id);
     html += group([...others.map(pl => row({ icon: `<span class="ri-dot">${I.play}</span>`, title: esc(pl.name) + (isDuo(pl) ? ' <span class="pill">Dúo</span>' : ''), sub: `${pl.sections.length} ${pl.sections.length === 1 ? 'bloque' : 'bloques'} · ${planMins(pl)}`, chev: true, a: 'openPlan', data: `data-id="${pl.id}"` })),
       row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Crear plan nuevo</span>', a: 'newPlan' })], { header: others.length ? 'Otros planes' : 'Tus planes' });
@@ -279,7 +280,7 @@ const VIEWS = {
     html += group(S().profiles.map(pr => row({ icon: `<span class="avatar ${pr.gender}">${esc((pr.name || '?').trim().charAt(0).toUpperCase())}</span>`, title: esc(pr.name), sub: esc(profSub(pr)), right: pr.id === S().activeProfile ? '<span class="pill">Activo</span>' : '', chev: true, a: 'editProfile', data: `data-id="${pr.id}"` })),
       { header: 'Perfiles', footer: 'El perfil activo es quien entrena en los planes individuales. Su género define los dibujos y el tema automático.' });
     html += group([
-      row({ title: 'Meta semanal', sub: 'Sesiones por semana', right: stepper('setStep', 'data-k="weeklyGoal" data-min="1" data-max="7" data-st="1"', g(st.weeklyGoal)) }),
+      row({ title: 'Meta semanal', sub: `Sesiones por semana${S().profiles.length > 1 ? ' · ' + esc(store.active.name) : ''}`, right: stepper('goalStep', '', g(goalOf(S().activeProfile))) }),
       row({ title: 'Preparación', sub: 'Cuenta regresiva antes de empezar', right: stepper('setStep', 'data-k="getReady" data-min="0" data-max="30" data-st="1"', `${st.getReady} s`) }),
       row({ title: 'Descanso entre ejercicios', right: stepper('setStep', 'data-k="transition" data-min="0" data-max="60" data-st="5"', `${st.transition} s`) }),
       row({ title: 'Descanso entre bloques', right: stepper('setStep', 'data-k="sectionRest" data-min="0" data-max="180" data-st="15"', `${st.sectionRest} s`) }),
@@ -417,6 +418,7 @@ function activityHTML(pr) {
   if (!ui.cal) ui.cal = { y: now.getFullYear(), m: now.getMonth() };
   let html = `<div class="stats"><div><b>${h.length}</b><span>Sesiones</span></div><div><b>${month.length}</b><span>Este mes</span></div><div><b>${mins}</b><span>Minutos</span></div><div><b>${streakWeeks(pr.id)}</b><span>Semanas seguidas</span></div></div>`;
   html += calendarHTML(h);
+  html += achievementsHTML(pr);
   if (!h.length) return html + `<div class="emptystate"><img src="img/cover.webp" alt=""><p><b>Aún no hay sesiones</b></p><p class="muted">Cuando termines un entrenamiento aparecerá aquí.</p></div>`;
   const byMonth = {};
   h.forEach(x => { const k = new Date(x.date).toLocaleDateString('es', { month: 'long', year: 'numeric' }); (byMonth[k] = byMonth[k] || []).push(x); });
@@ -424,6 +426,12 @@ function activityHTML(pr) {
     html += group(xs.map(x => { const kc = kcalText(x.kcal && x.kcal[pr.id]); return row({ icon: `<span class="mood">${x.mood || '✓'}</span>`, title: esc(x.planName), sub: `${new Date(x.date).toLocaleDateString('es', { weekday: 'short', day: 'numeric', month: 'short' })} · ${fmtMin(x.secs)}${kc ? ' · ' + kc : ''}${x.people ? ' · ' + esc(x.people.join(' + ')) : ''}${x.partial ? ' · parcial' : ''}`, chev: true, a: 'openSession', data: `data-id="${x.id}"` }); }), { header: k });
   });
   return html;
+}
+
+function achievementsHTML(pr) {
+  const have = pr.milestones || {}, ids = MILESTONES.filter(m => have[m.id]).reverse();
+  if (!ids.length) return '';
+  return group(ids.map(m => row({ icon: `<span class="ri-ms">${I[m.icon] || I.sparkle}</span>`, title: esc(m.name), sub: esc(m.desc), right: `<span class="muted">${dShort(have[m.id])}</span>` })), { header: `Logros · ${ids.length} de ${MILESTONES.length}` });
 }
 
 // ── Cuerpo: peso con fecha (y estatura opcional), gráfico, IMC discreto y totales
@@ -497,6 +505,12 @@ function ringSvg(frac, size = 54, w = 6) {
 }
 
 function streakWeeks(pid) { return streakWeeksOf(profEntries(pid), goalOf(pid)); }
+// «Semana 3 seguida» solo cuando es verdad (2 o más semanas cumpliendo la meta); si no, no se muestra nada
+function streakLine(pid) {
+  const n = streakWeeks(pid); if (n < 2) return '';
+  const cur = (weekCounts(profEntries(pid)).get(weekStart(today()).getTime()) || 0) >= goalOf(pid);
+  return `<p class="wk-streak">${I.sparkle}${cur ? `Semana ${n} seguida` : `${n} semanas seguidas`}</p>`;
+}
 const goalOf = pid => Math.min(7, Math.max(1, store.profile(pid).weeklyGoal || set().weeklyGoal || 3));
 
 function calendarHTML(entries) {
@@ -636,6 +650,7 @@ const A = {
   calMove: el => { let { y, m } = ui.cal; m += +el.dataset.d; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.cal = { y, m }; render(); },
   showPos: el => { stopAnim(); ui.moveShow[el.dataset.id] = +el.dataset.v; render(); },
   animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); } else { stopAnim(); anim = { id }; } render(); },
+  goalStep: el => { const pr = store.active; pr.weeklyGoal = clamp(goalOf(pr.id) + +el.dataset.d, 1, 7); store.save(); render(); },
   histTab: el => { ui.histTab = el.dataset.v; render(); },
   histProf: el => { ui.histPid = el.dataset.v; render(); },
   bodyAdd: el => { ui.bodyDraft = { pid: el.dataset.id || histPid(), orig: null, date: todayISO(), kg: '', cm: '' }; openSheet(bodySheetHTML(), { cls: 'tall' }); },
@@ -1091,20 +1106,24 @@ const P = {
     const R = this.result || (this.result = this.summarize());
     const who = pp.map(x => x.name).filter(Boolean).join(' y ');
     const sum = { secs: Math.round(this.active), worked: this.worked, blocks: this.doneSections.size, planId: this.plan.id, profiles: R.pids, kcal: R.kcal, result: R };
-    const week = weekSessions().length + 1, goal = set().weeklyGoal || 3;
+    const wpid = R.pids.includes(S().activeProfile) ? S().activeProfile : R.pids[0], goal = goalOf(wpid), week = weekSessions(wpid).length + 1;
+    const ms = newMilestoneFor(wpid, R, this.sessionStart, Math.round(this.active));
+    const streakNow = streakWeeksOf([...profEntries(wpid), { date: new Date(this.sessionStart).toISOString() }], goal);
+    sum.milestone = ms;
     const kcalCell = (x, label) => `<div><b>${kcalText(R.kcal[x.profile]) ? `≈ ${R.kcal[x.profile]}` : '—'}</b><span>${label}</span></div>`;
     const kcals = this.duo ? pp.map(x => kcalCell(x, esc(x.name) + ' · kcal')).join('') : kcalCell(pp[0], `kcal${R.approx.length ? ' estimadas' : ''} <button class="p-info-btn" data-a="kcalInfo" aria-label="Cómo se estiman las calorías">${I.info}</button>`);
     el.innerHTML = `<div class="p-top"><span></span><div class="p-info"><b>${esc(this.plan.name)}</b></div><span></span></div>
       <div class="p-center done"><div class="p-done-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="halo" cx="60" cy="60" r="56"/><circle class="disc" cx="60" cy="60" r="44"/><path class="tick" d="M41 62l14 14 25-29"/></svg></div>
         <h2 class="rise d1">Listo${who ? ', ' + esc(who) : ''}</h2><p class="sub rise d1">Entrenamiento completado</p>
         <div class="p-stats rise d2"><div><b>${clock(this.active)}</b><span>Duración</span></div>${kcals}</div>
-        <p class="p-weekline rise d3">${week >= goal ? '¡Meta semanal cumplida!' : `Esta semana: ${week} de ${goal}`}</p>
+        <p class="p-weekline rise d3">${week >= goal ? '¡Meta semanal cumplida!' : `Esta semana: ${week} de ${goal}`}${week >= goal && streakNow >= 2 ? ` · Semana ${streakNow} seguida` : ''}</p>
         <div id="pDoneExtra" class="rise d3">${doneExtras(sum)}</div></div>
       <div class="p-ctl col rise d3"><button class="btn primary big cta" data-a="pSave">Terminar</button></div>`;
   },
   record(partial) {
     const R = this.result || this.summarize();
     S().history.push({ id: uid(), date: new Date(this.sessionStart).toISOString(), planId: this.plan.id, planName: this.plan.name, secs: Math.round(this.active), worked: this.worked, total: this.totalWork, sections: [...this.doneSections], blocks: this.doneSections.size, mood: this.mood, note: ($('#pNote') || {}).value || '', partial: !!partial, profiles: R.pids, kcal: R.kcal, ...(R.approx.length ? { kcalApprox: R.approx } : {}), moveSecs: R.moveSecs, ...(this.duo ? { people: people(this.plan).map(x => x.name) } : {}) });
+    commitMilestones(R.pids, this.sessionStart, Math.round(this.active), R);
     store.save();
   },
   save() { this.record(false); this.close(); toast('Sesión guardada'); },
@@ -1124,7 +1143,24 @@ const P = {
 };
 
 // Gancho para fases 4-5: devuelve HTML (kcal estimadas, hitos, progreso por grupo muscular) que se muestra bajo la meta semanal.
-const doneExtras = sum => '';
+const doneExtras = sum => {
+  const m = sum.milestone && MILESTONE_BY_ID[sum.milestone]; if (!m) return '';
+  return `<div class="p-ms" role="status"><span class="ic">${I[m.icon] || I.sparkle}</span><span class="tx"><small>Logro desbloqueado</small><b>${esc(m.name)}</b><em>${esc(m.desc)}</em></span></div>`;
+};
+// hitos que esta sesión desbloquea (aún sin guardar): se muestra solo el más importante
+function sessionEntry(R, start, secs) { return { date: new Date(start).toISOString(), secs, profiles: R.pids, kcal: R.kcal, moveSecs: R.moveSecs }; }
+function newMilestoneFor(pid, R, start, secs) {
+  const ids = newMilestones([...profEntries(pid), sessionEntry(R, start, secs)], pid, goalOf(pid), store.profile(pid).milestones || {});
+  return ids.length ? ids[ids.length - 1] : null;
+}
+// al guardar la sesión: registra en silencio todos los hitos nuevos de cada participante
+function commitMilestones(pids, start, secs, R) {
+  pids.forEach(pid => {
+    const pr = store.profile(pid), have = pr.milestones || (pr.milestones = {});
+    // la sesión ya está en el historial: se evalúa el historial completo
+    newMilestones(profEntries(pid), pid, goalOf(pid), have).forEach(id => { have[id] = localISO(start); });
+  });
+}
 
 // "Ronda 1/3" (solo si el bloque tiene más de una ronda) + puntos del ejercicio dentro de la ronda
 const progHTML = s => {

@@ -31,7 +31,8 @@ export function bestStreak(entries, goal) {
   return best;
 }
 
-export function statsOf(entries, pid, goal) {
+export function statsOf(all, pid, goal) {
+  const entries = all.filter(e => !e.partial || (e.secs || 0) >= 180); // una salida casi inmediata no cuenta para los hitos
   const moves = new Set();
   let secs = 0, kcal = 0;
   entries.forEach(h => {

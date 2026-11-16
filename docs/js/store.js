@@ -1,5 +1,6 @@
 // Estado persistente en el dispositivo (localStorage). Sin servidor ni cuentas.
 import { DEFAULT_PLANS } from '../data/plans.js';
+import { entriesOf, replayMilestones } from './progress.js';
 
 const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
 export const VERSION = 4;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6)
@@ -65,6 +66,18 @@ function migrateSettings(st) {
   st.reminders = { ...DEFAULT_SETTINGS.reminders, ...(st.reminders || {}) };
 }
 
+// v3 → v4: meta semanal por perfil (copia la de Ajustes) y hitos ya logrados (se recalculan en silencio con el historial,
+// para que lo antiguo no aparezca como «nuevo»). Idempotente: solo rellena lo que falta.
+function migrateProgress(s) {
+  const first = s.profiles[0].id;
+  s.profiles.forEach(pr => {
+    const g = Math.round(+pr.weeklyGoal);
+    pr.weeklyGoal = g >= 1 && g <= 7 ? g : s.settings.weeklyGoal;
+    if (!pr.milestones || typeof pr.milestones !== 'object') pr.milestones = replayMilestones(entriesOf(s.history, pr.id, first), pr.id, pr.weeklyGoal);
+    pr.weights = (pr.weights || []).filter(w => w && w.kg > 0 && w.date);
+  });
+}
+
 function initial() {
   return { settings: { ...DEFAULT_SETTINGS }, plans: clone(DEFAULT_PLANS), activePlanId: DEFAULT_PLANS[0].id, history: [], hiddenBuiltins: [] };
 }
@@ -83,12 +96,14 @@ export const store = {
     s.plans.forEach(p => { if (!p.mode) p.mode = 'solo'; });
     const migrated = settingsOld || !Array.isArray(s.profiles);
     if (migrated) migrate(s);
+    const needProgress = s.profiles.some(pr => !pr.milestones || !(pr.weeklyGoal >= 1));
+    if (needProgress) migrateProgress(s);
     s.version = VERSION;
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
     if (!s.plans.some(p => p.id === s.activePlanId)) s.activePlanId = s.plans[0] ? s.plans[0].id : null;
     this.state = s;
-    if (migrated) this.save();
+    if (migrated || needProgress) this.save();
     return s;
   },
   save() { try { localStorage.setItem(KEY, JSON.stringify(this.state)); } catch (e) { console.warn(e); } },

@@ -11,6 +11,8 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | `docs/` | **La app publicada** (raíz de GitHub Pages). Sin build: HTML + ES modules + CSS. |
 | `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`). Fuente de verdad de cada ejercicio. |
 | `docs/data/plans.js` | **Planes incluidos** (`DEFAULT_PLANS`). Hoy: *Dynamic Reset 3×3*. |
+| `docs/js/calories.js` | Motor de calorías (funciones puras): MET × peso con corrección Mifflin, descansos, carga acotada. Autotest: `node project/tools/test_calories.mjs`. Ver `project/RESEARCH_CALORIES.md`. |
+| `docs/js/progress.js` | Semanas, meta semanal, racha en SEMANAS e hitos (puras). Los hitos se guardan por perfil en `profile.milestones`. |
 | `docs/js/engine.js` | Convierte un plan en pasos del temporizador (`buildSteps`), textos de dosis y estimaciones. |
 | `docs/js/app.js` | UI: navegación por pestañas, vistas, sheets, editor de planes y **reproductor** (`P`). |
 | `docs/js/store.js` | Estado en `localStorage` (`ptw.state.v1`): ajustes, planes editados, historial. |
@@ -51,6 +53,7 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
 - **Modelos**: `settings.model` ('f' | 'm') o `plan.people[i].model` en planes en pareja → carpeta `img/anim/f` o `img/anim/m`.
   Mujer: hoja `project/references/character-sheet.jpg`; hombre: `character-sheet-male.jpg`.
   Los planes referencian movimientos por id: **galería y planes están desacoplados**.
+- **Historial (v1.6)**: cada sesión guarda `profiles`, `kcal:{perfil:n}`, `kcalApprox` (perfiles que usaron datos por defecto), `moveSecs:{perfil:{movimiento:segundos}}`, `secs`, `planId`, `blocks`. Las sesiones anteriores no tienen kcal. Perfil: `weights:[{date,kg,cm?}]`, `weeklyGoal`, `milestones:{id:fecha}`.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
 
