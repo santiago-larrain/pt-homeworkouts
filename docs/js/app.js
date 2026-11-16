@@ -29,7 +29,7 @@ const TABS = [
   { id: 'settings', name: 'Ajustes', icon: I.gear, root: 'settings' },
 ];
 const nav = { tab: 'train', stacks: Object.fromEntries(TABS.map(t => [t.id, [{ v: t.root }]])) };
-const ui = { q: '', cat: 'all', editing: {}, cal: null, moveShow: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
+const ui = { q: '', f: { g: [], e: [], l: [] }, editing: {}, cal: null, moveShow: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
 let anim = null;
 
 const top = () => nav.stacks[nav.tab][nav.stacks[nav.tab].length - 1];
@@ -213,9 +213,10 @@ const VIEWS = {
   },
 
   catalog() {
-    const chips = [['all', 'Todos'], ...CATEGORIES.map(c => [c.id, c.name])];
-    const html = `<div class="searchbar">${I.search}<input type="search" placeholder="Buscar movimiento o músculo" value="${esc(ui.q)}" data-in="search" autocomplete="off"></div>
-      <div class="chips">${chips.map(([id, n]) => `<button class="chip ${ui.cat === id ? 'on' : ''}" data-a="cat" data-id="${id}">${n}</button>`).join('')}</div>
+    const nF = ui.f.g.length + ui.f.e.length + ui.f.l.length;
+    const active = [...ui.f.g.map(v => ['g', v, GROUP_NAME[v] || v]), ...ui.f.e.map(v => ['e', v, EQ[v] || v]), ...ui.f.l.map(v => ['l', v, LEVEL_NAME[v] || v])];
+    const html = `<div class="searchbar">${I.search}<input type="search" placeholder="Buscar movimiento o músculo" value="${esc(ui.q)}" data-in="search" autocomplete="off" aria-label="Buscar"></div>
+      <div class="chips"><button class="chip filter ${nF ? 'on' : ''}" data-a="openFilters">${I.sliders}Filtros${nF ? `<span class="n">${nF}</span>` : ''}</button>${active.map(([k, v, n]) => `<button class="chip removable" data-a="fRemove" data-k="${k}" data-v="${esc(v)}" aria-label="Quitar filtro ${esc(n)}">${esc(n)}${I.x}</button>`).join('')}</div>
       <div id="catList">${catalogList()}</div>`;
     return { title: 'Movimientos', large: true, right: `<button class="navbtn" data-a="muscleMap">Músculos</button>`, html };
   },
@@ -346,11 +347,45 @@ function timesGroup(st) {
   ], { header: 'Tiempos' });
 }
 
+// ── filtros del catálogo: grupo muscular (`group`), implementos (`equipment`) y nivel (`level`); tolera movimientos sin esos campos
+const GROUP_ORDER = ['piernas', 'gluteos', 'core', 'pecho', 'espalda', 'hombros', 'brazos', 'cardio', 'movilidad', 'torso', 'elongacion', 'otros'];
+const GROUP_NAME = { piernas: 'Piernas', gluteos: 'Glúteos', core: 'Core', pecho: 'Pecho', espalda: 'Espalda', hombros: 'Hombros', brazos: 'Brazos', cardio: 'Cardio', movilidad: 'Movilidad', torso: 'Torso y hombros', elongacion: 'Elongación', otros: 'Otros' };
+const CAT_GROUP = Object.fromEntries((CATEGORIES || []).map(c => [c.id, c.id === 'core' ? 'core' : c.id]));
+const LEVEL_NAME = { 1: 'Principiante', 2: 'Intermedio', 3: 'Avanzado' };
+const EQUIP_ORDER = ['ninguno', 'mat', 'mancuernas', 'kettlebell', 'banda', 'mini-banda', 'aro', 'silla', 'puerta'];
+const groupOf = m => m.group || CAT_GROUP[m.category] || 'otros';
+const searchText = m => [m.name, m.alias, ...(m.focus || []), ...(m.support || []), GROUP_NAME[groupOf(m)], ...(m.equipment || []).map(e => EQ[e])].join(' ').toLowerCase();
+function moveOk(m, q, f, skip) {
+  if (q && !searchText(m).includes(q)) return false;
+  if (skip !== 'g' && f.g.length && !f.g.includes(groupOf(m))) return false;
+  if (skip !== 'e' && f.e.length && !(m.equipment || []).some(e => f.e.includes(e))) return false;
+  if (skip !== 'l' && f.l.length && !f.l.includes(String(m.level))) return false;
+  return true;
+}
+const filterMoves = (q, f) => MOVES.filter(m => moveOk(m, (q || '').trim().toLowerCase(), f));
+const groupsPresent = () => GROUP_ORDER.filter(g => MOVES.some(m => groupOf(m) === g));
+const equipPresent = () => [...new Set([...EQUIP_ORDER, ...MOVES.flatMap(m => m.equipment || [])])].filter(e => MOVES.some(m => (m.equipment || []).includes(e)));
+const levelsPresent = () => [1, 2, 3].filter(l => MOVES.some(m => m.level === l));
+const mcard = m => `<button class="mcard" data-a="openMove" data-id="${m.id}"><span class="mimg"><img src="${imgOf(m, 0)}" alt="" loading="lazy"></span><span class="mname">${esc(m.name)}</span><span class="mfocus">${esc((m.focus || []).join(' · '))}</span>${m.level ? `<span class="mlevel" role="img" aria-label="Nivel: ${LEVEL_NAME[m.level]}">${[1, 2, 3].map(l => `<i class="${l <= m.level ? 'on' : ''}"></i>`).join('')}</span>` : ''}</button>`;
 function catalogList() {
-  const q = ui.q.trim().toLowerCase();
-  const list = MOVES.filter(m => (ui.cat === 'all' || m.category === ui.cat) && (!q || (m.name + ' ' + (m.alias || '') + ' ' + m.focus.join(' ')).toLowerCase().includes(q)));
-  return `<div class="grid">${list.map(m => `<button class="mcard" data-a="openMove" data-id="${m.id}"><span class="mimg"><img src="${imgOf(m, 0)}" alt="" loading="lazy"></span><span class="mname">${esc(m.name)}</span><span class="mfocus">${esc(m.focus.join(' · '))}</span></button>`).join('')}</div>
-    ${list.length ? `<p class="gf center">${list.length} movimientos</p>` : '<p class="empty">Sin resultados</p>'}`;
+  const q = ui.q.trim().toLowerCase(), list = filterMoves(q, ui.f), nF = ui.f.g.length + ui.f.e.length + ui.f.l.length;
+  if (!list.length) return '<p class="empty">Sin resultados.<br><span class="hint">Prueba con menos filtros.</span></p>';
+  if (nF || q) return `<div class="grid">${list.map(mcard).join('')}</div><p class="gf center">${list.length} ${list.length === 1 ? 'movimiento' : 'movimientos'}</p>`;
+  // sin filtros: la galería se separa por grupo muscular
+  return groupsPresent().map(g => { const ms = list.filter(m => groupOf(m) === g); return ms.length ? `<div class="sec-title"><h3>${GROUP_NAME[g]}</h3><span>${ms.length}</span></div><div class="grid">${ms.map(mcard).join('')}</div>` : ''; }).join('');
+}
+function filtersHTML() {
+  const q = ui.q.trim().toLowerCase(), f = ui.f, total = filterMoves(q, f).length;
+  const opt = (k, v, label, cur) => {
+    const n = MOVES.filter(m => moveOk(m, q, f, k) && (k === 'g' ? groupOf(m) === v : k === 'e' ? (m.equipment || []).includes(v) : String(m.level) === String(v))).length;
+    const on = cur.includes(String(v));
+    return row({ title: esc(label), right: `<span class="opt-n">${n}</span><span class="checkc sq ${on ? 'on' : ''}">${on ? I.check : ''}</span>`, a: 'fToggle', data: `data-k="${k}" data-v="${esc(v)}"`, cls: 'opt' + (!n && !on ? ' dim' : '') });
+  };
+  const lv = levelsPresent();
+  return `<div class="sheet-head"><button class="navbtn" data-a="fClear" ${f.g.length + f.e.length + f.l.length ? '' : 'disabled'}>Borrar</button><h2>Filtros</h2><button class="navbtn strong" data-a="closeSheet">Ver ${total}</button></div>
+    <div class="sheet-body">${group(groupsPresent().map(g => opt('g', g, GROUP_NAME[g], f.g)), { header: 'Grupo muscular' })}
+    ${group(equipPresent().map(e => opt('e', e, EQ[e] || e, f.e)), { header: 'Implementos', footer: 'Muestra los movimientos que usan cualquiera de los implementos elegidos.' })}
+    ${lv.length ? group(lv.map(l => opt('l', l, LEVEL_NAME[l], f.l)), { header: 'Nivel' }) : ''}</div>`;
 }
 
 const secShort = sec => sec.kind === 'circuit' ? `${sec.rounds} ${sec.rounds === 1 ? 'ronda' : 'rondas'} · ${sec.items.length} ej.` : `Secuencia · ${sec.items.length} ej.`;
@@ -458,14 +493,14 @@ function profileSheetHTML(id) {
 let picker = null;
 function pickerList() {
   const q = picker.q.toLowerCase();
-  const list = MOVES.filter(m => (picker.cat === 'all' || m.category === picker.cat) && (!q || (m.name + ' ' + m.focus.join(' ')).toLowerCase().includes(q)));
+  const list = MOVES.filter(m => (picker.cat === 'all' || groupOf(m) === picker.cat) && (!q || searchText(m).includes(q)));
   return group(list.map(m => row({ icon: thumb(m), title: esc(m.name), sub: esc(m.focus.join(' · ')), right: `<span class="checkc ${picker.sel.includes(m.id) ? 'on' : ''}">${picker.sel.includes(m.id) ? I.check : ''}</span>`, a: 'pickerToggle', data: `data-id="${m.id}"`, cls: 'withthumb' })));
 }
 function pickerBtnLabel() { return picker.mode === 'replace' ? 'Cambiar' : `Añadir${picker.sel.length ? ` (${picker.sel.length})` : ''}`; }
 function pickerHTML() {
   return `<div class="sheet-head"><button class="navbtn" data-a="closeSheet">Cancelar</button><h2>${picker.mode === 'replace' ? 'Cambiar' : 'Añadir'}</h2><button class="navbtn strong" data-a="pickerDone" ${picker.sel.length ? '' : 'disabled'}>${pickerBtnLabel()}</button></div>
     <div class="sheet-body"><div class="searchbar">${I.search}<input type="search" placeholder="Buscar" value="${esc(picker.q)}" data-in="pickerSearch"></div>
-    <div class="chips">${[['all', 'Todos'], ...CATEGORIES.map(c => [c.id, c.name])].map(([id, n]) => `<button class="chip ${picker.cat === id ? 'on' : ''}" data-a="pickerCat" data-id="${id}">${n}</button>`).join('')}</div>
+    <div class="chips">${[['all', 'Todos'], ...groupsPresent().map(g => [g, GROUP_NAME[g]])].map(([id, n]) => `<button class="chip ${picker.cat === id ? 'on' : ''}" data-a="pickerCat" data-id="${id}">${n}</button>`).join('')}</div>
     <div id="pickList">${pickerList()}</div></div>`;
 }
 
@@ -488,7 +523,10 @@ const A = {
   dismissInstall: () => { ui.dismissedInstall = true; sessionStorage.setItem('ptw.noinstall', '1'); render(); },
   closeSheet: () => closeSheet(),
   asPick: el => { const a = actionSheet.actions[+el.dataset.i]; closeSheet(); setTimeout(() => a.fn(), 50); },
-  cat: el => { ui.cat = el.dataset.id; render(); },
+  openFilters: () => openSheet(filtersHTML(), { onClose: render }),
+  fToggle: el => { const a = ui.f[el.dataset.k], v = el.dataset.v, i = a.indexOf(v); if (i >= 0) a.splice(i, 1); else a.push(v); refreshSheet(filtersHTML()); },
+  fRemove: el => { const a = ui.f[el.dataset.k]; a.splice(a.indexOf(el.dataset.v), 1); render(); },
+  fClear: () => { ui.f = { g: [], e: [], l: [] }; refreshSheet(filtersHTML()); },
   calMove: el => { let { y, m } = ui.cal; m += +el.dataset.d; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.cal = { y, m }; render(); },
   showPos: el => { stopAnim(); ui.moveShow[el.dataset.id] = +el.dataset.v; render(); },
   animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); } else { stopAnim(); anim = { id }; } render(); },

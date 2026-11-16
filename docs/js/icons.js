@@ -33,6 +33,7 @@ export const I = {
   sides: s(`<path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4" ${st}/>`),
   shield: s(`<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8-7.5 9.5-4.3-1.5-7.5-4.9-7.5-9.5V6z" ${st}/><path d="M8.5 12l2.5 2.5 4.5-5" ${st}/>`),
   heart: s('<path d="M12 20.5s-8-4.9-8-10.6A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.9c0 5.7-8 10.6-8 10.6z" fill="currentColor"/>'),
+  sliders: s(`<path d="M4 7h9M17 7h3M4 17h3M11 17h9" ${st}/><circle cx="15" cy="7" r="2.2" ${st}/><circle cx="9" cy="17" r="2.2" ${st}/>`),
   info: s(`<circle cx="12" cy="12" r="9" ${st}/><path d="M12 11v6M12 7.5v.1" ${st}/>`),
   sparkle: s('<path d="M12 2.5l1.8 5.7 5.7 1.8-5.7 1.8L12 17.5l-1.8-5.7L4.5 10l5.7-1.8z" fill="currentColor"/>'),
   plusCircle: s('<circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 7v10M7 12h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>'),
