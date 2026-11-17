@@ -48,3 +48,14 @@ No arrows, no text.
 - Objetos fijos (marco de puerta, gancho de pared) se dibujan **dentro de cada fotograma** y se alinea por ellos (`left`).
 - Movimientos circulares (círculos de hombros, monster walk): `loop: true` en `docs/data/anim.js`.
 - Dos vistas distintas en un mismo ejercicio (aro: piernas arriba + de lado): dos tiras; `build_anim.py` las une.
+
+## Lo aprendido en la fase 3 (54 movimientos nuevos)
+- **Vistas con escorzo**: la vista de espaldas pura (reverse-fly intentos 1-2) sale con proporciones raras; funcionó **TRES CUARTOS DESDE ATRÁS** (cámara detrás y ~35° a un lado) y, para un tronco inclinado, indicar el ángulo ("torso bent 45 degrees").
+- **band-pull-apart** salió mal de frente (los músculos del dorso se dibujaban en el pecho). Regenerado en 3/4 desde atrás: "we see her BACK … rear deltoids and rhomboids in ORANGE, middle trapezius and infraspinatus in YELLOW drawn on her back". Si el músculo foco no se ve desde la vista, **cambiar de vista** antes que insistir con el prompt.
+- El hombre se genera pasando como 2ª referencia la URL cdn.wonder.so de la tira de la mujer y la plantilla 2; para vistas de espaldas basta con decir "same three-quarter-from-behind camera angle (we see his back)". En mat: calcetas blancas; de pie: zapatillas negras.
+- Un objeto fijo (pared, marco, silla) dibujado distinto en cada fotograma "salta": mejor **no dibujar la pared** (wall-angel: se indica en `setup`) o pedirla idéntica.
+- Si en una tira horizontal dos figuras casi se tocan (mancuernas), usar `cuts` por modelo en `anim_config.json`.
+- Revisar siempre el lado: en perfil trabaja la extremidad cercana a la cámara; con `mirror` el espejo muestra el otro lado.
+- Decisiones de revisión (fase 3): kb-swing (la kettlebell se ve en todos los fotogramas, detrás de las piernas en los extremos), calf-raise (talón sube
+  poco pero se lee), fire-hydrant (abducción de 60-70°, correcta), lateral-lunge, seated-twist-chair (último fotograma ~75°), curl-up/reverse-crunch
+  (sutiles, se leen con la flecha), wall-angel (sin pared; `setup`) y overhead-triceps-ext (mancuerna vertical legible): **se conservan**, no se regeneraron.

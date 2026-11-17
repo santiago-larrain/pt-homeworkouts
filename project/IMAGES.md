@@ -8,14 +8,42 @@
 > Lo de abajo describe las ilustraciones anteriores (ChatGPT, 2 paneles), que siguen como referencia de estilo y como
 > ancla al generar tiras nuevas. El modelo vectorial de `docs/js/rig/` (v1.2) queda solo como respaldo.
 
-## Fotogramas (v1.3)
-- `strip_frames.py <tira> <N> <salida> <prefijo> [--anchor=feet|center|left|right] [--cuts=x1,…]`: separa las figuras por
-  regiones conectadas, reconoce y reconstruye el suelo/mat, alinea por el punto de apoyo y exporta fotogramas del mismo tamaño.
-- `build_anim.py [id …]`: corre lo anterior para todas las tiras (lista `STRIPS`), deja el papel en blanco puro, limita el
-  ancho a 640 px y escribe `docs/img/anim/list.json` (el service worker guarda todos los fotogramas para usar sin internet).
+## Fotogramas (v1.3, pipeline v2 de la fase 3)
+- `project/tools/anim_config.json` es la **única fuente de configuración** por movimiento (71): `frames`, `anchor`, `cuts` por modelo,
+  `loop`, `pos`, `nowall`, `parts` (tiras unidas, `ring-legs-side`) y `arrows` (`false` = sin flecha, o flechas manuales).
+  `python3 project/tools/build_anim.py [id …]` corta todo (en paralelo) y **genera** `docs/data/anim.js` (`n`, `pos`, `loop`),
+  `docs/data/arrows.js` (flechas) y `docs/img/anim/list.json`. No edites `anim.js` / `arrows.js` a mano.
+- `strip_frames.py <tira> <N> <salida> <prefijo> [--anchor=feet|center|left|right] [--cuts=x1,…] [--nowall]` (también `cut_strip()` importable):
+  separa las figuras por regiones conectadas, reconoce y reconstruye el suelo/mat, alinea por el punto de apoyo y exporta fotogramas del mismo tamaño.
 - Ancla: `feet` de pie / en cuatro apoyos, `left` tendida con la cabeza a la izquierda (o el marco de puerta), `right` cuando
-  los pies quedan fijos a la derecha, `center` para pasos laterales y vistas desde arriba.
-- `ring-legs-side` usa dos tiras (`ring-legs-up` + `ring-legs-side`, sin su primer fotograma) unidas en 5 fotogramas.
+  los pies quedan fijos a la derecha, `center` para pasos laterales y vistas desde arriba. Si lo que debe quedar quieto se mueve, probar otra.
+- `ring-legs-side` usa dos tiras (`ring-legs-up` + `ring-legs-side`, sin su primer fotograma) unidas en 5 fotogramas (`parts`).
+- Peso: fotogramas ≤ 640 px de ancho, WebP q80.
+
+### Lo aprendido con el cortador (v2)
+- **Ropa/calcetas blancas sobre el mat**: el blanco no es "tinta" frente al papel, así que el mat las borraba. Ahora, sobre el mat solo se
+  descarta lo que se parece al color del mat (distancia < 60) y las zonas casi blancas CERRADAS por el contorno que tocan el suelo se
+  recuperan como figura (`HOLE_MAX`). Solo con mat grueso (>12 px); con una línea fina de suelo no hace falta y puede unir figuras.
+- **Pared pálida** pegada a una silla (incline-pushup): `nowall: true` quita las columnas grises claras casi de arriba abajo. En wall-sit la pared
+  es parte del dibujo y se conserva.
+- **Mat por figura** (child-pose-lateral, floor-fly): cada figura trae su propio rectángulo; se alinea por el centro y funciona sin tratamiento especial.
+- `build_anim.py <id>` solo borra los fotogramas de ese id exacto (antes `glute-bridge` borraba `glute-bridge-iso`).
+- Un error en un hijo del pool ya no cuelga la compilación (se informa al final).
+
+### Flechas de movimiento
+`project/tools/arrows.py` compara las máscaras alineadas de dos posiciones consecutivas: zona desocupada (de dónde sale) vs. zona ocupada de
+nuevo (adónde va); centroide de la mayor componente de cada lado; descarta lo < 6 % del lado mayor (segundo intento a 3,5 % si no salió
+ninguna); hasta 2 flechas; la curvatura sale de los fotogramas intermedios; evita la cara (mancha de pelo oscuro) y la excluye como origen.
+Es una heurística: sirve bien en movimientos de una extremidad o de la cadera (puentes, elevaciones, zancadas, patadas) y falla en rotaciones
+sobre un punto fijo y en cambios muy pequeños. Se sobreescribe a mano con `arrows` en `anim_config.json` (`{f: [[{from,to,curve}…]], m: …}`,
+una lista por transición, coordenadas 0..1 del fotograma) o se apaga con `arrows: false` (calf-raise, overhead-triceps-ext, doorway-pec,
+standing-side-bend, db-thruster). Revisión visual: `docs/dev/anim.html`.
+
+### Fluidez
+Se probó interpolación por flujo óptico (OpenCV DIS) para fotogramas intermedios en 6 movimientos variados: con movimientos grandes (sentadilla,
+kb-halo, bird dog) deja fantasmas y desgarros iguales o peores que el fundido, así que **no se publica**. Lo que sí mejoró `frames.js`:
+decodificar todo antes de animar, tiempos con aceleración/frenado suaves entre posiciones (mismo tiempo de traslado sin importar el nº de fotogramas),
+y fundido corto con la figura nueva sobre la anterior opaca.
 
 ## Estilo definitivo (generado con ChatGPT)
 Basado en `references/character-sheet.jpg`: la misma mujer (Anita) con piel morena clara, pelo castaño oscuro en coleta alta con una
