@@ -221,7 +221,7 @@
  },
  {
   "id": "band-pull-apart",
-  "status": "needs-review",
+  "status": "ok",
   "frames": 5,
   "anchor": "feet",
   "cuts": {},
@@ -230,14 +230,14 @@
    0,
    4
   ],
-  "view": "FRONT view, facing the camera",
-  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/0cedd435d18b85bd3272dd68beb72a0f646bb11824071d3129b129aec09ca8a8.png",
-  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/839dde8245cec04898d2631e9949c2523b87cc3f7b5fd18aea76da0b03e28eaf.png",
+  "view": "THREE-QUARTER FROM BEHIND (camera behind, 35 deg right)",
+  "female_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/04c51a519d7f6e722521fff8bfa1d0810ae2e65660b247c7bac7dd3804ba3190.png",
+  "male_url": "https://cdn.wonder.so/images/01a1bd1e-e236-76eb-8ef5-2b9e56304016/c170986b172d6f46ccadb42ab4f2f88d2dcadb5fffab4a2128e50c67096f698a.png",
   "attempts": {
-   "f": 1,
-   "m": 1
+   "f": 2,
+   "m": 2
   },
-  "notes": "Motion and band are good. Muscle overlays are drawn on the FRONT of the shoulders/chest (front view) instead of rear delts/rhomboids, which are not visible from the front: anatomically imprecise."
+  "notes": "v2 (fase 3): regenerada desde ATRÁS (3/4 desde atrás), con deltoides posterior y romboides naranjas y trapecio medio/infraespinoso amarillos sobre la espalda. Reemplaza la vista frontal (músculos mal ubicados)."
  },
  {
   "id": "reverse-fly",

@@ -1,0 +1,631 @@
+{
+ "_doc": "Configuración por movimiento de build_anim.py. frames: nº de fotogramas de la tira; anchor: feet|center|left|right; cuts: {modelo: columnas de corte}; loop: ciclo; pos: fotograma (base 0) de cada posición; nowall: quitar pared pálida; arrows: false para no calcular flechas o {f:[[ {from,to,curve} ]], m:…} para fijarlas a mano (una lista por transición entre posiciones consecutivas); parts: varias tiras unidas.",
+ "moves": {
+  "goblet-squat": {
+   "frames": 5,
+   "anchor": "feet"
+  },
+  "cat-cow": {
+   "frames": 4,
+   "anchor": "feet",
+   "cuts": {
+    "m": "426,856,1298"
+   },
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.5,
+        0.5
+       ],
+       "to": [
+        0.48,
+        0.28
+       ],
+       "curve": 0.12
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.5,
+        0.5
+       ],
+       "to": [
+        0.48,
+        0.28
+       ],
+       "curve": 0.12
+      }
+     ]
+    ]
+   }
+  },
+  "shoulder-circles": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    1,
+    3
+   ],
+   "loop": true
+  },
+  "good-morning": {
+   "frames": 4,
+   "anchor": "feet"
+  },
+  "glute-bridge-iso": {
+   "frames": 4,
+   "anchor": "left"
+  },
+  "b-stance-rdl": {
+   "frames": 4,
+   "anchor": "feet"
+  },
+  "monster-walk": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    2
+   ],
+   "loop": true
+  },
+  "face-pull": {
+   "frames": 4,
+   "anchor": "feet"
+  },
+  "floor-press": {
+   "frames": 4,
+   "anchor": "left"
+  },
+  "band-external-rotation": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    2,
+    3
+   ]
+  },
+  "dead-bug": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    2,
+    3
+   ]
+  },
+  "ring-adductor-lift": {
+   "frames": 4,
+   "anchor": "right"
+  },
+  "kneeling-hip-flexor": {
+   "frames": 4,
+   "anchor": "right"
+  },
+  "figure-4": {
+   "frames": 4,
+   "anchor": "left"
+  },
+  "doorway-pec": {
+   "frames": 3,
+   "anchor": "left",
+   "arrows": false,
+   "arrows_note": "la figura casi no cambia de masa; la flecha automática salía en los pies"
+  },
+  "child-pose-lateral": {
+   "frames": 4,
+   "anchor": "center"
+  },
+  "ring-legs-side": {
+   "parts": [
+    {
+     "src": "ring-legs-up",
+     "frames": 3,
+     "anchor": "feet"
+    },
+    {
+     "src": "ring-legs-side",
+     "frames": 3,
+     "anchor": "left",
+     "skip": 1
+    }
+   ],
+   "pos": [
+    2,
+    4
+   ],
+   "arrows": false,
+   "note": "dos vistas distintas (piernas arriba + de lado): sin flecha"
+  },
+  "bodyweight-squat": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "chair-squat": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "reverse-lunge": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "split-squat": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "lateral-lunge": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "wall-sit": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "calf-raise": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ],
+   "arrows": false,
+   "arrows_note": "la diferencia es mínima (talón sube pocos px): sin flecha automática fiable"
+  },
+  "kb-sumo-squat": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "glute-bridge": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "single-leg-bridge": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "banded-bridge": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "ring-bridge": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "donkey-kick": {
+   "frames": 4,
+   "anchor": "right",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "fire-hydrant": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "clamshell": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "side-lying-leg-raise": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "kb-deadlift": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "kb-swing": {
+   "frames": 5,
+   "anchor": "feet",
+   "loop": true,
+   "pos": [
+    0,
+    2
+   ]
+  },
+  "plank": {
+   "frames": 4,
+   "anchor": "right",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "side-plank-knee": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "bird-dog": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "curl-up": {
+   "frames": 4,
+   "anchor": "right",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "reverse-crunch": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "toe-taps": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "superman": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.88,
+        0.62
+       ],
+       "to": [
+        0.9,
+        0.38
+       ],
+       "curve": 0.15
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.88,
+        0.62
+       ],
+       "to": [
+        0.9,
+        0.38
+       ],
+       "curve": 0.15
+      }
+     ]
+    ]
+   }
+  },
+  "db-pullover": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "bent-over-row": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "one-arm-row-chair": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "band-row": {
+   "frames": 4,
+   "anchor": "right",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "band-pull-apart": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "reverse-fly": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "incline-pushup": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ],
+   "nowall": true
+  },
+  "knee-pushup": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "floor-fly": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "band-chest-press": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "ring-chest-press": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "db-shoulder-press": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "lateral-raise": {
+   "frames": 5,
+   "anchor": "feet",
+   "cuts": {
+    "m": "260,588,950,1330"
+   },
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "kb-halo": {
+   "frames": 4,
+   "anchor": "feet",
+   "loop": true,
+   "pos": [
+    0,
+    2
+   ]
+  },
+  "biceps-curl": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "hammer-curl": {
+   "frames": 5,
+   "anchor": "feet",
+   "cuts": {
+    "m": "350,710,1060,1420"
+   },
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "overhead-triceps-ext": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ],
+   "arrows": false,
+   "arrows_note": "el antebrazo gira sobre un codo fijo: el centroide no da una flecha fiable"
+  },
+  "band-triceps-pushdown": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "thoracic-open-book": {
+   "frames": 4,
+   "anchor": "right",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "hamstring-stretch-supine": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "sphinx": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "seated-twist-chair": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "standing-quad-stretch": {
+   "frames": 4,
+   "anchor": "feet",
+   "pos": [
+    0,
+    3
+   ]
+  },
+  "wall-angel": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ]
+  },
+  "standing-side-bend": {
+   "frames": 5,
+   "anchor": "feet",
+   "pos": [
+    0,
+    4
+   ],
+   "arrows": false,
+   "arrows_note": "el brazo y el torso se inclinan juntos: flecha automática confusa"
+  },
+  "march-in-place": {
+   "frames": 4,
+   "anchor": "center",
+   "loop": true,
+   "pos": [
+    0,
+    1
+   ]
+  },
+  "low-impact-skater": {
+   "frames": 4,
+   "anchor": "center",
+   "loop": true,
+   "pos": [
+    0,
+    1
+   ]
+  },
+  "mountain-climber-slow": {
+   "frames": 4,
+   "anchor": "right",
+   "loop": true,
+   "pos": [
+    0,
+    2
+   ]
+  },
+  "db-thruster": {
+   "frames": 6,
+   "anchor": "feet",
+   "pos": [
+    0,
+    5
+   ],
+   "arrows": false,
+   "arrows_note": "movimiento de cuerpo completo; la flecha automática salía en los pies"
+  }
+ }
+}
