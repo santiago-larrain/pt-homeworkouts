@@ -16,7 +16,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
-const APP_VERSION = '1.8';
+const APP_VERSION = '1.9';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -34,7 +34,7 @@ const TABS = [
   { id: 'settings', name: 'Ajustes', icon: I.gear, root: 'settings' },
 ];
 const nav = { tab: 'train', stacks: Object.fromEntries(TABS.map(t => [t.id, [{ v: t.root }]])) };
-const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [], m: [] }, editing: {}, cal: null, moveShow: {}, healthPid: null, mmPerson: {}, mmRange: 'week', mmCtx: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
+const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [], m: [] }, editing: {}, cal: null, moveShow: {}, healthPid: null, mmPerson: {}, mmRange: 'week', mmCtx: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null, eqOpen: {}, eq: null };
 let anim = null;
 
 const top = () => nav.stacks[nav.tab][nav.stacks[nav.tab].length - 1];
@@ -90,7 +90,54 @@ function planKcal(p, onlySection = null) {
 const kcalChip = r => `<span class="mchip" title="Estimación">${I.flame}${kcalText(r.kcal) || '—'}${r.estimated ? ' · estimado' : ''}</span>`;
 const today = () => new Date();
 const EQ = { silla: 'Silla', kettlebell: 'Kettlebell', ...EQUIPMENT };
-const equipOf = p => [...new Set(p.sections.flatMap(sec => sec.items.flatMap(it => [it.move, it.b && it.b.move]))).values()].filter(Boolean).flatMap(id => (MOVE_BY_ID[id] || { equipment: [] }).equipment).filter(e => e !== 'ninguno').filter((e, i, a) => a.indexOf(e) === i).map(e => EQ[e] || e);
+const equipOf = p => [...new Set(p.sections.flatMap(sec => sec.items.flatMap(it => [it.move, it.b && it.b.move]))).values()].filter(Boolean).flatMap(id => (MOVE_BY_ID[id] || { equipment: [] }).equipment).filter(e => e !== 'ninguno').filter((e, i, a) => a.indexOf(e) === i);
+// ── implementos: chips tocables (abren su hoja) y «+N» / «Menos» que despliega el resto en el mismo lugar
+const eqName = e => (e === 'ninguno' ? 'Sin implementos' : EQ[e] || e);
+const eqChip = (e, plan = '', extra = '') => `<button class="mchip eq ${extra}" data-a="eqOpen" data-id="${esc(e)}" ${plan ? `data-p="${esc(plan)}"` : ''} aria-haspopup="dialog">${esc(eqName(e))}</button>`;
+function eqChips(ids, key, { limit = 3, plan = '' } = {}) {
+  const open = !!ui.eqOpen[key], n = ids.length - limit;
+  return ids.map((e, i) => eqChip(e, plan, i >= limit ? 'eq-x' : '')).join('') + (n > 0 ? `<button class="mchip eq more" data-a="eqMore" data-key="${esc(key)}" data-n="${n}" aria-expanded="${open}">${open ? 'Menos' : `+${n}`}</button>` : '');
+}
+const EQINFO = {
+  ninguno: { name: 'Peso corporal', desc: 'Estos ejercicios no necesitan nada: tu propio peso es la carga. Solo necesitas un poco de espacio libre.' },
+  mat: { name: 'Mat', desc: 'Superficie mullida para los ejercicios en el suelo. Extiéndelo sobre piso firme que no resbale; una toalla gruesa también sirve.' },
+  mancuernas: { name: 'Mancuernas', desc: 'Un par de pesas de mano, una en cada mano. Elige un peso con el que puedas terminar todas las repeticiones con buena técnica.', adj: 'dumbbell' },
+  kettlebell: { name: 'Kettlebell', desc: 'Pesa rusa con asa. Se sostiene con las dos manos (a la altura del pecho o entre las piernas) en los ejercicios que la piden.', adj: 'kettlebell' },
+  banda: { name: 'Banda de brazos', desc: 'Banda elástica larga con manijas, para brazos y espalda. Ánclala firme en el lado de las bisagras de una puerta cerrada.', adj: 'band' },
+  'mini-banda': { name: 'Mini banda (piernas)', desc: 'Banda corta de tela cerrada en aro, para piernas y glúteos. Se pone sobre las rodillas o los tobillos, según el ejercicio.', adj: 'miniBand' },
+  aro: { name: 'Aro de Pilates', desc: 'Aro con agarres acolchados. Se aprieta entre las manos, los muslos o los tobillos para activar el core, los aductores y los brazos.' },
+  silla: { name: 'Silla', desc: 'Para apoyarte o sentarte. Firme, sin ruedas; si se mueve, ponla contra una pared.' },
+  puerta: { name: 'Marco de puerta', desc: 'Sirve de apoyo para estirar el pecho y para anclar la banda. Usa una puerta cerrada, con el anclaje del lado de las bisagras.' },
+};
+// convención de colores de bandas (varía según la marca; se indica en la hoja)
+const BAND_LEVELS = [['suave', 'Suave', '#F2C94C', 'amarillo'], ['media', 'Media', '#E5484D', 'rojo'], ['fuerte', 'Fuerte', '#2F6FDE', 'azul']];
+const BAND_HELP = { suave: 'Para empezar o para series largas.', media: 'La más usada; un esfuerzo moderado.', fuerte: 'Para cuando la media se queda corta.' };
+const KB_STEPS = [0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24];
+const kgText = v => (v > 0 ? `${(+v).toLocaleString('es', { maximumFractionDigits: 1 })} kg` : 'Sin definir');
+const eqPids = () => {
+  const plan = ui.eq && ui.eq.plan && store.plan(ui.eq.plan);
+  const ids = plan && isDuo(plan) ? people(plan).map(x => x.profile) : [S().activeProfile];
+  return [...new Set(ids)];
+};
+function eqSheetHTML() {
+  const id = ui.eq.id, info = EQINFO[id] || { name: eqName(id), desc: '' }, pids = eqPids();
+  if (!pids.includes(ui.eq.pid)) ui.eq.pid = pids[0];
+  const pr = profOf(ui.eq.pid), L = pr.loads, base = `data-id="${pr.id}"`, uses = MOVES.filter(m => m.equipment.includes(id)).length;
+  let adj = '';
+  if (info.adj === 'dumbbell') adj = `<div class="eq-adj"><p class="eq-lbl">Peso de cada mancuerna</p>${stepper('eqStep', `${base} data-k="dumbbellKg" data-st="0.5" data-max="40"`, kgText(L.dumbbellKg))}</div>`;
+  else if (info.adj === 'kettlebell') adj = `<div class="eq-adj"><p class="eq-lbl">Peso de la kettlebell</p>${stepper('eqStep', `${base} data-k="kettlebellKg" data-list="kb"`, kgText(L.kettlebellKg))}</div>`;
+  else if (info.adj) {
+    const cur = L[info.adj] || 'media', lv = BAND_LEVELS.find(x => x[0] === cur) || BAND_LEVELS[1];
+    adj = `<div class="eq-adj"><p class="eq-lbl">Resistencia</p><div class="seg eqseg">${BAND_LEVELS.map(([v, l, c]) => `<button data-a="eqLevel" ${base} data-k="${info.adj}" data-v="${v}" class="${v === cur ? 'on' : ''}" aria-pressed="${v === cur}"><i class="sw" style="background:${c}"></i>${l}</button>`).join('')}</div>
+      <p class="eq-note">${BAND_HELP[cur]} Colores según tu banda: suave = amarillo, media = rojo, fuerte = azul.</p></div>`;
+  }
+  const who = pids.length > 1 ? `<div class="eq-who">${seg('eqWho', '', pids.map(pid => [pid, esc(profOf(pid).name || 'Perfil')]), ui.eq.pid)}</div>` : '';
+  return `<div class="sheet-head"><span></span><h2>${esc(info.name)}</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body eq-body">
+    <div class="eq-img"><img src="img/equipment/${esc(id)}.webp" alt="${esc(info.name)}" width="180" height="180"></div>
+    <p class="eq-desc">${esc(info.desc)}</p>
+    ${uses ? `<p class="eq-uses">Se usa en ${uses} ${uses === 1 ? 'movimiento' : 'movimientos'}</p>` : ''}
+    ${info.adj ? who + `<div class="group eq-card">${adj}</div><p class="gf center">Se usa para estimar la carga y las calorías${pids.length > 1 ? '' : ` de ${esc(pr.name || 'tu perfil')}`}.</p>` : ''}</div>`;
+}
 const firstPid = () => S().profiles[0].id;
 const profEntries = pid => entriesOf(S().history, pid, firstPid());
 const weekSessions = (pid = S().activeProfile) => { const ws = weekStart(today()); return profEntries(pid).filter(h => new Date(h.date) >= ws); };
@@ -126,9 +173,9 @@ function mountRig(box, m, { model, fixed = null, play = true, isPaused, mirror =
   return () => an.destroy();
 }
 
-function toast(msg) {
+function toast(msg, ms = 1800) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('on');
-  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 1800);
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), ms);
 }
 function undoToast(msg, undo) {
   const t = $('#toast'); t.innerHTML = `${esc(msg)} <button data-a="undo">Deshacer</button>`; t.classList.add('on');
@@ -223,12 +270,12 @@ const VIEWS = {
     // oferta amable de recordatorios (una vez, tras la 2.ª sesión completa; se puede descartar para siempre)
     if (!s.settings.reminderOffer && !remOf(store.active).on && profEntries(s.activeProfile).filter(h => !h.partial).length >= 2) html += `<div class="card install offer">${I.bell}<div><b>¿Te recordamos entrenar?</b><p>Elige días y hora; aparece en tu Calendario con una alerta.</p><div class="offer-btns"><button class="btn tinted small" data-a="offerGo">Configurar</button><button class="btn plain small" data-a="offerNo">Ahora no</button></div></div><button class="iconbtn" data-a="offerNo" aria-label="Descartar">${I.x}</button></div>`;
     if (p) {
-      const nSec = p.sections.filter(x => x.items.length).length, eq = equipOf(p), shown = eq.slice(0, 3);
+      const nSec = p.sections.filter(x => x.items.length).length, eq = equipOf(p);
       const thumbs = [...new Set(p.sections.flatMap(x => x.items.map(it => it.move)))].map(id => MOVE_BY_ID[id]).filter(Boolean).slice(0, 4);
       const pp0 = isDuo(p) ? people(p) : null;
       html += `<div class="card today"><div class="today-top"><p class="eyebrow">${s.history.length ? 'Tu entrenamiento' : 'Para empezar'}${isDuo(p) ? ' · en pareja' : ''}</p><div class="thumbstack">${thumbs.map(m => thumb(m, 1, pp0 ? pp0[0].model : undefined)).join('')}</div></div>
         <h2>${esc(p.name)}</h2><p class="sub">${esc(isDuo(p) ? people(p).map(x => x.name).join(' + ') : (p.subtitle || ''))}</p>
-        <div class="mchips"><span class="mchip">${I.clock}${planMins(p)}</span>${kcalChip(planKcal(p))}<span class="mchip">${I.grid}${nSec} ${nSec === 1 ? 'bloque' : 'bloques'}</span>${shown.map(e => `<span class="mchip eq">${esc(e)}</span>`).join('')}${eq.length > 3 ? `<span class="mchip eq">+${eq.length - 3}</span>` : ''}${eq.length ? '' : '<span class="mchip eq">Sin implementos</span>'}</div>
+        <div class="mchips eqrow ${ui.eqOpen.home ? 'open' : ''}"><span class="mchip">${I.clock}${planMins(p)}</span>${kcalChip(planKcal(p))}<span class="mchip">${I.grid}${nSec} ${nSec === 1 ? 'bloque' : 'bloques'}</span>${eqChips(eq.length ? eq : ['ninguno'], 'home', { plan: p.id })}</div>
         <button class="btn primary cta big" data-a="start" data-id="${p.id}">${I.play}Comenzar</button>
         <button class="btn plain" data-a="openPlan" data-id="${p.id}">Ver plan</button></div>`;
     }
@@ -254,6 +301,7 @@ const VIEWS = {
     } else {
       html = `<div class="plan-head"><h1>${esc(p.name)}</h1>${duo ? `<p class="muted">${I.figure} ${esc(pp[0].name)} + ${esc(pp[1].name)}</p>` : (p.subtitle ? `<p class="muted">${esc(p.subtitle)}</p>` : '')}
       <div class="meta"><span>${I.clock}${planMins(p)}</span><button class="kchip" data-a="kcalInfo" aria-label="Cómo se estiman las calorías">${I.flame}${kcalText(planKcal(p).kcal) || '—'}${planKcal(p).estimated ? ' · estimado' : ''}</button>${p.frequency ? `<span>${I.calendar}${esc(p.frequency)}</span>` : ''}${duo ? '<span class="pill">En pareja</span>' : ''}</div>
+      ${equipOf(p).length ? `<div class="mchips eqrow plan-eq ${ui.eqOpen['plan:' + p.id] ? 'open' : ''}">${eqChips(equipOf(p), 'plan:' + p.id, { plan: p.id })}</div>` : ''}
       <div class="btnrow"><button class="btn primary cta" data-a="start" data-id="${p.id}">${I.play}Comenzar</button><button class="btn tinted icon" data-a="planMenu" data-id="${p.id}" aria-label="Más opciones" style="min-height:60px;border-radius:20px">${I.more}</button></div>
       ${p.goal ? `<p class="goal">${esc(p.goal)}</p>` : ''}</div>`;
     }
@@ -310,7 +358,7 @@ const VIEWS = {
       <div class="keycue">${I.check}<span>${esc(m.cue)}</span></div>${m.setup ? `<p class="setup">${I.info}<span>${esc(m.setup)}</span></p>` : ''}`;
     html += group([row({ title: 'En foco', right: `<span class="tags">${m.focus.map(f => `<span class="tag"><u></u>${esc(f)}</span>`).join('')}</span>`, cls: 'tall' }),
       ...(m.support.length ? [row({ title: 'Apoyo', right: `<span class="tags">${m.support.map(f => `<span class="tag"><u class="s"></u>${esc(f)}</span>`).join('')}</span>`, cls: 'tall' })] : []),
-      row({ title: 'Implementos', right: `<span class="muted">${m.equipment.map(e => EQUIPMENT[e]).join(', ')}${m.load ? ` · ${esc(m.load)}` : ''}</span>` }),
+      row({ title: 'Implementos', right: `<span class="mchips eqrow inl">${eqChips(m.equipment, 'move:' + m.id, { limit: 99 })}${m.load ? `<span class="muted">${esc(m.load)}</span>` : ''}</span>`, cls: 'tall' }),
       row({ title: 'Dosis sugerida', right: `<span class="muted">${esc(doseText(m.dose))}</span>` })], { header: 'Detalles' });
     html += mmCardHTML({ id: 'mmMove', hint: 'El tono más intenso es el músculo en foco; el más suave, el de apoyo.' });
     html += group(m.tips.map((tp, i) => `<div class="row tip"><span class="num">${i + 1}</span><span class="rt"><span class="rtt">${esc(tp)}</span></span></div>`), { header: 'Técnica' });
@@ -746,6 +794,26 @@ function toDuo(p) {
 
 // ───────────────────────── ACCIONES
 const A = {
+  eqOpen: el => { ui.eq = { id: el.dataset.id, pid: S().activeProfile, plan: el.dataset.p || null }; openSheet(eqSheetHTML(), { cls: 'eq', onClose: () => { ui.eq = null; render(); } }); },
+  eqWho: el => { ui.eq.pid = el.dataset.v; refreshSheet(eqSheetHTML()); },
+  eqLevel: el => { profOf(el.dataset.id).loads[el.dataset.k] = el.dataset.v; store.save(); refreshSheet(eqSheetHTML()); },
+  eqStep: el => {
+    const L = profOf(el.dataset.id).loads, k = el.dataset.k, d = +el.dataset.d, cur = L[k] || 0;
+    if (el.dataset.list === 'kb') L[k] = d > 0 ? (KB_STEPS.find(v => v > cur) ?? KB_STEPS[KB_STEPS.length - 1]) : ([...KB_STEPS].reverse().find(v => v < cur) ?? 0);
+    else L[k] = Math.round(clamp(cur + d * +el.dataset.st, 0, +el.dataset.max) * 10) / 10;
+    store.save(); refreshSheet(eqSheetHTML());
+  },
+  eqMore: el => {
+    const row = el.closest('.eqrow'), open = !row.classList.contains('open'), n = el.dataset.n;
+    ui.eqOpen[el.dataset.key] = open;
+    const h0 = row.offsetHeight; row.classList.toggle('open', open); el.setAttribute('aria-expanded', open); el.textContent = open ? 'Menos' : `+${n}`;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const h1 = row.offsetHeight; if (h0 === h1) return;
+    row.style.height = h0 + 'px'; row.style.overflow = 'hidden'; row.getBoundingClientRect();
+    row.style.transition = 'height .3s cubic-bezier(.2,.8,.2,1)'; row.style.height = h1 + 'px';
+    const end = () => { row.style.height = row.style.overflow = row.style.transition = ''; };
+    row.addEventListener('transitionend', end, { once: true }); setTimeout(end, 450);
+  },
   tab: el => { stopAnim(); switchTab(el.dataset.id); },
   back: () => { stopAnim(); back(); },
   openPlan: el => { if (nav.tab !== 'train') nav.tab = 'train'; push('plan', { id: el.dataset.id }); },
@@ -1323,6 +1391,7 @@ const P = {
     try { speechSynthesis.cancel(); } catch (e) { }
     $('#player').className = ''; $('#player').innerHTML = ''; document.body.classList.remove('playing'); applyTheme();
     this.steps = null; render();
+    if (updatePending) setTimeout(() => window.__applyUpdate && window.__applyUpdate(), 1200);
   },
 };
 
@@ -1371,7 +1440,7 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme
 
 // Pide al service worker que guarde (sin internet) los fotogramas que esta usuaria va a necesitar:
 // todos los de los movimientos de sus planes y las dos posiciones de cada movimiento, para su(s) figura(s). El resto se guarda al verlo.
-let warmT = 0;
+let warmT = 0, updatePending = false;
 function warmFrames() {
   if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   clearTimeout(warmT);
@@ -1400,4 +1469,18 @@ warmFrames();
   }
 }
 store.persist().then(v => { ui.persisted = v; if (top().v === 'settingsStorage') render(); });
-if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
+// Actualizaciones fiables: el SW se registra sin caché HTTP, se busca versión nueva al abrir y al volver a la app,
+// y cuando un SW nuevo toma el control se recarga (si hay un entrenamiento en curso, al terminarlo).
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  let hadController = !!navigator.serviceWorker.controller; // la primera toma de control (instalación inicial) no recarga
+  let reloading = false;
+  const reloadNow = () => { if (reloading) return; reloading = true; location.reload(); };
+  window.__applyUpdate = () => { if (P.steps) { updatePending = true; toast('Nueva versión lista · se aplicará al terminar', 5000); } else reloadNow(); };
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) window.__applyUpdate(); else hadController = true; });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
+    const check = () => reg.update().catch(() => {});
+    check();
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') check(); });
+    window.addEventListener('pageshow', e => { if (e.persisted) check(); });
+  }).catch(() => {});
+}

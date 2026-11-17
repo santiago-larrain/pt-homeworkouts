@@ -26,6 +26,7 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | `docs/js/frames.js` | Reproductor de fotogramas (`FrameAnimator`): precarga, fundidos, pausas en cada posición, respiración y capa SVG de flechas (se espeja con `.flip`). |
 | `docs/img/anim/<f\|m>/<id>-<k>.webp` | **Fotogramas** (fuente de verdad visual, v1.3), mujer `f` y hombre `m`. `list.json` = lista para el service worker. |
 | `docs/js/rig/` | Modelo vectorial anterior (v1.2). Solo **respaldo** para movimientos sin fotogramas. |
+| `docs/img/equipment/<id>.webp` | Ilustraciones de implementos (v1.9, Wonder, 360 px) para la hoja de cada implemento (chips de equipo → `eqSheetHTML` en `app.js`; cargas por perfil en `profile.loads`). Fuentes en `project/references/equipment/`. |
 | `docs/img/moves/<id>-N.webp` | Ilustraciones antiguas (ChatGPT/vector). **Ya no se usan en la app**; quedan como referencia visual. |
 | `project/renderer/` | Versión Node antigua del dibujo (exporta PNG). La app usa `docs/js/rig/`. |
 | `project/references/anim/` | Tiras originales de Wonder (`<f\|m>-<id>.jpg`), fuente de los fotogramas. |
