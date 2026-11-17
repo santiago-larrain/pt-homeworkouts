@@ -38,4 +38,8 @@ export const I = {
   sparkle: s('<path d="M12 2.5l1.8 5.7 5.7 1.8-5.7 1.8L12 17.5l-1.8-5.7L4.5 10l5.7-1.8z" fill="currentColor"/>'),
   plusCircle: s('<circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 7v10M7 12h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>'),
   minusCircle: s('<circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7 12h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>'),
+  expand: s(`<path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" ${st}/>`),
+  bell: s(`<path d="M6 16.5V11a6 6 0 0112 0v5.5l1.5 2h-15zM10 20.5a2 2 0 004 0" ${st}/>`),
+  heart: s(`<path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0112 7.4a4.3 4.3 0 017.5 2.5C19.5 15.4 12 20 12 20z" ${st}/>`),
+  download: s(`<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14" ${st}/>`),
 };

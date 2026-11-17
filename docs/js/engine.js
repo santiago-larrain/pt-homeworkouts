@@ -90,7 +90,9 @@ export function buildSteps(plan, settings, onlySection = null) {
             const t = switching ? settings.switchSides : settings.phaseGap;
             if (t > 0) steps.push({ ...base, type: 'switch', secs: t, title: switching ? 'Cambia de lado' : 'Cambia de posición', nextUnit: u, key: `${secIdx}|${r}|${ii}|${ui}|switch` });
           } else if (prev && prev.type === 'work' && settings.transition > 0) {
-            steps.push({ ...base, type: 'transition', secs: settings.transition, title: 'Siguiente', nextUnit: u, key: `${secIdx}|${r}|${ii}|${ui}|trans` });
+            // `sec.gap` (opcional): pausa propia del bloque entre ejercicios; nunca más larga que la de Ajustes
+            const gap = sec.gap >= 0 ? Math.min(sec.gap, settings.transition) : settings.transition;
+            if (gap > 0) steps.push({ ...base, type: 'transition', secs: gap, title: 'Siguiente', nextUnit: u, key: `${secIdx}|${r}|${ii}|${ui}|trans` });
           }
           const w = { ...base, type: 'work', secs: u.secs, title: move.name, itemIdx: ii, items: sec.items.length, key: `${secIdx}|${r}|${ii}|${ui}|work` };
           if (duo) Object.assign(w, { duo: true, a: { ...u.a, move, dose: doseOf(item) }, b: { ...u.b, move: moveB, dose: doseOf(item.b) }, side: u.side });

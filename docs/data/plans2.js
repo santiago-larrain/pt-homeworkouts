@@ -1,7 +1,7 @@
 // Planes incluidos nuevos (v2): 5 planes de project/catalog_v2/NOTES.md §5, en la forma de DEFAULT_PLANS (plans.js).
 // Para integrar: agregar PLANS2 al final de DEFAULT_PLANS (los ids son estables; los planes nuevos se agregan solos al estado local).
 // Usan solo ids de MOVES (catalog.js) y MOVES2 (moves2.js). Sin `dose` = dosis por defecto del movimiento (p. ej. child-pose-lateral por fases).
-// Nota: en secuencias de 1 ronda `rest` no se usa en el motor; se deja la pausa propuesta (5 s en Movilidad) por si luego se usa.
+// Nota: `gap` (opcional, en segundos) fija la pausa entre ejercicios de ese bloque (Movilidad: 5 s); el motor usa el menor entre `gap` y Ajustes → Descanso entre ejercicios.
 
 const reps = (move, min, max = min, extra = {}) => ({ move, dose: { type: 'reps', min, max, ...extra } });
 const time = (move, secs, extra = {}) => ({ move, dose: { type: 'time', secs, ...extra } });
@@ -155,7 +155,7 @@ export const PLANS2 = [
     sections: [
       {
         id: 'A', name: 'Secuencia', note: 'Sin prisa; respira lento y no fuerces el rango.',
-        kind: 'sequence', rounds: 1, rest: 5,
+        kind: 'sequence', rounds: 1, rest: 0, gap: 5,
         items: [
           time('cat-cow', 45),
           reps('thoracic-open-book', 6, 6, side),

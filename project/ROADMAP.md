@@ -17,6 +17,12 @@
   postura del niño lateral) y vistas nuevas (monster walk de espalda, rotación externa en 3/4, postura del niño desde arriba).
 - Herramientas: `project/tools/strip_frames.py` y `build_anim.py`; prompts en `project/prompts/PROMPTS_v5_wonder_strips.md`.
 
+## Hecho en v1.7 (rama v2)
+- Catálogo de 71 movimientos (17 + 54) con filtros por grupo, músculo específico, implemento y nivel; búsqueda con alias de músculos; nota de preparación (`setup`).
+- 5 planes nuevos incluidos (los usuarios existentes los reciben solos); `gap` por bloque para la pausa entre ejercicios (Movilidad 10: 5 s).
+- Mapa muscular: «Qué trabaja» en plan y movimiento, semanal/mensual en Historial, de la sesión en su detalle y «Hoy trabajaste» en el cierre (si cabe); rampa oscura corregida (más carga = más intenso).
+- Flechas de movimiento verificadas en el reproductor real; service worker más liviano (núcleo + miniaturas al instalar; fotogramas de tus planes por mensaje; el resto al verlos).
+
 ## Pendiente inmediato
 - [ ] Revisar en el iPhone la fluidez de los fundidos y la velocidad (Ajustes → Velocidad de la animación).
 - [ ] Detalle menor: en el gato-camello del hombre queda un contorno muy tenue de la calceta vecina junto a las manos.
@@ -26,6 +32,5 @@
 - Más movimientos en el catálogo (con imágenes del mismo estilo) y más planes incluidos.
 - Movimientos personalizados creados por la usuaria (nombre, foto opcional, dosis).
 - Registro de peso o banda por ejercicio y gráfico de progreso.
-- Recordatorios (las notificaciones web en iOS requieren que la app esté instalada; iOS 16.4+).
 - Modo "solo un bloque" en la pantalla de inicio y plan de calentamiento rápido.
 - Sincronización opcional entre dispositivos (hoy solo exportar/importar JSON).

@@ -9,23 +9,27 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | Ruta | Qué es |
 |---|---|
 | `docs/` | **La app publicada** (raíz de GitHub Pages). Sin build: HTML + ES modules + CSS. |
-| `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`). Fuente de verdad de cada ejercicio. |
-| `docs/data/plans.js` | **Planes incluidos** (`DEFAULT_PLANS`). Hoy: *Dynamic Reset 3×3*. |
+| `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`, 71): los 17 originales + `moves2.js`. Fuente de verdad de cada ejercicio. |
+| `docs/data/moves2.js` | Movimientos v2 (`MOVES2`, 54) con `CATEGORIES2` y `EQUIPMENT2`; lo genera `project/tools/gen_moves2.py` desde `project/catalog_v2/moves.json`. `catalog.js` los concatena. |
+| `docs/data/plans.js` | **Planes incluidos** (`DEFAULT_PLANS`): *Dynamic Reset 3×3* + `PLANS2`. |
+| `docs/data/plans2.js` | Planes v2 (`PLANS2`, 5): Cuerpo completo 20, Glúteos y piernas con bandas, Tren superior con mancuernas, Core y postura, Movilidad 10. |
+| `docs/js/musclemap.js` · `docs/data/muscles.js` | **Mapa muscular** (SVG frente/espalda teñido por carga) y su geometría/alias. Ver `project/MUSCLEMAP.md`. |
 | `docs/js/calories.js` | Motor de calorías (funciones puras): MET × peso con corrección Mifflin, descansos, carga acotada. Autotest: `node project/tools/test_calories.mjs`. Ver `project/RESEARCH_CALORIES.md`. |
 | `docs/js/progress.js` | Semanas, meta semanal, racha en SEMANAS e hitos (puras). Los hitos se guardan por perfil en `profile.milestones`. |
 | `docs/js/engine.js` | Convierte un plan en pasos del temporizador (`buildSteps`), textos de dosis y estimaciones. |
 | `docs/js/app.js` | UI: navegación por pestañas, vistas, sheets, editor de planes y **reproductor** (`P`). |
 | `docs/js/store.js` | Estado en `localStorage` (`ptw.state.v1`): ajustes, planes editados, historial. |
 | `docs/js/audio.js` | Pitidos con Web Audio + voz guía (`speechSynthesis`). |
-| `docs/sw.js` | Service worker (offline). **Subir `CACHE_VERSION` en cada cambio.** |
-| `docs/data/anim.js` | **Animaciones** (`ANIM`): fotogramas por movimiento y qué fotograma es cada posición. |
-| `docs/js/frames.js` | Reproductor de fotogramas (`FrameAnimator`): fundidos, pausas en cada posición, respiración. |
+| `docs/sw.js` | Service worker (offline). **Subir `CACHE_VERSION` en cada cambio.** Al instalar guarda el núcleo + la miniatura de cada movimiento; los fotogramas de los planes de la usuaria los pide la app con un mensaje `warm` y el resto se guarda al verlos. |
+| `docs/data/anim.js` · `docs/data/arrows.js` | **Animaciones** (`ANIM`): fotogramas por movimiento y qué fotograma es cada posición; `ARROWS`: flechas de movimiento (se generan, no se editan a mano). |
+| `docs/js/frames.js` | Reproductor de fotogramas (`FrameAnimator`): precarga, fundidos, pausas en cada posición, respiración y capa SVG de flechas (se espeja con `.flip`). |
 | `docs/img/anim/<f\|m>/<id>-<k>.webp` | **Fotogramas** (fuente de verdad visual, v1.3), mujer `f` y hombre `m`. `list.json` = lista para el service worker. |
 | `docs/js/rig/` | Modelo vectorial anterior (v1.2). Solo **respaldo** para movimientos sin fotogramas. |
 | `docs/img/moves/<id>-N.webp` | Ilustraciones antiguas (ChatGPT/vector). **Ya no se usan en la app**; quedan como referencia visual. |
 | `project/renderer/` | Versión Node antigua del dibujo (exporta PNG). La app usa `docs/js/rig/`. |
 | `project/references/anim/` | Tiras originales de Wonder (`<f\|m>-<id>.jpg`), fuente de los fotogramas. |
-| `project/tools/build_anim.py` | Recorta todas las tiras → `docs/img/anim/` (usa `strip_frames.py`). |
+| `project/tools/anim_config.json` | **Configuración por movimiento** (fotogramas, ancla, cortes por modelo, `pos`, `loop`, flechas manuales…). Dirige `build_anim.py`. |
+| `project/tools/build_anim.py` | Recorta las tiras → `docs/img/anim/`, y genera `anim.js`, `arrows.js` y `list.json` (usa `strip_frames.py` y `arrows.py`). |
 | `project/` | Contexto, investigación, decisiones de diseño, prompts de imágenes y material fuente (NO se publica como app, pero el repo es público). |
 
 Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (técnica de cada ejercicio),
@@ -34,12 +38,13 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
 
 ## Modelo de datos
 
-- **Movimiento** (`MOVES`): `id`, `name`, `category`, `equipment[]`, `focus[]` (músculos en foco: naranja), `support[]` (apoyo: amarillo),
-  `cue` (clave técnica corta), `tips[]`, `positions[2]` con `{label, breath:'in'|'ex', verb, img}`, `dose` por defecto, `imageStatus` (`final` | `placeholder`).
+- **Movimiento** (`MOVES`): `id`, `name`, `category`, `group` (grupo muscular para filtrar), `level` (1-3), `met`, `sided`/`mirror`, `equipment[]`, `focus[]` (músculos en foco: naranja), `support[]` (apoyo: amarillo),
+  `cue` (clave técnica corta), `setup?` (nota de preparación: se muestra bajo la clave técnica en el detalle y en el reproductor), `tips[]`, `positions[2]` con `{label, breath:'in'|'ex', verb, img}`, `dose` por defecto, `imageStatus` (`final` | `placeholder`).
   `breath` indica cómo respirar **para llegar** a esa posición (regla: exhala en el esfuerzo).
 - **Dosis**: `{type:'time', secs, perSide?, note?}` | `{type:'reps', min, max, perSide?, alternating?, unit?}` |
   `{type:'phases', phases:[{label, secs, pos, perSide?}]}` (`pos` fija qué imagen se muestra).
-- **Plan**: `{id, name, subtitle, goal, frequency, mode:'solo'|'duo', people?, sections:[{id, name, note, kind:'circuit'|'sequence', rounds, rest, items:[{move, dose?, b?}]}]}`.
+- **Plan**: `{id, name, subtitle, goal, frequency, mode:'solo'|'duo', people?, sections:[{id, name, note, kind:'circuit'|'sequence', rounds, rest, gap?, items:[{move, dose?, b?}]}]}`.
+  `gap?` (s) fija la pausa entre ejercicios de ese bloque (el motor usa el menor entre `gap` y Ajustes → Descanso entre ejercicios); sin `gap`, vale Ajustes. `rest` solo actúa en circuitos (entre rondas).
   **Plan en pareja** (`mode:'duo'`): cada item agrega `b: {move, dose}` para la persona 2; `people: [{name, model:'f'|'m'}, …]`.
   Un solo ritmo para ambas: `settings.duoGovern` = `'time'` (reps → segundos con `secsPerRep`, se usa el más largo) o `'reps'` (espera "Hecho" de las dos).
   En el reproductor: persona 1 arriba, controles al centro, persona 2 abajo.
@@ -54,16 +59,19 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
   Mujer: hoja `project/references/character-sheet.jpg`; hombre: `character-sheet-male.jpg`.
   Los planes referencian movimientos por id: **galería y planes están desacoplados**.
 - **Historial (v1.6)**: cada sesión guarda `profiles`, `kcal:{perfil:n}`, `kcalApprox` (perfiles que usaron datos por defecto), `moveSecs:{perfil:{movimiento:segundos}}`, `secs`, `planId`, `blocks`. Las sesiones anteriores no tienen kcal. Perfil: `weights:[{date,kg,cm?}]`, `weeklyGoal`, `milestones:{id:fecha}`.
+- **Mapa muscular**: `muscleLoad(plan)` / `muscleLoadFromMoves(...)` → carga 0..1 por músculo canónico (foco 1, apoyo 0,5, por tiempo de trabajo). Tarjetas «Qué trabaja» en el detalle del plan (con selector de persona en pareja) y del movimiento, mapa semanal/mensual en Historial → Actividad (a partir de `moveSecs`), mapa de la sesión en su detalle y «Hoy trabajaste» en el cierre del reproductor (solo si cabe sin desplazarse). Los nombres de `focus`/`support` se reconocen con los alias de `muscles.js` (`canonicalMuscles`); la búsqueda y el filtro «Músculo específico» del catálogo usan lo mismo.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
 
 ## Reglas al cambiar cosas
 
 1. **Nunca romper datos guardados**: si cambias la forma del estado, migra en `store.load()` (no cambies `KEY` sin migración).
-2. Movimiento nuevo: entrada en `MOVES` + tiras de Wonder para mujer y hombre (`project/prompts/PROMPTS_v5_wonder_strips.md`)
-   guardadas en `project/references/anim/`, su línea en `STRIPS` de `build_anim.py`, `python3 project/tools/build_anim.py <id>`
-   y su entrada en `ANIM`. Revisa la tira (biomecánica, lados, aro/banda) y los fotogramas recortados antes de publicar.
-   Sube `CACHE_VERSION` en `docs/sw.js`.
+2. Movimiento nuevo: entrada en `project/catalog_v2/moves.json` (y `python3 project/tools/gen_moves2.py` → `docs/data/moves2.js`) o en `MOVES` de `catalog.js`;
+   tiras de Wonder para mujer y hombre (`project/prompts/PROMPTS_v5_wonder_strips.md`) guardadas en `project/references/anim/<f|m>-<id>.jpg`;
+   su entrada en `project/tools/anim_config.json` (fotogramas, ancla, cortes, `pos`, `loop`, flechas) y `python3 project/tools/build_anim.py <id>`,
+   que genera los fotogramas, `docs/data/anim.js`, `docs/data/arrows.js` y `docs/img/anim/list.json` (ya no hay que editar `ANIM` ni `STRIPS` a mano).
+   Revisa la tira (biomecánica, lados, aro/banda), los fotogramas recortados y las flechas (`docs/dev/anim.html`) antes de publicar.
+   Sube `CACHE_VERSION` en `docs/sw.js`; si el movimiento usa archivos JS nuevos, agrégalos a `CORE`.
 3. Cambios de UI: respeta `project/DESIGN.md`: un solo color de acento (rosa `#E0457B` / `#FF6E9C` en oscuro),
    fuente del sistema, listas agrupadas, zonas táctiles ≥ 44 px, modo claro/oscuro, `prefers-reduced-motion`.
 4. iOS: el audio solo se activa tras un toque (`unlockAudio()` al iniciar la sesión). El temporizador usa

@@ -5,15 +5,17 @@ import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, c
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
 import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
-import { FrameAnimator, hasFrames, frameURL, posFrame } from './frames.js';
+import { FrameAnimator, hasFrames, frameURL, frameCount, posFrame } from './frames.js';
 import { sessionKcal, kcalText } from './calories.js';
+import { muscleLoad, muscleLoadFromMoves, topMuscles, mountMuscleMap, muscleMapSVG, muscleLegendHTML, injectMuscleMapCSS, mmDarkVars } from './musclemap.js';
+import { MUSCLES, GROUPS as MUSCLE_GROUPS, canonicalMuscles } from '../data/muscles.js';
 import { entriesOf, localISO, streakWeeks as streakWeeksOf, weekCounts, newMilestones, MILESTONES, MILESTONE_BY_ID } from './progress.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
-const APP_VERSION = '1.6';
+const APP_VERSION = '1.7';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -31,7 +33,7 @@ const TABS = [
   { id: 'settings', name: 'Ajustes', icon: I.gear, root: 'settings' },
 ];
 const nav = { tab: 'train', stacks: Object.fromEntries(TABS.map(t => [t.id, [{ v: t.root }]])) };
-const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [] }, editing: {}, cal: null, moveShow: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
+const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [], m: [] }, editing: {}, cal: null, moveShow: {}, mmPerson: {}, mmRange: 'week', mmCtx: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
 let anim = null;
 
 const top = () => nav.stacks[nav.tab][nav.stacks[nav.tab].length - 1];
@@ -44,6 +46,7 @@ function switchTab(id) {
 
 // ───────────────────────── render
 function render(mode) {
+  destroyMaps();
   const t = top();
   const view = VIEWS[t.v](t);
   const scr = $('#screens');
@@ -142,6 +145,7 @@ function openSheet(html, { cls = '', onClose = null } = {}) {
 }
 function refreshSheet(html) { const sh = $('#sheet-layer .sheet'); if (sh) { const st = sh.scrollTop; sh.innerHTML = `<div class="grabber"></div>${html}`; sh.scrollTop = st; } }
 function closeSheet() {
+  sheetMaps.splice(0).forEach(x => { try { x.destroy(); } catch (e) { } });
   const layer = $('#sheet-layer');
   layer.classList.remove('show');
   setTimeout(() => { if (!layer.classList.contains('show')) { layer.classList.remove('on'); layer.innerHTML = ''; } }, 260);
@@ -163,6 +167,27 @@ const people = p => {
 const defaultPeople = () => { const pr = S().profiles, a = store.active; return [{ profile: a.id }, { profile: (pr.find(x => x.id !== a.id) || a).id }]; };
 const GENDER = { f: 'Mujer', m: 'Hombre' }, LEVEL = [['suave', 'Suave'], ['media', 'Media'], ['fuerte', 'Fuerte']];
 const profSub = pr => [GENDER[pr.gender], pr.birthYear && `${new Date().getFullYear() - pr.birthYear} años`, pr.heightCm && `${pr.heightCm} cm`, pr.weights.length && `${pr.weights[pr.weights.length - 1].kg} kg`].filter(Boolean).join(' · ');
+
+// ───────────────────────── mapa muscular (js/musclemap.js) · tarjetas «Qué trabaja»
+const mms = [], sheetMaps = [];
+const destroyMaps = () => { mms.splice(0).forEach(x => { try { x.destroy(); } catch (e) { } }); };
+const secsPerRep = () => ({ secsPerRep: set().secsPerRep });
+// carga del plan; en planes en pareja, por persona (0 | 1)
+const planLoad = (p, person = 0) => muscleLoad(p, MOVE_BY_ID, { ...secsPerRep(), person });
+const mmPerson = p => (isDuo(p) ? Math.min(1, ui.mmPerson[p.id] || 0) : 0);
+function mmCardHTML({ id, title = 'Qué trabaja', head = '', hint = 'Toca un músculo para ver cuánto trabaja.', big = true, cls = '' }) {
+  return `<div class="card mmcard ${cls}"><div class="mm-head"><h3>${esc(title)}</h3>${big ? `<button class="mm-big" data-a="mmBig" data-id="${id}" aria-label="Ver el mapa en grande">${I.expand}<span>Ampliar</span></button>` : ''}</div>${head}<div class="mm-body"><div class="mm-fig" id="${id}"></div><div class="mm-side" id="${id}Side"></div></div><p class="mm-hint">${esc(hint)}</p></div>`;
+}
+// monta el mapa pequeño y la leyenda (top 3) a su lado; guarda el contexto para «Ampliar»
+function mountMapCard(id, load, opts = {}, inSheet = false) {
+  const el = document.getElementById(id); if (!el) return;
+  injectMuscleMapCSS();
+  ui.mmCtx[id] = { load, opts };
+  (inSheet ? sheetMaps : mms).push(mountMuscleMap(el, load, { views: 'both', titles: false, legend: false, ...opts }));
+  const side = document.getElementById(id + 'Side');
+  if (side) side.innerHTML = Object.keys(load).length ? muscleLegendHTML(load, { n: 3 }) : '<p class="muted">Sin datos todavía.</p>';
+}
+const moveFormat = (name, v) => ({ title: name, sub: v >= 1 ? 'En foco' : v > 0 ? 'Apoyo' : 'No trabaja en este ejercicio' });
 
 // ───────────────────────── VISTAS
 const VIEWS = {
@@ -210,6 +235,12 @@ const VIEWS = {
       <div class="btnrow"><button class="btn primary cta" data-a="start" data-id="${p.id}">${I.play}Comenzar</button><button class="btn tinted icon" data-a="planMenu" data-id="${p.id}" aria-label="Más opciones" style="min-height:60px;border-radius:20px">${I.more}</button></div>
       ${p.goal ? `<p class="goal">${esc(p.goal)}</p>` : ''}</div>`;
     }
+    let mapLoad = null, mapOpts = null;
+    if (!editing) {
+      const who = mmPerson(p);
+      mapLoad = planLoad(p, who); mapOpts = { gender: duo ? pp[who].model : store.active.gender };
+      html += mmCardHTML({ id: 'mmPlan', head: duo ? seg('mmPerson', `data-p="${p.id}"`, pp.map((x, k) => [k, esc(x.name)]), who) : '' });
+    }
     p.sections.forEach((sec, si) => {
       const head = `<span class="gh-row"><span class="badge sm">${BADGE[si] || si + 1}</span><span class="gh-name">${esc(sec.name)}</span><span class="gh-meta">${secShort(sec)}</span>${editing ? '' : `<button class="mini" data-a="startSection" data-p="${p.id}" data-s="${si}" aria-label="Comenzar solo este bloque">${I.play}</button>`}</span>`;
       const rows = [];
@@ -231,12 +262,12 @@ const VIEWS = {
     });
     if (editing) html += group([row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir bloque</span>', a: 'addSection', data: `data-p="${p.id}"` })]);
     if (editing) html += `<p class="gf center">Toca un ejercicio para cambiar su dosis. Usa las flechas para ordenar.</p>`;
-    return { title: p.name, backLabel: 'Entrenar', right, html };
+    return { title: p.name, backLabel: 'Entrenar', right, html, after: mapLoad ? () => mountMapCard('mmPlan', mapLoad, mapOpts) : null };
   },
 
   catalog() {
-    const nF = ui.f.g.length + ui.f.e.length + ui.f.l.length;
-    const active = [...ui.f.g.map(v => ['g', v, GROUP_NAME[v] || v]), ...ui.f.e.map(v => ['e', v, EQ[v] || v]), ...ui.f.l.map(v => ['l', v, LEVEL_NAME[v] || v])];
+    const nF = nFilters(ui.f);
+    const active = [...ui.f.g.map(v => ['g', v, GROUP_NAME[v] || v]), ...ui.f.m.map(v => ['m', v, v]), ...ui.f.e.map(v => ['e', v, EQ[v] || v]), ...ui.f.l.map(v => ['l', v, LEVEL_NAME[v] || v])];
     const html = `<div class="searchbar">${I.search}<input type="search" placeholder="Buscar movimiento o músculo" value="${esc(ui.q)}" data-in="search" autocomplete="off" aria-label="Buscar"></div>
       <div class="chips"><button class="chip filter ${nF ? 'on' : ''}" data-a="openFilters">${I.sliders}Filtros${nF ? `<span class="n">${nF}</span>` : ''}</button>${active.map(([k, v, n]) => `<button class="chip removable" data-a="fRemove" data-k="${k}" data-v="${esc(v)}" aria-label="Quitar filtro ${esc(n)}">${esc(n)}${I.x}</button>`).join('')}</div>
       <div id="catList">${catalogList()}</div>`;
@@ -254,15 +285,16 @@ const VIEWS = {
     let html = mediaHTML(m, cur, { id: 'mv', cls: 'viewer' });
     html += `<div class="viewer-ctl">${seg('showPos', `data-id="${m.id}"`, keys.map((k, n) => [k, `${n + 1} · ${esc(m.positions[k].label)}`]), playing ? -1 : cur)}<button class="iconbtn tinted" data-a="animMove" data-id="${m.id}" aria-label="${playing ? 'Detener animación' : 'Ver animación'}">${playing ? I.pause : I.play}</button></div>
       <h1 class="detail-title">${esc(m.name)}</h1>${m.alias ? `<p class="muted center">${esc(m.alias)}</p>` : ''}
-      <div class="keycue">${I.check}<span>${esc(m.cue)}</span></div>`;
+      <div class="keycue">${I.check}<span>${esc(m.cue)}</span></div>${m.setup ? `<p class="setup">${I.info}<span>${esc(m.setup)}</span></p>` : ''}`;
     html += group([row({ title: 'En foco', right: `<span class="tags">${m.focus.map(f => `<span class="tag"><u></u>${esc(f)}</span>`).join('')}</span>`, cls: 'tall' }),
       ...(m.support.length ? [row({ title: 'Apoyo', right: `<span class="tags">${m.support.map(f => `<span class="tag"><u class="s"></u>${esc(f)}</span>`).join('')}</span>`, cls: 'tall' })] : []),
       row({ title: 'Implementos', right: `<span class="muted">${m.equipment.map(e => EQUIPMENT[e]).join(', ')}${m.load ? ` · ${esc(m.load)}` : ''}</span>` }),
       row({ title: 'Dosis sugerida', right: `<span class="muted">${esc(doseText(m.dose))}</span>` })], { header: 'Detalles' });
+    html += mmCardHTML({ id: 'mmMove', hint: 'El tono más intenso es el músculo en foco; el más suave, el de apoyo.' });
     html += group(m.tips.map((tp, i) => `<div class="row tip"><span class="num">${i + 1}</span><span class="rt"><span class="rtt">${esc(tp)}</span></span></div>`), { header: 'Técnica' });
     html += group(keys.map((k, n) => { const ps = m.positions[k]; return row({ icon: `<span class="badge sm">${n + 1}</span>`, title: esc(ps.label), right: `<span class="breath-txt ${ps.breath}">${ps.breath === 'in' ? 'Inhala' : 'Exhala'} · ${esc(ps.verb)}</span>` }); }), { header: 'Respiración', footer: 'Indica cómo respirar para llegar a cada posición. El borde de la imagen es azul, con un brillo que se expande, al inhalar (flecha ↑), y rojo, con una línea doble fina y un brillo suave, al exhalar (flecha ↓).' });
     html += group([...inPlans.map(x => row({ title: esc(x) })), row({ icon: `<span class="ri-plus">${I.plus}</span>`, title: '<span class="accent">Añadir a un plan</span>', a: 'addToPlan', data: `data-id="${m.id}"` })], { header: 'En tus planes' });
-    return { title: m.name, backLabel: nav.tab === 'moves' ? 'Movimientos' : 'Atrás', html, after: () => startAnim(m.id, playing ? null : cur) };
+    return { title: m.name, backLabel: nav.tab === 'moves' ? 'Movimientos' : 'Atrás', html, after: () => { startAnim(m.id, playing ? null : cur); mountMapCard('mmMove', muscleLoadFromMoves([m], MOVE_BY_ID, secsPerRep()), { gender: store.active.gender, format: moveFormat }); } };
   },
 
   history() {
@@ -270,7 +302,8 @@ const VIEWS = {
     const many = S().profiles.length > 1;
     let html = `<div class="histctl">${seg('histTab', '', [['act', 'Actividad'], ['body', 'Cuerpo']], ui.histTab)}${many ? seg('histProf', '', S().profiles.map(x => [x.id, esc(x.name)]), pid) : ''}</div>`;
     html += body ? bodyHTML(pr) : activityHTML(pr);
-    return { title: 'Historial', large: true, html, right: body ? `<button class="navbtn strong" data-a="bodyAdd" data-id="${pid}">Registrar</button>` : '' };
+    const hd = body ? null : histMapData(pr);
+    return { title: 'Historial', large: true, html, right: body ? `<button class="navbtn strong" data-a="bodyAdd" data-id="${pid}">Registrar</button>` : '', after: hd && hd.n ? () => mountMapCard('mmHist', hd.load, { gender: pr.gender, format: histFormat }) : null };
   },
 
   settings() {
@@ -370,36 +403,50 @@ const CAT_GROUP = Object.fromEntries((CATEGORIES || []).map(c => [c.id, c.id ===
 const LEVEL_NAME = { 1: 'Principiante', 2: 'Intermedio', 3: 'Avanzado' };
 const EQUIP_ORDER = ['ninguno', 'mat', 'mancuernas', 'kettlebell', 'banda', 'mini-banda', 'aro', 'silla', 'puerta'];
 const groupOf = m => m.group || CAT_GROUP[m.category] || 'otros';
-const searchText = m => [m.name, m.alias, ...(m.focus || []), ...(m.support || []), GROUP_NAME[groupOf(m)], ...(m.equipment || []).map(e => EQ[e])].join(' ').toLowerCase();
+const fold = x => String(x || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+const nFilters = f => f.g.length + f.e.length + f.l.length + f.m.length;
+// músculos canónicos (foco y apoyo) de un movimiento
+const musclesOf = m => [...new Set([...(m.focus || []), ...(m.support || [])].flatMap(n => canonicalMuscles(n)))];
+const searchText = m => fold([m.name, m.alias, ...(m.focus || []), ...(m.support || []), ...musclesOf(m), GROUP_NAME[groupOf(m)], ...(m.equipment || []).map(e => EQ[e])].join(' '));
+// la búsqueda reconoce nombres de músculo y alias («glúteos», «lumbar», «abdominales», «hombros»…)
+function textOk(m, q) {
+  if (!q) return true;
+  const f = fold(q);
+  if (searchText(m).includes(f)) return true;
+  const c = canonicalMuscles(q); return c.length > 0 && musclesOf(m).some(x => c.includes(x));
+}
 function moveOk(m, q, f, skip) {
-  if (q && !searchText(m).includes(q)) return false;
+  if (!textOk(m, q)) return false;
   if (skip !== 'g' && f.g.length && !f.g.includes(groupOf(m))) return false;
+  if (skip !== 'm' && f.m.length && !musclesOf(m).some(x => f.m.includes(x))) return false;
   if (skip !== 'e' && f.e.length && !(m.equipment || []).some(e => f.e.includes(e))) return false;
   if (skip !== 'l' && f.l.length && !f.l.includes(String(m.level))) return false;
   return true;
 }
-const filterMoves = (q, f) => MOVES.filter(m => moveOk(m, (q || '').trim().toLowerCase(), f));
+const filterMoves = (q, f) => MOVES.filter(m => moveOk(m, (q || '').trim(), f));
+const musclesPresent = () => { const n = {}; MOVES.forEach(m => musclesOf(m).forEach(x => { n[x] = (n[x] || 0) + 1; })); const order = Object.keys(MUSCLE_GROUPS); return MUSCLES.filter(x => n[x.name]).sort((a, b) => order.indexOf(a.group) - order.indexOf(b.group)).map(x => x.name); };
 const groupsPresent = () => GROUP_ORDER.filter(g => MOVES.some(m => groupOf(m) === g));
 const equipPresent = () => [...new Set([...EQUIP_ORDER, ...MOVES.flatMap(m => m.equipment || [])])].filter(e => MOVES.some(m => (m.equipment || []).includes(e)));
 const levelsPresent = () => [1, 2, 3].filter(l => MOVES.some(m => m.level === l));
 const mcard = m => `<button class="mcard" data-a="openMove" data-id="${m.id}"><span class="mimg"><img src="${imgOf(m, 0)}" alt="" loading="lazy"></span><span class="mname">${esc(m.name)}</span><span class="mfocus">${esc((m.focus || []).join(' · '))}</span>${m.level ? `<span class="mlevel" role="img" aria-label="Nivel: ${LEVEL_NAME[m.level]}">${[1, 2, 3].map(l => `<i class="${l <= m.level ? 'on' : ''}"></i>`).join('')}</span>` : ''}</button>`;
 function catalogList() {
-  const q = ui.q.trim().toLowerCase(), list = filterMoves(q, ui.f), nF = ui.f.g.length + ui.f.e.length + ui.f.l.length;
+  const q = ui.q.trim(), list = filterMoves(q, ui.f), nF = nFilters(ui.f);
   if (!list.length) return '<p class="empty">Sin resultados.<br><span class="hint">Prueba con menos filtros.</span></p>';
   if (nF || q) return `<div class="grid">${list.map(mcard).join('')}</div><p class="gf center">${list.length} ${list.length === 1 ? 'movimiento' : 'movimientos'}</p>`;
   // sin filtros: la galería se separa por grupo muscular
   return groupsPresent().map(g => { const ms = list.filter(m => groupOf(m) === g); return ms.length ? `<div class="sec-title"><h3>${GROUP_NAME[g]}</h3><span>${ms.length}</span></div><div class="grid">${ms.map(mcard).join('')}</div>` : ''; }).join('');
 }
 function filtersHTML() {
-  const q = ui.q.trim().toLowerCase(), f = ui.f, total = filterMoves(q, f).length;
+  const q = ui.q.trim(), f = ui.f, total = filterMoves(q, f).length;
   const opt = (k, v, label, cur) => {
-    const n = MOVES.filter(m => moveOk(m, q, f, k) && (k === 'g' ? groupOf(m) === v : k === 'e' ? (m.equipment || []).includes(v) : String(m.level) === String(v))).length;
+    const n = MOVES.filter(m => moveOk(m, q, f, k) && (k === 'g' ? groupOf(m) === v : k === 'm' ? musclesOf(m).includes(v) : k === 'e' ? (m.equipment || []).includes(v) : String(m.level) === String(v))).length;
     const on = cur.includes(String(v));
     return row({ title: esc(label), right: `<span class="opt-n">${n}</span><span class="checkc sq ${on ? 'on' : ''}">${on ? I.check : ''}</span>`, a: 'fToggle', data: `data-k="${k}" data-v="${esc(v)}"`, cls: 'opt' + (!n && !on ? ' dim' : '') });
   };
   const lv = levelsPresent();
-  return `<div class="sheet-head"><button class="navbtn" data-a="fClear" ${f.g.length + f.e.length + f.l.length ? '' : 'disabled'}>Borrar</button><h2>Filtros</h2><button class="navbtn strong" data-a="closeSheet">Ver ${total}</button></div>
+  return `<div class="sheet-head"><button class="navbtn" data-a="fClear" ${nFilters(f) ? '' : 'disabled'}>Borrar</button><h2>Filtros</h2><button class="navbtn strong" data-a="closeSheet">Ver ${total}</button></div>
     <div class="sheet-body">${group(groupsPresent().map(g => opt('g', g, GROUP_NAME[g], f.g)), { header: 'Grupo muscular' })}
+    <h3 class="gh">Músculo específico</h3><div class="chips wrap" role="group" aria-label="Músculo específico">${musclesPresent().map(mn => { const n = MOVES.filter(m => moveOk(m, q, f, 'm') && musclesOf(m).includes(mn)).length, on = f.m.includes(mn); return `<button class="chip ${on ? 'on' : ''} ${!n && !on ? 'dim' : ''}" data-a="fToggle" data-k="m" data-v="${esc(mn)}" aria-pressed="${on}">${esc(mn)}<span class="n">${n}</span></button>`; }).join('')}</div><p class="gf">Incluye los movimientos donde el músculo está en foco o de apoyo.</p>
     ${group(equipPresent().map(e => opt('e', e, EQ[e] || e, f.e)), { header: 'Implementos', footer: 'Muestra los movimientos que usan cualquiera de los implementos elegidos.' })}
     ${lv.length ? group(lv.map(l => opt('l', l, LEVEL_NAME[l], f.l)), { header: 'Nivel' }) : ''}</div>`;
 }
@@ -410,6 +457,25 @@ function secSub(sec) {
   return sec.kind === 'circuit' ? `Circuito · ${sec.rounds} rondas · ${n} ej.${rest ? ` · descanso ${rest} s` : ''}` : `Secuencia · ${n} ejercicios`;
 }
 
+const pctTxt = v => `${Math.round(v * 100)} % · ${v < 0.34 ? 'ligero' : v < 0.67 ? 'medio' : 'alto'}`;
+// músculos del periodo (semana o mes) a partir de los segundos por movimiento de cada sesión (moveSecs, v1.6+)
+function histMapData(pr) {
+  const now = today(), from = ui.mmRange === 'month' ? new Date(now.getFullYear(), now.getMonth(), 1) : weekStart(now);
+  const acc = {}; let n = 0;
+  profEntries(pr.id).forEach(x => {
+    const ms = x.moveSecs && x.moveSecs[pr.id]; if (!ms || new Date(x.date) < from) return;
+    n++; Object.entries(ms).forEach(([id, sc]) => { acc[id] = (acc[id] || 0) + sc; });
+  });
+  return { n, load: muscleLoadFromMoves(Object.entries(acc).map(([id, secs]) => ({ move: id, secs })), MOVE_BY_ID) };
+}
+const histFormat = (name, v) => ({ title: name, sub: v > 0 ? pctTxt(v) : 'sin trabajo en este periodo' });
+function histMapHTML(pr) {
+  const d = histMapData(pr), week = ui.mmRange !== 'month';
+  const head = seg('mmRange', '', [['week', 'Esta semana'], ['month', 'Este mes']], ui.mmRange);
+  if (!d.n) return `<div class="card mmcard"><div class="mm-head"><h3>Músculos</h3></div>${head}<p class="muted mm-empty">${week ? 'Cuando entrenes esta semana verás aquí qué músculos trabajaste.' : 'Aún no hay sesiones este mes con detalle de músculos.'}</p></div>`;
+  return mmCardHTML({ id: 'mmHist', title: 'Músculos', head, hint: 'Relativo al músculo que más trabajaste en el periodo.' });
+}
+
 function activityHTML(pr) {
   const h = [...profEntries(pr.id)].sort((a, b) => new Date(b.date) - new Date(a.date));
   const now = today();
@@ -418,6 +484,7 @@ function activityHTML(pr) {
   if (!ui.cal) ui.cal = { y: now.getFullYear(), m: now.getMonth() };
   let html = `<div class="stats"><div><b>${h.length}</b><span>Sesiones</span></div><div><b>${month.length}</b><span>Este mes</span></div><div><b>${mins}</b><span>Minutos</span></div><div><b>${streakWeeks(pr.id)}</b><span>Semanas seguidas</span></div></div>`;
   html += calendarHTML(h);
+  html += histMapHTML(pr);
   html += achievementsHTML(pr);
   if (!h.length) return html + `<div class="emptystate"><img src="img/cover.webp" alt=""><p><b>Aún no hay sesiones</b></p><p class="muted">Cuando termines un entrenamiento aparecerá aquí.</p></div>`;
   const byMonth = {};
@@ -612,8 +679,8 @@ function profileSheetHTML(id) {
 
 let picker = null;
 function pickerList() {
-  const q = picker.q.toLowerCase();
-  const list = MOVES.filter(m => (picker.cat === 'all' || groupOf(m) === picker.cat) && (!q || searchText(m).includes(q)));
+  const q = picker.q.trim();
+  const list = MOVES.filter(m => (picker.cat === 'all' || groupOf(m) === picker.cat) && textOk(m, q));
   return group(list.map(m => row({ icon: thumb(m), title: esc(m.name), sub: esc(m.focus.join(' · ')), right: `<span class="checkc ${picker.sel.includes(m.id) ? 'on' : ''}">${picker.sel.includes(m.id) ? I.check : ''}</span>`, a: 'pickerToggle', data: `data-id="${m.id}"`, cls: 'withthumb' })));
 }
 function pickerBtnLabel() { return picker.mode === 'replace' ? 'Cambiar' : `Añadir${picker.sel.length ? ` (${picker.sel.length})` : ''}`; }
@@ -624,7 +691,7 @@ function pickerHTML() {
     <div id="pickList">${pickerList()}</div></div>`;
 }
 
-function planSave() { store.save(); render(); }
+function planSave() { store.save(); render(); warmFrames(); }
 const newItem = (id, duo) => duo ? { move: id, dose: clone(MOVE_BY_ID[id].dose), b: { move: id, dose: clone(MOVE_BY_ID[id].dose) } } : { move: id, dose: clone(MOVE_BY_ID[id].dose) };
 function toDuo(p) {
   const c = clone(p); c.id = uid(); c.mode = 'duo'; c.builtin = false; c.name = `${p.name} · en pareja`;
@@ -646,11 +713,19 @@ const A = {
   openFilters: () => openSheet(filtersHTML(), { onClose: render }),
   fToggle: el => { const a = ui.f[el.dataset.k], v = el.dataset.v, i = a.indexOf(v); if (i >= 0) a.splice(i, 1); else a.push(v); refreshSheet(filtersHTML()); },
   fRemove: el => { const a = ui.f[el.dataset.k]; a.splice(a.indexOf(el.dataset.v), 1); render(); },
-  fClear: () => { ui.f = { g: [], e: [], l: [] }; refreshSheet(filtersHTML()); },
+  fClear: () => { ui.f = { g: [], e: [], l: [], m: [] }; refreshSheet(filtersHTML()); },
   calMove: el => { let { y, m } = ui.cal; m += +el.dataset.d; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } ui.cal = { y, m }; render(); },
   showPos: el => { stopAnim(); ui.moveShow[el.dataset.id] = +el.dataset.v; render(); },
   animMove: el => { const id = el.dataset.id; if (anim && anim.id === id) { stopAnim(); } else { stopAnim(); anim = { id }; } render(); },
   goalStep: el => { const pr = store.active; pr.weeklyGoal = clamp(goalOf(pr.id) + +el.dataset.d, 1, 7); store.save(); render(); },
+  mmPerson: el => { ui.mmPerson[el.dataset.p] = +el.dataset.v; render(); },
+  mmRange: el => { ui.mmRange = el.dataset.v; render(); },
+  mmBig: el => {
+    const c = ui.mmCtx[el.dataset.id]; if (!c) return;
+    openSheet(`<div class="sheet-head"><span></span><h2>Qué trabaja</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body"><div id="mmBigFig" class="mm-bigfig"></div><p class="gf center">Toca un músculo para ver su nombre y cuánto trabaja.</p></div>`, { cls: 'tall' });
+    injectMuscleMapCSS();
+    sheetMaps.push(mountMuscleMap($('#mmBigFig'), c.load, { ...c.opts, views: 'both', titles: true, legend: true, topN: 5 }));
+  },
   histTab: el => { ui.histTab = el.dataset.v; render(); },
   histProf: el => { ui.histPid = el.dataset.v; render(); },
   bodyAdd: el => { ui.bodyDraft = { pid: el.dataset.id || histPid(), orig: null, date: todayISO(), kg: '', cm: '' }; openSheet(bodySheetHTML(), { cls: 'tall' }); },
@@ -715,7 +790,7 @@ const A = {
   secStep: el => { const sec = store.plan(el.dataset.p).sections[+el.dataset.s], k = el.dataset.k; sec[k] = clamp((sec[k] || 0) + +el.dataset.d * +el.dataset.st, +el.dataset.min, +el.dataset.max); store.save(); refreshSheet(sectionSheetHTML(el.dataset.p, +el.dataset.s)); },
   personProfile: el => { const p = store.plan(el.dataset.p); p.people = people(p).map(x => ({ profile: x.profile })); p.people[+el.dataset.k].profile = el.dataset.v; store.save(); refreshSheet(peopleSheetHTML(p.id)); },
   editProfile: el => openSheet(profileSheetHTML(el.dataset.id), { onClose: render }),
-  profGender: el => { profOf(el.dataset.id).gender = el.dataset.v; store.save(); applyTheme(); refreshSheet(profileSheetHTML(el.dataset.id)); },
+  profGender: el => { profOf(el.dataset.id).gender = el.dataset.v; store.save(); applyTheme(); warmFrames(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   profLevel: el => { profOf(el.dataset.id).loads[el.dataset.k] = el.dataset.v; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   profStep: el => { const L = profOf(el.dataset.id).loads, k = el.dataset.k; L[k] = Math.round(clamp((L[k] || 0) + +el.dataset.d * +el.dataset.st, 0, +el.dataset.max) * 10) / 10; store.save(); refreshSheet(profileSheetHTML(el.dataset.id)); },
   doseType: el => {
@@ -761,11 +836,14 @@ const A = {
   },
   openSession: el => {
     const x = S().history.find(h => h.id === el.dataset.id); if (!x) return;
+    const mp = x.moveSecs && Object.keys(x.moveSecs).find(k => store.state.profiles.some(q => q.id === k) && Object.keys(x.moveSecs[k]).length);
     openSheet(`<div class="sheet-head"><span></span><h2>${esc(x.planName)}</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div><div class="sheet-body">
       <div class="sess-top"><span class="mood big">${x.mood || '✓'}</span><p>${new Date(x.date).toLocaleString('es', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p></div>
       ${group([row({ title: 'Duración', right: `<span class="muted">${clock(x.secs)}</span>` }), ...(x.kcal ? S().profiles.filter(pr => x.kcal[pr.id] != null).map(pr => row({ title: `Calorías${Object.keys(x.kcal).length > 1 ? ' · ' + esc(pr.name) : ''}`, right: `<span class="muted">${kcalText(x.kcal[pr.id]) || '—'}${(x.kcalApprox || []).includes(pr.id) ? ' · estimado' : ''}</span>` })) : []), row({ title: 'Ejercicios', right: `<span class="muted">${x.worked} de ${x.total}</span>` }), row({ title: 'Bloques', right: `<span class="muted">${esc((x.sections || []).join(', '))}</span>` }), ...(x.people ? [row({ title: 'En pareja', right: `<span class="muted">${esc(x.people.join(' + '))}</span>` })] : [])])}
+      ${mp ? mmCardHTML({ id: 'mmSess', title: `Músculos de esta sesión${Object.keys(x.moveSecs).length > 1 ? ' · ' + esc(store.profile(mp).name) : ''}`, big: false, hint: 'Relativo al músculo que más trabajó en la sesión.' }) : ''}
       ${x.note ? group([`<div class="row"><span class="rt"><span class="rtt">${esc(x.note)}</span></span></div>`], { header: 'Notas' }) : ''}
       ${group([row({ title: '<span class="danger">Eliminar sesión</span>', a: 'delSession', data: `data-id="${x.id}"` })])}</div>`);
+    if (mp) mountMapCard('mmSess', muscleLoadFromMoves(Object.entries(x.moveSecs[mp]).map(([id, secs]) => ({ move: id, secs })), MOVE_BY_ID), { gender: store.profile(mp).gender, format: histFormat }, true);
   },
   delSession: el => { const h = S().history, i = h.findIndex(x => x.id === el.dataset.id); const rem = h.splice(i, 1)[0]; store.save(); closeSheet(); render(); undoToast('Sesión eliminada', () => { h.push(rem); planSave(); }); },
   setStep: el => { const st = set(), k = el.dataset.k; st[k] = Math.round(clamp(st[k] + +el.dataset.d * +el.dataset.st, +el.dataset.min, +el.dataset.max) * 10) / 10; afterSetting(); },
@@ -1001,7 +1079,7 @@ const P = {
       center = `${mediaHTML(m, s.pos ?? 0, { id: 'pm0', extra: s.pos == null && m.positions.length > 1 ? `<button class="p-animbtn" data-a="pAnimToggle" aria-label="Animación">${st.animate ? I.pause : I.play}</button>` : '' })}
         <div class="p-title"><h2>${esc(m.name)}</h2><p>${s.sideName ? `<span class="side-chip ${s.side === 1 ? 'r' : 'l'}">${esc(s.sideName)}</span>` : ''}${esc([s.sub, ...(s.dose && s.dose.note && s.dose.note !== s.sub ? [s.dose.note] : [])].filter(Boolean).join(' · '))}</p></div>
         <div class="p-meter">${s.secs != null ? `<div class="p-ring has-prog">${bigRing()}<div class="p-time" id="pTime">${clock(Math.ceil(this.remain))}</div>${progHTML(s)}</div>` : `<div class="p-reps"><b>${esc(s.reps.split(' ')[0])}</b><span>${esc(s.reps.split(' ').slice(1).join(' '))}</span><em id="pTime">${clock(0)}</em>${progHTML(s)}</div>`}
-          <p class="p-cue">${I.check}${esc(m.cue)}</p></div>`;
+          <p class="p-cue">${I.check}${esc(m.cue)}</p>${m.setup ? `<p class="p-setup">${esc(m.setup)}</p>` : ''}</div>`;
     } else {
       const n = s.nextWork;
       const nextCard = (mv, u, k, cap) => `<div class="p-next"><span class="p-next-img ${u.mirror ? 'flip' : ''}"><img src="${imgOf(mv, keyIdx(mv)[0], k == null ? undefined : pp[k].model)}" alt=""></span><span><small>${k == null ? cap : esc(pp[k].name)}</small><b>${esc(mv.name)}</b><em>${esc(u.secs != null && u.reps == null ? fmtSecs(u.secs) : (u.reps || ''))}${unitText(u) ? ' · ' + esc(unitText(u)) : ''}</em></span></div>`;
@@ -1111,14 +1189,22 @@ const P = {
     const streakNow = streakWeeksOf([...profEntries(wpid), { date: new Date(this.sessionStart).toISOString() }], goal);
     sum.milestone = ms;
     const kcalCell = (x, label) => `<div><b>${kcalText(R.kcal[x.profile]) ? `≈ ${R.kcal[x.profile]}` : '—'}</b><span>${label}</span></div>`;
+    // «Hoy trabajaste»: mapa diminuto de la sesión (solo si hay datos); el reproductor es siempre oscuro
+    const mload = muscleLoadFromMoves(Object.entries((R.moveSecs && R.moveSecs[wpid]) || {}).map(([id, secs]) => ({ move: id, secs })), MOVE_BY_ID);
+    const tops = topMuscles(mload, 3);
+    if (tops.length) injectMuscleMapCSS();
+    const mm = tops.length ? `<div class="p-mm rise d3" style="${mmDarkVars}"><div class="p-mm-fig">${muscleMapSVG(mload, { gender: store.profile(wpid).gender, size: 118, titles: false, style: false })}</div><div class="p-mm-tx"><small>Hoy trabajaste</small>${tops.map(t => `<b>${esc(t.name)}</b>`).join('')}</div></div>` : '';
     const kcals = this.duo ? pp.map(x => kcalCell(x, esc(x.name) + ' · kcal')).join('') : kcalCell(pp[0], `kcal${R.approx.length ? ' estimadas' : ''} <button class="p-info-btn" data-a="kcalInfo" aria-label="Cómo se estiman las calorías">${I.info}</button>`);
     el.innerHTML = `<div class="p-top"><span></span><div class="p-info"><b>${esc(this.plan.name)}</b></div><span></span></div>
       <div class="p-center done"><div class="p-done-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="halo" cx="60" cy="60" r="56"/><circle class="disc" cx="60" cy="60" r="44"/><path class="tick" d="M41 62l14 14 25-29"/></svg></div>
         <h2 class="rise d1">Listo${who ? ', ' + esc(who) : ''}</h2><p class="sub rise d1">Entrenamiento completado</p>
         <div class="p-stats rise d2"><div><b>${clock(this.active)}</b><span>Duración</span></div>${kcals}</div>
         <p class="p-weekline rise d3">${week >= goal ? '¡Meta semanal cumplida!' : `Esta semana: ${week} de ${goal}`}${week >= goal && streakNow >= 2 ? ` · Semana ${streakNow} seguida` : ''}</p>
-        <div id="pDoneExtra" class="rise d3">${doneExtras(sum)}</div></div>
+        ${mm}<div id="pDoneExtra" class="rise d3">${doneExtras(sum)}</div></div>
       <div class="p-ctl col rise d3"><button class="btn primary big cta" data-a="pSave">Terminar</button></div>`;
+    // el mapa de «Hoy trabajaste» solo se queda si la pantalla de cierre sigue cabiendo sin desplazarse (si no, está en el detalle de la sesión)
+    const c = el.querySelector('.p-center.done'), m = c && c.querySelector('.p-mm');
+    if (m) { const kids = [...c.children], need = kids.reduce((a, k) => a + k.offsetHeight, 0) + (kids.length - 1) * 12 + 28; if (need > c.clientHeight) m.remove(); }
   },
   record(partial) {
     const R = this.result || this.summarize();
@@ -1185,7 +1271,25 @@ function startSession(pid, onlySection = null) {
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && P.steps) { P.requestWake(); P.update(); } });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
 
+// Pide al service worker que guarde (sin internet) los fotogramas que esta usuaria va a necesitar:
+// todos los de los movimientos de sus planes y las dos posiciones de cada movimiento, para su(s) figura(s). El resto se guarda al verlo.
+let warmT = 0;
+function warmFrames() {
+  if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+  clearTimeout(warmT);
+  warmT = setTimeout(() => {
+    const models = new Set([store.active.gender]), urls = new Set();
+    S().plans.forEach(p => { if (isDuo(p)) people(p).forEach(x => models.add(x.model)); });
+    models.forEach(model => {
+      S().plans.forEach(p => p.sections.forEach(sec => sec.items.forEach(it => [it.move, it.b && it.b.move].forEach(id => { if (id && hasFrames(id)) for (let k = 0; k < frameCount(id); k++) urls.add(frameURL(id, model, k)); }))));
+      MOVES.forEach(m => { if (hasFrames(m.id)) keyIdx(m).forEach(i => urls.add(frameURL(m.id, model, posFrame(m.id, i, m.positions.length)))); });
+    });
+    navigator.serviceWorker.ready.then(r => { if (r.active) r.active.postMessage({ type: 'warm', urls: [...urls] }); }).catch(() => {});
+  }, 1500);
+}
+
 applyTheme();
 render();
+warmFrames();
 store.persist().then(v => { ui.persisted = v; if (top().v === 'settingsStorage') render(); });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});

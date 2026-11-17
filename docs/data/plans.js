@@ -5,7 +5,9 @@
 //               'sequence' → cada ejercicio una vez, en orden.
 // item.dose: ver docs/data/catalog.js (time | reps | phases). Si se omite, usa la dosis del movimiento.
 
-export const DEFAULT_PLANS = [
+import { PLANS2 } from './plans2.js';
+
+const PLANS1 = [
   {
     id: 'dynamic-reset-3x3',
     name: 'Dynamic Reset 3×3',
@@ -65,3 +67,6 @@ export const DEFAULT_PLANS = [
     ],
   },
 ];
+
+// Planes incluidos (v1.7): Dynamic Reset 3×3 + los 5 de plans2.js. Los nuevos se agregan solos al estado local de quien ya usa la app.
+export const DEFAULT_PLANS = [...PLANS1, ...PLANS2];

@@ -603,3 +603,36 @@ body.playing #toast { bottom: calc(var(--safe-b) + 24px); }
   .p-done-ring .tick { stroke-dashoffset: 0; }
 }
 input[type="date"].inline.short { width: 160px; min-width: 0; text-align: right; }
+
+/* ───────── v1.7: notas de preparación, filtro por músculo, mapa muscular (tarjetas «Qué trabaja») ───────── */
+.setup { display: flex; gap: var(--s2); align-items: flex-start; justify-content: center; margin: var(--s2) var(--s4) 0; font-size: var(--fs-sm); line-height: 1.35; color: var(--label2); text-align: left; }
+.setup .i { width: 16px; height: 16px; flex: none; margin-top: 1px; color: var(--label3); }
+.p-setup { margin: 4px 0 0; max-width: 310px; font-size: var(--fs-sm); line-height: 1.3; color: rgba(255, 255, 255, .56); text-align: center; }
+.chips.wrap { flex-wrap: wrap; overflow: visible; margin: 0; padding: var(--s2) 0; gap: 6px; }
+.chips.wrap .chip { height: 34px; font-size: var(--fs-sm); padding: 0 11px; }
+.chip.dim { opacity: .45; }
+.chip:not(.on) .n { background: var(--fill); color: var(--label2); }
+.mmcard { margin-top: var(--s3); }
+.mm-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); min-height: 32px; }
+.mm-head h3 { margin: 0; font-size: var(--fs-base); font-weight: var(--fw-semi); }
+.mm-big { display: inline-flex; gap: 4px; align-items: center; color: var(--accent-ink); font-size: var(--fs-md); font-weight: var(--fw-medium); min-height: 32px; }
+.mm-big .i { width: 16px; height: 16px; }
+.mmcard .seg { margin-top: var(--s3); }
+.mm-body { display: flex; gap: var(--s3); align-items: center; margin-top: var(--s3); }
+.mm-fig { flex: 0 0 56%; min-width: 0; }
+.mm-side { flex: 1; min-width: 0; }
+.mm-side .mm-legend { margin-top: 0; }
+.mm-side .mm-chips { flex-direction: column; align-items: flex-start; }
+.mm-hint { margin: var(--s3) 0 0; font-size: var(--fs-xs); color: var(--label3); }
+.mm-empty { margin: var(--s3) 0 0; }
+.mm-bigfig { padding: 0 var(--s2); }
+.p-mm { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 10px auto 0; padding: 8px 16px; border-radius: 16px; background: rgba(255, 255, 255, .06); }
+.p-mm-fig { flex: none; line-height: 0; }
+.p-mm-tx { display: flex; flex-direction: column; text-align: left; gap: 3px; }
+.p-mm-tx small { color: rgba(255, 255, 255, .6); font-size: var(--fs-xs); }
+.p-mm-tx b { color: #fff; font-size: var(--fs-md); font-weight: var(--fw-semi); }
+.mm-fig { flex-basis: 50%; }
+.mm-side .mm-chip { width: 100%; min-width: 0; justify-content: space-between; border-radius: 12px; padding: 5px 8px; gap: 6px; font-size: var(--fs-sm); line-height: 1.2; }
+.mm-side .mm-chip i { align-self: center; }
+.mm-side .mm-chip b { white-space: nowrap; margin-left: auto; }
+.mm-side .mm-chips { gap: 5px; }

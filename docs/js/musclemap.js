@@ -80,8 +80,8 @@ export const LEVELS = 16;
 const RAMP = {
   // claro: del ámbar pálido al rojo anaranjado profundo (la luminosidad baja con la carga)
   light: [[0, '#FFDA85'], [0.3, '#FFC25E'], [0.55, '#FF8F34'], [0.78, '#E8541D'], [1, '#A81F12']],
-  // oscuro: de un rojo apagado a un ámbar brillante (la luminosidad sube con la carga)
-  dark: [[0, '#7A3A2C'], [0.3, '#B94A26'], [0.6, '#F2792F'], [0.85, '#FFA84D'], [1, '#FFD785']],
+  // oscuro (v1.7): de un marrón rosado apagado, casi del color del cuerpo, a un naranja vivo: más carga = más saturado y más brillante
+  dark: [[0, '#5A3A36'], [0.3, '#8F4A30'], [0.6, '#D55A22'], [0.85, '#F36A1E'], [1, '#FF7A1A']],
 };
 const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const rgb2hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
@@ -102,6 +102,8 @@ export const levelOf = v => (!(v > 0) ? 0 : Math.min(LEVELS, Math.max(1, Math.ro
 export const heatColor = (v, dark = false) => { const l = levelOf(v); return l ? sample(RAMP[dark ? 'dark' : 'light'], (l - 1) / (LEVELS - 1)) : (dark ? '#3A3036' : '#E3DBDF'); };
 
 const varsFor = mode => Array.from({ length: LEVELS }, (_, i) => `--mm-c${i + 1}:${sample(RAMP[mode], i / (LEVELS - 1))};`).join('');
+// Variables del modo oscuro como estilo en línea (para pantallas siempre oscuras, p. ej. el reproductor)
+export const mmDarkVars = `--mm-shade:rgba(0,0,0,.34);--mm-c0:#3A3036;--mm-body:#241B21;--mm-outline:#6E5E67;--mm-line:#241B21;--mm-chip:rgba(255,255,255,.1);--mm-ink:#F5EDF0;--mm-ink2:#C4B0B8;${varsFor('dark')}`;
 const gradStops = Array.from({ length: LEVELS + 1 }, (_, i) => `var(--mm-c${i || 'x'})`).join(',').replace('var(--mm-cx)', 'var(--mm-c0)');
 
 // Tokens `--mm-*` con respaldo: se pueden sobrescribir desde cualquier ancestro (el tema de la app los hereda de :root).

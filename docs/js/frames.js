@@ -6,6 +6,7 @@ import { ANIM } from '../data/anim.js';
 import { ARROWS } from '../data/arrows.js';
 
 export const hasFrames = id => !!ANIM[id];
+export const frameCount = id => (ANIM[id] ? ANIM[id].n : 0);
 export const frameURL = (id, model, k) => `img/anim/${model === 'm' ? 'm' : 'f'}/${id}-${k + 1}.webp`;
 // fotograma (base 0) de cada posición del movimiento
 export function posFrames(id, nPos) {

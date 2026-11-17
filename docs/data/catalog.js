@@ -11,7 +11,9 @@
 // positions puede tener 2 o más fotogramas; los marcados `mid: true` son intermedios (solo para la animación).
 // Modelo masculino: si existen docs/img/moves/m/<id>-<n>.webp, agrega `male: true` al movimiento.
 
-export const CATEGORIES = [
+import { CATEGORIES2, EQUIPMENT2, MOVES2 } from './moves2.js';
+
+const CATEGORIES1 = [
   { id: 'movilidad', name: 'Movilidad' },
   { id: 'piernas', name: 'Piernas y glúteos' },
   { id: 'torso', name: 'Torso y hombro' },
@@ -19,7 +21,7 @@ export const CATEGORIES = [
   { id: 'elongacion', name: 'Elongación' },
 ];
 
-export const EQUIPMENT = {
+const EQUIPMENT1 = {
   ninguno: 'Sin implementos',
   mat: 'Mat',
   mancuernas: 'Mancuernas',
@@ -31,7 +33,7 @@ export const EQUIPMENT = {
 
 const img = (id, n) => `img/moves/${id}-${n}.webp`;
 
-export const MOVES = [
+const MOVES1 = [
   {
     id: 'cat-cow', name: 'Gato – Camello', category: 'movilidad', equipment: ['mat'],
     group: 'movilidad', met: 2.5, level: 1,
@@ -248,4 +250,8 @@ export const MOVES = [
   },
 ];
 
+// Catálogo completo (v1.7): los 17 movimientos originales + los 54 de moves2.js = 71.
+export const CATEGORIES = [...CATEGORIES1, ...CATEGORIES2];
+export const EQUIPMENT = { ...EQUIPMENT1, ...EQUIPMENT2 };
+export const MOVES = [...MOVES1, ...MOVES2];
 export const MOVE_BY_ID = Object.fromEntries(MOVES.map(m => [m.id, m]));

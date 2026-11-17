@@ -9,7 +9,7 @@ lo trabaja un plan. SVG en línea, dibujado a mano (sin imágenes), una región 
 | `docs/data/muscles.js` | **Datos**: `MUSCLES` (id, nombre, grupo, geometría por vista), `SILHOUETTE`, `WARP` (mujer/hombre), `DETAILS`, alias. |
 | `docs/dev/musclemap.html` | Página de prueba (no es parte de la app): `?mode=light\|dark&theme=rosa\|estandar&g=f\|m&p=all\|regions\|names`. |
 
-Al integrar: agregar `js/musclemap.js` y `data/muscles.js` a la lista de archivos de `docs/sw.js` y subir `CACHE_VERSION`.
+Integrado en v1.7 (ya están en `CORE` de `docs/sw.js`): tarjetas «Qué trabaja» en el detalle del plan y del movimiento, mapa semanal/mensual en Historial → Actividad (de `moveSecs`), mapa de cada sesión en su detalle y «Hoy trabajaste» al terminar (solo si cabe). Los mapas de la app se montan con `mountMuscleMap` y se destruyen en cada `render()`. En pantallas siempre oscuras (reproductor) se usa `mmDarkVars` como estilo en línea.
 
 ## API
 
@@ -43,7 +43,7 @@ Todo va por variables CSS con respaldo (se definen en `:root` dentro de `MM_CSS`
 Lee `data-mode="dark"` (y `prefers-color-scheme` si no hay `data-mode`) y, cuando existen, `--accent`, `--accent-ink`, `--label`, `--label2`, `--card` de `DESIGN.md`:
 el neutro y el cuerpo se tiñen un 3–8 % con `--accent`, así `rosa` queda cálido y `estandar` lila-azulado, **pero la rampa de calor es la misma en ambos temas** (naranja = trabajo).
 - Claro: del ámbar pálido `#FFDA85` al rojo anaranjado `#A81F12` (la luminosidad **baja** con la carga: 0,75 → 0,09).
-- Oscuro: del rojo apagado `#7A3A2C` al ámbar brillante `#FFD785` (la luminosidad **sube**: 0,07 → 0,72). En ambos la intensidad se lee por luminosidad además del tono (apta para daltonismo), no solo por el rojo/naranja.
+- Oscuro (v1.7): del marrón rosado apagado `#5A3A36` (casi el color del cuerpo) al naranja vivo `#FF7A1A`: **más carga = más saturado y más brillante** (antes el máximo era el más pálido y se leía como «menos»). En ambos modos la intensidad se lee también por luminosidad/saturación (apta para daltonismo), no solo por el tono.
 - 16 niveles discretos (`.mm-l1…16`); la carga > 0 siempre llega al menos al nivel 1 (nunca se confunde con «sin trabajo»).
 
 ## Dibujo y geometría
