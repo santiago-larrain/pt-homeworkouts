@@ -92,13 +92,15 @@
    ]
   },
   "dead-bug": {
-   "frames": 4,
-   "anchor": "feet",
+   "frames": 5,
+   "anchor": "left",
    "pos": [
     0,
     2,
-    3
-   ]
+    4
+   ],
+   "arrows": false,
+   "arrows_note": "brazo y pierna opuestos se mueven a la vez; las flechas automáticas salían distintas en mujer y hombre"
   },
   "ring-adductor-lift": {
    "frames": 4,

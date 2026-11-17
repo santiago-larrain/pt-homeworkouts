@@ -15,7 +15,7 @@ export const ANIM = {
   'face-pull': { n: 4 },
   'floor-press': { n: 4 },
   'band-external-rotation': { n: 4, pos: [0, 2, 3] },
-  'dead-bug': { n: 4, pos: [0, 2, 3] },
+  'dead-bug': { n: 5, pos: [0, 2, 4] },
   'ring-adductor-lift': { n: 4 },
   'kneeling-hip-flexor': { n: 4 },
   'figure-4': { n: 4 },
