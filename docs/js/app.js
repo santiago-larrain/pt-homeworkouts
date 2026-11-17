@@ -9,13 +9,14 @@ import { FrameAnimator, hasFrames, frameURL, frameCount, posFrame } from './fram
 import { sessionKcal, kcalText } from './calories.js';
 import { muscleLoad, muscleLoadFromMoves, topMuscles, mountMuscleMap, muscleMapSVG, muscleLegendHTML, injectMuscleMapCSS, mmDarkVars } from './musclemap.js';
 import { MUSCLES, GROUPS as MUSCLE_GROUPS, canonicalMuscles } from '../data/muscles.js';
+import { HEALTH, hasInstallURL, DAY_ORDER, DAY_LABEL, DAY_NAME, daysText, cleanReminder, shortcutURL, remindersPayload, importPayload, logPayload, parseHealth, healthFromSearch, buildICS, appStartURL } from './health.js';
 import { entriesOf, localISO, streakWeeks as streakWeeksOf, weekCounts, newMilestones, MILESTONES, MILESTONE_BY_ID } from './progress.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
-const APP_VERSION = '1.7';
+const APP_VERSION = '1.8';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -33,7 +34,7 @@ const TABS = [
   { id: 'settings', name: 'Ajustes', icon: I.gear, root: 'settings' },
 ];
 const nav = { tab: 'train', stacks: Object.fromEntries(TABS.map(t => [t.id, [{ v: t.root }]])) };
-const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [], m: [] }, editing: {}, cal: null, moveShow: {}, mmPerson: {}, mmRange: 'week', mmCtx: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
+const ui = { histTab: 'act', histPid: null, bodyDraft: null, q: '', f: { g: [], e: [], l: [], m: [] }, editing: {}, cal: null, moveShow: {}, healthPid: null, mmPerson: {}, mmRange: 'week', mmCtx: {}, dismissedInstall: sessionStorage.getItem('ptw.noinstall') === '1', persisted: null };
 let anim = null;
 
 const top = () => nav.stacks[nav.tab][nav.stacks[nav.tab].length - 1];
@@ -189,6 +190,25 @@ function mountMapCard(id, load, opts = {}, inSheet = false) {
 }
 const moveFormat = (name, v) => ({ title: name, sub: v >= 1 ? 'En foco' : v > 0 ? 'Apoyo' : 'No trabaja en este ejercicio' });
 
+// ───────────────────────── recordatorios y Apple Salud (js/health.js · project/SHORTCUT.md)
+// Abre una URL de otra app (shortcuts://…) con un enlace: así se puede interceptar en las pruebas
+function openURL(url) { const a = document.createElement('a'); a.href = url; a.rel = 'noopener'; a.style.display = 'none'; document.body.appendChild(a); a.click(); a.remove(); }
+const runShortcut = payload => openURL(shortcutURL(payload));
+const remOf = pr => cleanReminder(pr.reminders);
+const planForReminder = () => store.plan(S().activePlanId) || S().plans[0];
+const remTitle = () => `Entrenar · ${planForReminder().name}`;
+const remSummary = pr => { const r = remOf(pr); return r.on && r.days.length ? `${daysText(r.days)} · ${r.time}` : 'Apagados'; };
+const fmtKg = n => `${fmt1(n)} kg`;
+// agrega (o reemplaza el del mismo día) un peso/estatura que llegó de Salud; devuelve el texto para el aviso o null
+function applyHealth(h, pidHint) {
+  if (!h) return null;
+  const pr = h.profile && S().profiles.some(x => x.id === h.profile) ? store.profile(h.profile) : store.profile(pidHint || S().activeProfile);
+  if (h.kg) { pr.weights = (pr.weights || []).filter(w => w.date !== h.date); pr.weights.push({ date: h.date, kg: h.kg, ...(h.cm ? { cm: h.cm } : {}), source: 'salud' }); pr.weights.sort((a, b) => (a.date < b.date ? -1 : 1)); }
+  if (h.cm) pr.heightCm = h.cm;
+  store.save();
+  return [h.kg && fmtKg(h.kg), h.cm && `${fmt1(h.cm)} cm`].filter(Boolean).join(' · ') + (S().profiles.length > 1 ? ` · ${pr.name}` : '');
+}
+
 // ───────────────────────── VISTAS
 const VIEWS = {
   home() {
@@ -200,6 +220,8 @@ const VIEWS = {
     if (!standalone() && !ui.dismissedInstall) html += `<div class="card install">${I.share}<div><b>Instala la app</b><p>Así tus datos no se borran. Toca <b>Compartir → Agregar a inicio</b>.</p></div><button class="iconbtn" data-a="dismissInstall" aria-label="Cerrar">${I.x}</button></div>`;
     const daysSinceBackup = s.settings.lastBackup ? (Date.now() - new Date(s.settings.lastBackup)) / 864e5 : Infinity;
     if (standalone() && s.history.length >= 3 && daysSinceBackup > 30) html += `<div class="card install">${I.shield}<div><b>Guarda un respaldo</b><p>Tus datos viven solo en este teléfono. Exporta un respaldo por si cambias o pierdes el teléfono.</p><button class="btn tinted small" data-a="exportData">Exportar respaldo</button></div></div>`;
+    // oferta amable de recordatorios (una vez, tras la 2.ª sesión completa; se puede descartar para siempre)
+    if (!s.settings.reminderOffer && !remOf(store.active).on && profEntries(s.activeProfile).filter(h => !h.partial).length >= 2) html += `<div class="card install offer">${I.bell}<div><b>¿Te recordamos entrenar?</b><p>Elige días y hora; aparece en tu Calendario con una alerta.</p><div class="offer-btns"><button class="btn tinted small" data-a="offerGo">Configurar</button><button class="btn plain small" data-a="offerNo">Ahora no</button></div></div><button class="iconbtn" data-a="offerNo" aria-label="Descartar">${I.x}</button></div>`;
     if (p) {
       const nSec = p.sections.filter(x => x.items.length).length, eq = equipOf(p), shown = eq.slice(0, 3);
       const thumbs = [...new Set(p.sections.flatMap(x => x.items.map(it => it.move)))].map(id => MOVE_BY_ID[id]).filter(Boolean).slice(0, 4);
@@ -332,6 +354,11 @@ const VIEWS = {
       row({ title: 'Ajustar por la carga', sub: 'Suma un poco si usas mancuernas o kettlebell (según tus cargas en el perfil).', right: toggle('set:kcalLoad', st.kcalLoad) }),
       row({ title: 'Cómo se calcula', a: 'kcalInfo', chev: true }),
     ], { header: 'Calorías', footer: 'Siempre son una estimación, nunca una medida exacta.' });
+    html += group([row({ icon: `<span class="ri-ms">${I.bell}</span>`, title: 'Recordatorios', sub: `${esc(store.active.name)} · ${esc(remSummary(store.active))}`, a: 'openReminders', chev: true })], { header: 'Recordatorios', footer: 'Aparecen en tu Calendario como un evento semanal con alerta. iOS no permite que una app web programe avisos por sí sola.' });
+    html += group([
+      row({ icon: `<span class="ri-ms">${I.heart}</span>`, title: 'Conectar con Apple Salud', sub: st.healthShortcut ? 'Atajo «' + esc(HEALTH.shortcutName) + '» instalado' : 'Importa peso y estatura, y guarda entrenamientos', a: 'healthOpen', data: `data-id="${S().activeProfile}"`, chev: true }),
+      ...(st.healthShortcut ? [row({ title: 'Importar peso y estatura', sub: esc(store.active.name), a: 'healthImport', data: `data-id="${S().activeProfile}"`, chev: true }), row({ title: 'Pegar datos del atajo', sub: 'Si el Atajo abrió Safari en vez de la app', a: 'healthPaste', data: `data-id="${S().activeProfile}"`, chev: true }), row({ title: 'Guardar entrenamientos en Salud', sub: 'Botón «Guardar en Salud» al terminar', right: toggle('set:healthLog', st.healthLog) })] : []),
+    ], { header: 'Apple Salud', footer: 'La app no accede a Salud: lo hace un Atajo de Apple que instalas una sola vez. Nada sale de tu teléfono salvo lo que tú envías al Atajo.' });
     html += group([
       row({ title: 'Exportar respaldo', sub: st.lastBackup ? `Último: ${new Date(st.lastBackup).toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Aún no has exportado uno', a: 'exportData', chev: true }),
       row({ title: 'Importar respaldo', a: 'importData', chev: true }),
@@ -341,6 +368,22 @@ const VIEWS = {
     ], { header: 'Datos', footer: 'Todo se guarda solo en este teléfono, sin cuentas. Exporta un respaldo de vez en cuando.' });
     html += group([row({ title: 'Cómo instalar en el iPhone', a: 'installHelp', chev: true }), row({ title: 'Versión', right: `<span class="muted">${APP_VERSION}</span>` })], { header: 'Acerca de' });
     return { title: 'Ajustes', large: true, html };
+  },
+
+  settingsReminders() {
+    const pr = store.active, r = remOf(pr), st = set(), p = planForReminder();
+    const days = DAY_ORDER.map(d => `<button class="daybtn ${r.days.includes(d) ? 'on' : ''}" data-a="remDay" data-d="${d}" aria-pressed="${r.days.includes(d)}" aria-label="${DAY_NAME[d]}">${DAY_LABEL[d]}</button>`).join('');
+    let html = group([
+      row({ title: 'Recordatorios', sub: esc(pr.name), right: toggle('rem:on', r.on) }),
+      `<div class="row stack"><span class="rt"><span class="rtt">Días</span></span><div class="days-pick" role="group" aria-label="Días de la semana">${days}</div></div>`,
+      row({ title: 'Hora', right: `<input class="inline short" type="time" data-in="remTime" value="${esc(r.time)}" aria-label="Hora del recordatorio">` }),
+    ], { footer: r.on && r.days.length ? `«${esc(remTitle())}» · ${esc(daysText(r.days))} a las ${esc(r.time)}.` : (r.on ? 'Elige al menos un día.' : 'Apagados. Actívalos y guárdalos en tu Calendario.') });
+    html += `<div class="rem-actions">`;
+    if (st.healthShortcut) html += `<button class="btn primary big" data-a="remShortcut">${I.bell}${r.on ? 'Aplicar con el Atajo' : 'Quitar con el Atajo'}</button><p class="gf center">El Atajo «${esc(HEALTH.shortcutName)}» borra y vuelve a crear los eventos del calendario «${esc(HEALTH.calendarName)}». Tócalo cada vez que cambies algo.</p>`;
+    html += `<button class="btn ${st.healthShortcut ? 'tinted' : 'primary'} big" data-a="remICS" ${r.on && !r.days.length ? 'disabled' : ''}>${I.download}${r.on ? 'Guardar en mi Calendario' : 'Quitar de mi Calendario'}</button><p class="gf center">Descarga un archivo .ics: al abrirlo, Calendario puede pedirte que reemplaces o quites el evento anterior.</p></div>`;
+    if (!st.healthShortcut) html += group([row({ title: 'Con el Atajo «Entrena»', sub: 'Activar, cambiar y apagar desde la app, sin archivos', a: 'healthOpen', data: `data-id="${pr.id}"`, chev: true })]);
+    void p;
+    return { title: 'Recordatorios', backLabel: 'Ajustes', html };
   },
 
   settingsMore() {
@@ -551,9 +594,10 @@ function bodyHTML(pr) {
     html += `<div class="card bodycard"><div class="bc-top"><div><p class="bc-k">Peso</p><p class="bc-v"><b>${fmt1(last.kg)}</b> kg</p></div><p class="bc-d">${delta}</p></div>${weightChart(ws)}</div>`;
     if (cm) { const bmi = last.kg / ((cm / 100) ** 2); html += group([row({ title: 'IMC', sub: 'Referencia general; no distingue músculo de grasa.', right: `<span class="muted">${fmt1(bmi)}</span>` })]); }
   }
+  html += group([row({ icon: `<span class="ri-ms">${I.heart}</span>`, title: 'Apple Salud', sub: S().settings.healthShortcut ? 'Importar peso y estatura' : 'Conectar con Apple Salud', a: 'healthOpen', data: `data-id="${pr.id}"`, chev: true })]);
   const T = x => `${x.n} ${x.n === 1 ? 'sesión' : 'sesiones'} · ${x.mins} min · ${x.hasK ? kcalText(x.kcal) || '—' : '—'}`;
   html += group([row({ title: 'Esta semana', right: `<span class="muted">${T(tot.week)}</span>`, cls: 'tall' }), row({ title: 'Este mes', right: `<span class="muted">${T(tot.month)}</span>`, cls: 'tall' })], { header: `Totales${many ? ' · ' + esc(pr.name) : ''}`, footer: 'Las calorías son una estimación y suman solo las sesiones que las registraron.' });
-  if (ws.length) html += group([...ws.slice().reverse().map(w => row({ title: `${fmt1(w.kg)} kg`, sub: dShort(w.date, true) + (w.cm ? ` · ${w.cm} cm` : ''), chev: true, a: 'bodyEdit', data: `data-id="${pr.id}" data-date="${w.date}"` }))], { header: 'Registros' });
+  if (ws.length) html += group([...ws.slice().reverse().map(w => row({ title: `${fmt1(w.kg)} kg`, sub: dShort(w.date, true) + (w.cm ? ` · ${w.cm} cm` : '') + (w.source === 'salud' ? ' · Salud' : ''), chev: true, a: 'bodyEdit', data: `data-id="${pr.id}" data-date="${w.date}"` }))], { header: 'Registros' });
   return html;
 }
 function bodySheetHTML() {
@@ -670,7 +714,7 @@ function profileSheetHTML(id) {
       row({ title: 'Estatura (cm)', right: `<input class="inline short" type="number" inputmode="decimal" data-in="profNum" data-k="heightCm" ${base} value="${pr.heightCm ?? ''}" placeholder="Opcional" min="80" max="250">` }),
       row({ title: 'Peso actual (kg)', right: `<input class="inline short" type="number" inputmode="decimal" step="0.1" data-in="profWeight" ${base} value="${last}" placeholder="Opcional" min="20" max="400">` })],
       { header: 'Datos corporales', footer: 'Opcionales. Al cambiar el peso se guarda con la fecha de hoy.' })}
-    ${group([row({ title: 'Peso y medidas', sub: 'Registros, gráfico y totales', a: 'openBody', data: base, chev: true })])}
+    ${group([row({ title: 'Peso y medidas', sub: 'Registros, gráfico y totales', a: 'openBody', data: base, chev: true }), row({ title: 'Conectar con Apple Salud', sub: S().settings.healthShortcut ? 'Conectado · importar peso y estatura' : 'Trae tu peso y estatura con un Atajo', a: 'healthOpen', data: base, chev: true })])}
     ${group([row({ title: 'Mancuernas', right: stepper('profStep', `${base} data-k="dumbbellKg" data-st="0.5" data-max="40"`, kg(L.dumbbellKg)) }),
       row({ title: 'Kettlebell', right: stepper('profStep', `${base} data-k="kettlebellKg" data-st="1" data-max="48"`, kg(L.kettlebellKg)) }),
       row({ title: 'Banda de brazos', right: seg('profLevel', `${base} data-k="band"`, LEVEL, L.band) }),
@@ -850,6 +894,34 @@ const A = {
   setSeg: el => { set()[el.dataset.k] = el.dataset.v; afterSetting(); },
   testSound: () => { unlockAudio(); sfx.tick(); setTimeout(sfx.tick, 700); setTimeout(() => sfx.tick(true), 1400); setTimeout(sfx.go, 2100); setTimeout(sfx.side, 3000); setTimeout(sfx.rest, 3700); setTimeout(sfx.done, 4800); if (set().voice) setTimeout(() => say('Sentadilla goblet. Diez a doce repeticiones.'), 6200); },
   openMore: () => push('settingsMore'),
+  openReminders: () => push('settingsReminders'),
+  offerNo: () => { set().reminderOffer = true; store.save(); render(); },
+  offerGo: () => { set().reminderOffer = true; store.save(); nav.tab = 'settings'; nav.stacks.settings = [{ v: 'settings' }, { v: 'settingsReminders' }]; render(); },
+  remDay: el => { const pr = store.active, r = remOf(pr), d = +el.dataset.d; r.days = r.days.includes(d) ? r.days.filter(x => x !== d) : [...r.days, d]; pr.reminders = cleanReminder(r); store.save(); render(); },
+  // .ics para Calendario (sin Atajo). SEQUENCE sube en cada archivo para que Calendario lo trate como actualización del mismo evento
+  remICS: () => {
+    const pr = store.active, r = remOf(pr); r.seq += 1; pr.reminders = r; store.save();
+    const p = planForReminder(), mins = Math.max(10, Math.round(estimateSecs(buildSteps(p, set()), set()) / 60));
+    const txt = buildICS({ profileId: pr.id, title: remTitle(), url: appStartURL(), reminder: r, minutes: mins, cancel: !r.on });
+    const name = `entrena-${(pr.name || 'perfil').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'perfil'}${r.on ? '' : '-quitar'}.ics`;
+    const blob = new Blob([txt], { type: 'text/calendar;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast(r.on ? 'Archivo listo: ábrelo para agregarlo a Calendario' : 'Archivo listo: ábrelo para quitar el evento');
+  },
+  remShortcut: () => { const pr = store.active, r = remOf(pr); r.seq += 1; pr.reminders = r; store.save(); runShortcut(remindersPayload({ profileName: pr.name, reminder: r, planName: planForReminder().name, url: appStartURL() })); },
+  // Apple Salud
+  healthOpen: el => { ui.healthPid = el.dataset.id || S().activeProfile; openSheet(healthSheetHTML(), { onClose: render }); },
+  healthInstall: () => { if (hasInstallURL()) openURL(HEALTH.installURL); },
+  healthInstalled: () => { set().healthShortcut = true; store.save(); refreshSheet(healthSheetHTML()); toast('Atajo marcado como instalado'); },
+  healthUninstall: () => { set().healthShortcut = false; set().healthLog = false; store.save(); refreshSheet(healthSheetHTML()); },
+  healthImport: el => { const pid = el.dataset.id || ui.healthPid || S().activeProfile, pr = store.profile(pid); closeSheet(); runShortcut(importPayload({ profileId: pr.id, profileName: pr.name, app: appStartURL() })); },
+  healthPaste: el => {
+    const pid = el.dataset.id || ui.healthPid || S().activeProfile;
+    if (!navigator.clipboard || !navigator.clipboard.readText) { toast('Tu navegador no permite leer el portapapeles'); return; }
+    navigator.clipboard.readText().then(t => { const m = applyHealth(parseHealth(t), pid); if (m) { closeSheet(); render(); toast(`Importado de Salud: ${m}`); } else toast('No encontré datos de Salud en el portapapeles'); }).catch(() => toast('No pude leer el portapapeles'));
+  },
+  pHealth: () => P.saveHealth(),
   openStorage: () => push('settingsStorage'),
   restorePlans: () => confirmSheet('Los planes incluidos volverán a su versión original. Tus planes propios no cambian.', 'Restaurar planes', () => { DEFAULT_PLANS.forEach(p => store.restoreBuiltin(p.id)); S().hiddenBuiltins = []; store.save(); render(); toast('Planes restaurados'); }),
   exportData: () => {
@@ -876,6 +948,23 @@ const A = {
   pAnimToggle: () => { set().animate = !set().animate; store.save(); P.renderStep(); },
   pSettings: () => P.openSettings(),
 };
+
+function healthSheetHTML() {
+  const st = set(), pid = ui.healthPid || S().activeProfile, pr = store.profile(pid), li = (n, t) => `<div class="row tip"><span class="num">${n}</span><span class="rt"><span class="rtt">${t}</span></span></div>`;
+  const head = `<div class="sheet-head"><span></span><h2>Apple Salud</h2><button class="navbtn strong" data-a="closeSheet">Listo</button></div>`;
+  if (!st.healthShortcut) {
+    return `${head}<div class="sheet-body">
+      ${group([li(1, 'Trae tu <b>peso y estatura</b> desde Salud a esta app.'), li(2, 'Guarda tus <b>entrenamientos terminados</b> en Salud.'), li(3, `Funciona con un <b>Atajo de Apple</b> (${esc(HEALTH.shortcutName)}) que instalas una sola vez. La app no se conecta a Salud ni a ningún servidor.`)])}
+      <button class="btn primary big cta" data-a="healthInstall" ${hasInstallURL() ? '' : 'disabled'}>${I.download}Instalar atajo</button>
+      ${hasInstallURL() ? '' : '<p class="gf center">El enlace del atajo todavía no está configurado (project/SHORTCUT.md).</p>'}
+      <button class="btn tinted big" data-a="healthInstalled">Ya lo instalé</button>
+      <p class="gf">La primera vez, iOS pide permisos para Calendario y Salud.</p></div>`;
+  }
+  return `${head}<div class="sheet-body">
+    ${group([row({ title: 'Importar peso y estatura', sub: `Para ${esc(pr.name)}`, a: 'healthImport', data: `data-id="${pid}"`, chev: true }), row({ title: 'Pegar datos del atajo', sub: 'Si volvió a Safari en vez de la app', a: 'healthPaste', data: `data-id="${pid}"`, chev: true })], { footer: 'El Atajo vuelve a la app con tus datos. Si usas la app instalada, iOS puede abrir Safari: entonces copia los datos y usa «Pegar datos del atajo».' })}
+    ${group([row({ title: 'Guardar entrenamientos en Salud', sub: 'Botón «Guardar en Salud» al terminar', right: toggle('set:healthLog', st.healthLog) })])}
+    ${group([row({ title: '<span class="danger">Ya no uso el atajo</span>', a: 'healthUninstall' })])}</div>`;
+}
 
 function newPlanHTML() {
   return `<div class="sheet-head"><button class="navbtn" data-a="closeSheet">Cancelar</button><h2>Nuevo plan</h2><span></span></div>
@@ -912,7 +1001,8 @@ const INPUT = {
     const pr = profOf(el.dataset.id), v = Math.round(parseFloat(el.value) * 10) / 10, d = todayISO();
     pr.weights = pr.weights.filter(w => w.date !== d);
     if (v > 0) pr.weights.push({ date: d, kg: v }); pr.weights.sort((a, b) => a.date < b.date ? -1 : 1); store.save();
-  },  planName: el => { const p = store.plan(el.dataset.p), v = el.value.trim(); if (p && v) { p.name = v; store.save(); } },
+  },  remTime: el => { const pr = store.active, r = remOf(pr); if (/^\d{2}:\d{2}$/.test(el.value)) { r.time = el.value; pr.reminders = cleanReminder(r); store.save(); const f = $('.screen .gf'); if (f) f.textContent = r.on && r.days.length ? `«${remTitle()}» · ${daysText(r.days)} a las ${r.time}.` : f.textContent; } },
+  planName: el => { const p = store.plan(el.dataset.p), v = el.value.trim(); if (p && v) { p.name = v; store.save(); } },
   planSub: el => { const p = store.plan(el.dataset.p); if (p) { p.subtitle = el.value.trim(); store.save(); } },
   secName: el => { store.plan(el.dataset.p).sections[+el.dataset.s].name = el.value; store.save(); },
 };
@@ -930,6 +1020,7 @@ document.addEventListener('change', e => {
   const el = e.target; const k = el.dataset.in; if (!k || el.type !== 'checkbox') return;
   if (k.startsWith('set:')) { set()[k.slice(4)] = el.checked; if (k === 'set:voice' && el.checked) unlockAudio(); afterSetting(); return; }
   if (k === 'prof:active') { if (el.checked) S().activeProfile = el.dataset.id; store.save(); applyTheme(); refreshSheet(profileSheetHTML(el.dataset.id)); return; }
+  if (k === 'rem:on') { const pr = store.active, r = remOf(pr); r.on = el.checked; pr.reminders = r; store.save(); render(); return; }
   if (k.startsWith('dose:')) { const h = holderOf(el); h.dose = clone(doseOf(h)); h.dose[k.slice(5)] = el.checked; store.save(); refreshItem(el); }
 });
 
@@ -1157,6 +1248,7 @@ const P = {
   // ── final
   finish() {
     clearInterval(this.timer); this.stopFrames(); this.releaseWake();
+    this.endAt = Date.now(); this.healthSent = false;
     this.result = this.summarize();
     sfx.done(); say('¡Entrenamiento completado! Muy bien.');
     this.renderDone();
@@ -1201,10 +1293,16 @@ const P = {
         <div class="p-stats rise d2"><div><b>${clock(this.active)}</b><span>Duración</span></div>${kcals}</div>
         <p class="p-weekline rise d3">${week >= goal ? '¡Meta semanal cumplida!' : `Esta semana: ${week} de ${goal}`}${week >= goal && streakNow >= 2 ? ` · Semana ${streakNow} seguida` : ''}</p>
         ${mm}<div id="pDoneExtra" class="rise d3">${doneExtras(sum)}</div></div>
-      <div class="p-ctl col rise d3"><button class="btn primary big cta" data-a="pSave">Terminar</button></div>`;
+      <div class="p-ctl col rise d3">${set().healthShortcut && set().healthLog ? `<button class="btn tinted dark small p-health" data-a="pHealth">${I.heart}Guardar en Salud</button>` : ''}<button class="btn primary big cta" data-a="pSave">Terminar</button></div>`;
     // el mapa de «Hoy trabajaste» solo se queda si la pantalla de cierre sigue cabiendo sin desplazarse (si no, está en el detalle de la sesión)
     const c = el.querySelector('.p-center.done'), m = c && c.querySelector('.p-mm');
     if (m) { const kids = [...c.children], need = kids.reduce((a, k) => a + k.offsetHeight, 0) + (kids.length - 1) * 12 + 28; if (need > c.clientHeight) m.remove(); }
+  },
+  // «Guardar en Salud»: el Atajo registra el entrenamiento (inicio, fin, kcal de quien entrenó)
+  saveHealth() {
+    const R = this.result || this.summarize(), pid = R.pids.includes(S().activeProfile) ? S().activeProfile : R.pids[0];
+    runShortcut(logPayload({ profileId: pid, start: this.sessionStart, end: this.endAt || Date.now(), kcal: R.kcal[pid], title: this.plan.name }));
+    this.healthSent = true; const b = $('.p-health'); if (b) b.innerHTML = `${I.check}Enviado al Atajo`;
   },
   record(partial) {
     const R = this.result || this.summarize();
@@ -1291,5 +1389,15 @@ function warmFrames() {
 applyTheme();
 render();
 warmFrames();
+// Vuelta del Atajo de Salud: …/?health=<JSON>. Se importa, se avisa y se limpia la URL.
+{
+  const h = healthFromSearch(location.search);
+  if (new URLSearchParams(location.search).has('health')) {
+    const m = applyHealth(h, S().activeProfile);
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { }
+    render();
+    setTimeout(() => toast(m ? `Importado de Salud: ${m}` : 'No pude leer los datos de Salud'), 300);
+  }
+}
 store.persist().then(v => { ui.persisted = v; if (top().v === 'settingsStorage') render(); });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});

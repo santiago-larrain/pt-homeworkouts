@@ -14,6 +14,7 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | `docs/data/plans.js` | **Planes incluidos** (`DEFAULT_PLANS`): *Dynamic Reset 3×3* + `PLANS2`. |
 | `docs/data/plans2.js` | Planes v2 (`PLANS2`, 5): Cuerpo completo 20, Glúteos y piernas con bandas, Tren superior con mancuernas, Core y postura, Movilidad 10. |
 | `docs/js/musclemap.js` · `docs/data/muscles.js` | **Mapa muscular** (SVG frente/espalda teñido por carga) y su geometría/alias. Ver `project/MUSCLEMAP.md`. |
+| `docs/js/health.js` | Fase 6 (v1.8): configuración del Atajo de Apple (nombre, enlace iCloud), `.ics` de recordatorios, URLs `shortcuts://`, lectura de `?health=`. Ver `project/SHORTCUT.md`. |
 | `docs/js/calories.js` | Motor de calorías (funciones puras): MET × peso con corrección Mifflin, descansos, carga acotada. Autotest: `node project/tools/test_calories.mjs`. Ver `project/RESEARCH_CALORIES.md`. |
 | `docs/js/progress.js` | Semanas, meta semanal, racha en SEMANAS e hitos (puras). Los hitos se guardan por perfil en `profile.milestones`. |
 | `docs/js/engine.js` | Convierte un plan en pasos del temporizador (`buildSteps`), textos de dosis y estimaciones. |
@@ -60,6 +61,7 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
   Los planes referencian movimientos por id: **galería y planes están desacoplados**.
 - **Historial (v1.6)**: cada sesión guarda `profiles`, `kcal:{perfil:n}`, `kcalApprox` (perfiles que usaron datos por defecto), `moveSecs:{perfil:{movimiento:segundos}}`, `secs`, `planId`, `blocks`. Las sesiones anteriores no tienen kcal. Perfil: `weights:[{date,kg,cm?}]`, `weeklyGoal`, `milestones:{id:fecha}`.
 - **Mapa muscular**: `muscleLoad(plan)` / `muscleLoadFromMoves(...)` → carga 0..1 por músculo canónico (foco 1, apoyo 0,5, por tiempo de trabajo). Tarjetas «Qué trabaja» en el detalle del plan (con selector de persona en pareja) y del movimiento, mapa semanal/mensual en Historial → Actividad (a partir de `moveSecs`), mapa de la sesión en su detalle y «Hoy trabajaste» en el cierre del reproductor (solo si cabe sin desplazarse). Los nombres de `focus`/`support` se reconocen con los alias de `muscles.js` (`canonicalMuscles`); la búsqueda y el filtro «Músculo específico» del catálogo usan lo mismo.
+- **Recordatorios y Salud (v1.8)**: `profile.reminders = {on, days:[0-6 (0=domingo)], time:'HH:MM', seq}`; `settings.healthShortcut` (¿instalado el Atajo?), `settings.healthLog` (guardar entrenamientos en Salud), `settings.reminderOffer` (oferta de recordatorio descartada). Pesos importados de Salud llevan `source:'salud'`. El puente con iOS es solo un Atajo (`project/SHORTCUT.md`): ni notificaciones locales ni HealthKit son posibles en una PWA.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
 

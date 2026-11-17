@@ -23,7 +23,13 @@
 - Mapa muscular: «Qué trabaja» en plan y movimiento, semanal/mensual en Historial, de la sesión en su detalle y «Hoy trabajaste» en el cierre (si cabe); rampa oscura corregida (más carga = más intenso).
 - Flechas de movimiento verificadas en el reproductor real; service worker más liviano (núcleo + miniaturas al instalar; fotogramas de tus planes por mensaje; el resto al verlos).
 
+## Hecho en v1.8 (rama v2)
+- Recordatorios por perfil (días, hora, on/off): archivo `.ics` para Calendario (sin Atajo) y, con el Atajo «Entrena» instalado, creación/edición/apagado desde la app.
+- Conexión con Apple Salud vía Atajo: importar peso y estatura (`?health=`) y guardar entrenamientos completados. Guía en `project/SHORTCUT.md`.
+
 ## Pendiente inmediato
+- [ ] Construir y firmar el Atajo «Entrena» en un iPhone (`project/SHORTCUT.md`), compartirlo por iCloud y pegar el enlace en `docs/js/health.js` (`installURL`).
+- [ ] Probar en el iPhone: el retorno `?health=` abre Safari (no la app instalada); «Pegar datos del atajo» es el camino fiable.
 - [ ] Revisar en el iPhone la fluidez de los fundidos y la velocidad (Ajustes → Velocidad de la animación).
 - [ ] Detalle menor: en el gato-camello del hombre queda un contorno muy tenue de la calceta vecina junto a las manos.
 - [ ] Probar en el iPhone de Anita: sonido con el interruptor de silencio, voz guía en español, Wake Lock y "Agregar a inicio".

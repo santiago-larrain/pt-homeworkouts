@@ -1,9 +1,10 @@
 // Estado persistente en el dispositivo (localStorage). Sin servidor ni cuentas.
 import { DEFAULT_PLANS } from '../data/plans.js';
 import { entriesOf, replayMilestones } from './progress.js';
+import { cleanReminder } from './health.js';
 
 const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
-export const VERSION = 4;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6)
+export const VERSION = 5;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6) · 5 = recordatorios por perfil y Salud (v1.8)
 
 export const DEFAULT_SETTINGS = {
   name: 'Anita',
@@ -33,11 +34,14 @@ export const DEFAULT_SETTINGS = {
   haptics: true,        // vibración breve (Android; iOS Safari la ignora)
   kcalCorrected: true,  // calorías: corrige el MET con el metabolismo en reposo (Mifflin); apagado = fórmula estándar
   kcalLoad: true,       // calorías: pequeño ajuste por la carga de mancuernas/kettlebell del perfil
-  reminders: { on: false, days: [1, 3, 5], time: '19:00' }, // fase 6 (sin uso todavía)
+  reminders: { on: false, days: [1, 3, 5], time: '19:00' }, // (obsoleto desde v1.8: los recordatorios son por perfil, `profile.reminders`)
+  healthShortcut: false,   // v1.8: la usuaria marcó que instaló el Atajo «Entrena» (no se puede detectar desde la web)
+  healthLog: false,        // v1.8: ofrecer «Guardar en Salud» al terminar un entrenamiento
+  reminderOffer: false,    // v1.8: la oferta amable de recordatorios (tras la 2.ª sesión) ya se mostró y se descartó
 };
 
 const clone = o => JSON.parse(JSON.stringify(o));
-export const newProfile = (id, name, gender) => ({ id, name, gender, weights: [], loads: { dumbbellKg: 0, kettlebellKg: 0, band: 'media', miniBand: 'media' } });
+export const newProfile = (id, name, gender) => ({ id, name, gender, weights: [], reminders: cleanReminder(null), loads: { dumbbellKg: 0, kettlebellKg: 0, band: 'media', miniBand: 'media' } });
 export const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 
 // v1 → v2: perfiles. Perfil 1 sale de settings.model/name; perfil 2 = pareja (del primer plan en pareja, si existe).
@@ -78,6 +82,11 @@ function migrateProgress(s) {
   });
 }
 
+// v4 → v5: recordatorios por perfil (el perfil 1 hereda `settings.reminders`, que antes no se usaba). Idempotente.
+function migrateReminders(s) {
+  s.profiles.forEach((pr, i) => { pr.reminders = cleanReminder(pr.reminders || (i === 0 ? s.settings.reminders : null)); });
+}
+
 function initial() {
   return { settings: { ...DEFAULT_SETTINGS }, plans: clone(DEFAULT_PLANS), activePlanId: DEFAULT_PLANS[0].id, history: [], hiddenBuiltins: [] };
 }
@@ -98,6 +107,7 @@ export const store = {
     if (migrated) migrate(s);
     const needProgress = s.profiles.some(pr => !pr.milestones || !(pr.weeklyGoal >= 1));
     if (needProgress) migrateProgress(s);
+    if (s.profiles.some(pr => !pr.reminders)) migrateReminders(s);
     s.version = VERSION;
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
