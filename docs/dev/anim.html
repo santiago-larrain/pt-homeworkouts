@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="../"> <!-- las rutas img/anim/… de frames.js son relativas a docs/ -->
+<title>Revisión de animaciones</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f4f4f6; --fg: #1c1c1e; --card: #fff; --mut: #6b6b70; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #111; --fg: #eee; --card: #1d1d20; --mut: #9a9aa0; } }
+  body { margin: 0; padding: 12px 16px 40px; background: var(--bg); color: var(--fg); font: 14px/1.35 system-ui, sans-serif; }
+  h1 { font-size: 18px; margin: 4px 0 2px; } p.s { margin: 0 0 10px; color: var(--mut); font-size: 12px; }
+  .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 8px 0 14px; }
+  .bar input, .bar select, .bar button { font: inherit; padding: 4px 8px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .cell { background: var(--card); border-radius: 12px; padding: 8px; }
+  .cell h3 { margin: 0 0 6px; font-size: 12px; font-weight: 600; display: flex; justify-content: space-between; gap: 6px; }
+  .cell h3 span { color: var(--mut); font-weight: 400; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .rigbox { position: relative; background: #fff; overflow: hidden; border-radius: 10px; aspect-ratio: 4 / 3.4; }
+  .rigframes { position: absolute; inset: 6px 6px 22px; }
+  .rigbox .rigframes img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; user-select: none; }
+  .tag { position: absolute; left: 0; right: 0; bottom: 3px; text-align: center; font-size: 11px; color: #555; z-index: 6; }
+  .flip { transform: scaleX(-1); }
+</style>
+</head>
+<body>
+<h1>Revisión de animaciones</h1>
+<p class="s">Todos los movimientos × mujer / hombre, con flechas de movimiento. Parámetros: <code>?from=0&amp;to=12</code> (rango), <code>?id=plank</code> (uno), <code>?speed=1.6</code>, <code>?mirror</code>, <code>?at=0.2</code> (congela en esa fracción del ciclo).</p>
+<div class="bar"><label>Filtro <input id="q" placeholder="id…"></label><label>Velocidad <select id="sp"><option>0.8</option><option selected>1.6</option><option>2.4</option></select></label><button id="pause">Pausa</button><span id="count"></span></div>
+<div class="grid" id="grid"></div>
+<script type="module">
+import { ANIM } from './data/anim.js';
+import { FrameAnimator } from './js/frames.js';
+const qs = new URLSearchParams(location.search);
+let MOVES = [], MOVES2 = [];
+try { MOVES = (await import('./data/catalog.js')).MOVES; } catch (e) {}
+try { MOVES2 = (await import('./data/moves2.js')).MOVES2; } catch (e) {}
+const names = Object.fromEntries([...MOVES, ...MOVES2].map(m => [m.id, m]));
+let ids = Object.keys(ANIM);
+if (qs.get('id')) ids = ids.filter(i => i === qs.get('id'));
+const from = +(qs.get('from') || 0), to = +(qs.get('to') || ids.length);
+ids = ids.slice(from, to);
+let paused = false, anims = [];
+const grid = document.getElementById('grid');
+function build(filter = '') {
+  anims.forEach(a => a.destroy()); anims = []; grid.innerHTML = '';
+  const speed = +(qs.get('speed') || document.getElementById('sp').value);
+  const list = ids.filter(i => i.includes(filter));
+  document.getElementById('count').textContent = list.length + ' movimientos';
+  for (const id of list) {
+    const A = ANIM[id], m = names[id];
+    const nPos = m ? m.positions.length : (A.pos ? A.pos.length : 2);
+    const cell = document.createElement('div'); cell.className = 'cell';
+    cell.innerHTML = `<h3>${id}<span>${m ? m.name : ''} · ${A.n} f${A.loop ? ' · loop' : ''}</span></h3><div class="pair"></div>`;
+    for (const model of ['f', 'm']) {
+      const box = document.createElement('div'); box.className = 'rigbox';
+      box.innerHTML = `<div class="tag">${model === 'f' ? 'mujer' : 'hombre'}</div>`;
+      cell.querySelector('.pair').append(box);
+      const an = new FrameAnimator(box, id, model, { nPos, speed, isPaused: () => paused });
+      if (qs.has('mirror')) box.firstElementChild.classList.add('flip');
+      anims.push(an);
+      if (qs.has('at')) { paused = true; an.ready.then(() => an.seek(+qs.get('at') * an.cycleMs())); } // ?at=0.3: congela en el 30 % del ciclo (revisar el fundido y las flechas)
+    }
+    grid.append(cell);
+  }
+}
+build();
+document.getElementById('q').oninput = e => build(e.target.value.trim());
+document.getElementById('sp').onchange = () => build(document.getElementById('q').value.trim());
+document.getElementById('pause').onclick = e => { paused = !paused; e.target.textContent = paused ? 'Seguir' : 'Pausa'; };
+window.__anims = () => anims;
+</script>
+</body>
+</html>
