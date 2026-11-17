@@ -100,7 +100,9 @@
     4
    ],
    "arrows": false,
-   "arrows_note": "brazo y pierna opuestos se mueven a la vez; las flechas automáticas salían distintas en mujer y hombre"
+   "arrows_note": "brazo y pierna opuestos se mueven a la vez; las flechas automáticas salían distintas en mujer y hombre",
+   "alt": "dead-bug-b",
+   "bodyAlign": true
   },
   "ring-adductor-lift": {
    "frames": 4,
@@ -314,7 +316,8 @@
    "pos": [
     0,
     3
-   ]
+   ],
+   "alt": "bird-dog-b"
   },
   "curl-up": {
    "frames": 4,
@@ -338,7 +341,8 @@
    "pos": [
     0,
     3
-   ]
+   ],
+   "alt": "toe-taps-b"
   },
   "superman": {
    "frames": 4,
@@ -378,7 +382,8 @@
       }
      ]
     ]
-   }
+   },
+   "alt": "superman-b"
   },
   "db-pullover": {
    "frames": 4,

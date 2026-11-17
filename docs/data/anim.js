@@ -3,6 +3,7 @@
 //   n:   número de fotogramas (iguales para ambos modelos).
 //   pos: fotograma (base 0) que corresponde a cada posición de MOVES[id].positions (por defecto: primero y último).
 //   loop: ciclo 1→…→n→1 (movimientos circulares) en vez de ida y vuelta.
+//   alt: nº de fotogramas de la tira B (img/anim/<f|m>/<id>-b-<k>.webp) de un movimiento alternante (dose.alternating): el otro brazo/pierna.
 // Los fotogramas intermedios se recorren con fundidos suaves; en las posiciones la animación se detiene un momento.
 export const ANIM = {
   'goblet-squat': { n: 5 },
@@ -15,7 +16,7 @@ export const ANIM = {
   'face-pull': { n: 4 },
   'floor-press': { n: 4 },
   'band-external-rotation': { n: 4, pos: [0, 2, 3] },
-  'dead-bug': { n: 5, pos: [0, 2, 4] },
+  'dead-bug': { n: 5, pos: [0, 2, 4], alt: 5 },
   'ring-adductor-lift': { n: 4 },
   'kneeling-hip-flexor': { n: 4 },
   'figure-4': { n: 4 },
@@ -42,11 +43,11 @@ export const ANIM = {
   'kb-swing': { n: 5, pos: [0, 2], loop: true },
   'plank': { n: 4 },
   'side-plank-knee': { n: 4 },
-  'bird-dog': { n: 4 },
+  'bird-dog': { n: 4, alt: 4 },
   'curl-up': { n: 4 },
   'reverse-crunch': { n: 4 },
-  'toe-taps': { n: 4 },
-  'superman': { n: 4 },
+  'toe-taps': { n: 4, alt: 4 },
+  'superman': { n: 4, alt: 4 },
   'db-pullover': { n: 4 },
   'bent-over-row': { n: 4 },
   'one-arm-row-chair': { n: 4 },

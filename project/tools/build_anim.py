@@ -3,6 +3,8 @@
 Uso (desde la raíz del repo):  python3 project/tools/build_anim.py [id …] [--no-arrows] [--no-data]
 - Lee  project/tools/anim_config.json  (una entrada por movimiento: fotogramas, ancla, cortes por modelo, loop, pos,
   nowall, tiras unidas `parts`, flechas manuales `arrows`).
+- `alt: "<id>-b"` (+ `bodyAlign` (alinea por el contorno inferior del cuerpo), `altFrames`, `altCuts`, `altArrows`: 'same' (por defecto) | 'auto' | false | {f,m}): tira B de un movimiento alternante, `<f|m>-<id>-b.jpg`; se corta con el mismo lienzo que A y
+  alineada con su fotograma 1 (strip_frames.cut_pair) y se escribe `<id>-b-<k>.webp` (flechas en ARROWS['<id>-b']).
 - Lee  project/references/anim/<f|m>-<id>.jpg  (una tira con N poses en fila; ver project/IMAGES.md).
 - Recorta y alinea con strip_frames.py y escribe  docs/img/anim/<f|m>/<id>-<k>.webp  (k desde 1, ancho ≤ 640, WebP q80).
 - Genera docs/data/anim.js (ANIM: n, pos, loop), docs/data/arrows.js (ARROWS: flechas de movimiento calculadas con
@@ -22,11 +24,11 @@ CFG = os.path.join(ROOT, 'project', 'tools', 'anim_config.json')
 MAX_W, QUALITY = 640, 80
 
 
-def cut(model, sid, n, anchor, cuts, nowall):
+def cut(model, sid, n, anchor, cuts, nowall, body=False):
     from strip_frames import cut_strip
     src = os.path.join(SRC, f'{model}-{sid}.jpg')
     if not os.path.exists(src): raise SystemExit(f'falta {src}')
-    return cut_strip(src, n, anchor, (cuts or {}).get(model, ''), nowall)
+    return cut_strip(src, n, anchor, (cuts or {}).get(model, ''), nowall, None, body)
 
 
 def save(frames, model, mid):
@@ -64,17 +66,36 @@ def job_(args):
             r = cut(model, p['src'], p['frames'], p['anchor'], c.get('cuts'), False)
             frames += r['frames'][p.get('skip', 0):]
         save(frames, model, mid)
-        return mid, model, [[] for _ in range(len(pos_of(c)) - 1)]
-    r = cut(model, mid, c['frames'], c['anchor'], c.get('cuts'), c.get('nowall', False))
-    save(r['frames'], model, mid)
-    arrows = None
+        return mid, model, ([[] for _ in range(len(pos_of(c)) - 1)], None)
+    if c.get('alt'):  # movimiento alternante: tira A (mid) + tira B (c['alt']) con el mismo lienzo y alineadas en el fotograma 1
+        from strip_frames import cut_pair
+        srcA, srcB = os.path.join(SRC, f'{model}-{mid}.jpg'), os.path.join(SRC, f'{model}-{c["alt"]}.jpg')
+        for f in (srcA, srcB):
+            if not os.path.exists(f): raise SystemExit(f'falta {f}')
+        cuts = c.get('cuts') or {}; acuts = c.get('altCuts') or {}
+        r, rb, dx = cut_pair(srcA, srcB, c['frames'], c.get('altFrames', c['frames']), c['anchor'], cuts.get(model, ''), acuts.get(model, ''), c.get('nowall', False), bool(c.get('bodyAlign')))
+        save(r['frames'], model, mid); save(rb['frames'], model, c['alt'])
+        print(mid, model, 'B alineada con dx =', dx, flush=True)
+    else:
+        r = cut(model, mid, c['frames'], c['anchor'], c.get('cuts'), c.get('nowall', False), bool(c.get('bodyAlign'))); rb = None
+        save(r['frames'], model, mid)
+    arrows = None; arrowsB = None
     if want_arrows and c.get('arrows') is not False:
         man = (c.get('arrows') or {}).get(model)
         if man is not None: arrows = man
         else:
             import arrows as A
             arrows = A.compute(r['masks'], [np.asarray(f) for f in r['frames']], pos_of(c), bool(c.get('loop')))
-    return mid, model, arrows
+        # tira B: por defecto las MISMAS flechas que A (el gesto 2D es igual, solo cambia qué lado es: las automáticas salían
+        # inconsistentes entre modelos); altArrows: 'auto' las calcula sobre B, false las apaga, {f:…,m:…} las fija a mano
+        alt_a = c.get('altArrows', 'same')
+        if rb is not None and alt_a is not False and arrows is not None:
+            if alt_a == 'same': arrowsB = arrows
+            elif isinstance(alt_a, dict): arrowsB = alt_a.get(model)
+            elif alt_a == 'auto':
+                import arrows as A
+                arrowsB = A.compute(rb['masks'], [np.asarray(f) for f in rb['frames']], pos_of(c), bool(c.get('loop')))
+    return mid, model, (arrows, arrowsB)
 
 
 def js_arrows(data):
@@ -99,6 +120,7 @@ def js_anim(cfg):
              '//   n:   número de fotogramas (iguales para ambos modelos).',
              '//   pos: fotograma (base 0) que corresponde a cada posición de MOVES[id].positions (por defecto: primero y último).',
              '//   loop: ciclo 1→…→n→1 (movimientos circulares) en vez de ida y vuelta.',
+             '//   alt: nº de fotogramas de la tira B (img/anim/<f|m>/<id>-b-<k>.webp) de un movimiento alternante (dose.alternating): el otro brazo/pierna.',
              '// Los fotogramas intermedios se recorren con fundidos suaves; en las posiciones la animación se detiene un momento.',
              'export const ANIM = {']
     for mid, c in cfg.items():
@@ -106,6 +128,7 @@ def js_anim(cfg):
         bits = [f'n: {n}']
         if c.get('pos') and c['pos'] != [0, n - 1]: bits.append(f"pos: {json.dumps(c['pos'])}")
         if c.get('loop'): bits.append('loop: true')
+        if c.get('alt'): bits.append(f"alt: {c.get('altFrames', c['frames'])}")
         lines.append(f"  '{mid}': {{ {', '.join(bits)} }},")
     lines.append('};')
     return '\n'.join(lines) + '\n'
@@ -124,10 +147,12 @@ def main():
             data[mm.group(1)] = {l.strip()[0]: json.loads(l.strip()[3:].rstrip(',')) for l in mm.group(2).strip('\n').split('\n')}
     errors = []
     with Pool(min(8, os.cpu_count() or 2)) as pool:
-        for mid, model, arrows in pool.imap_unordered(job, todo):
-            if isinstance(arrows, str):
-                errors.append((mid, model, arrows)); print(mid, model, arrows, flush=True); continue
+        for mid, model, res in pool.imap_unordered(job, todo):
+            if isinstance(res, str):
+                errors.append((mid, model, res)); print(mid, model, res, flush=True); continue
+            arrows, arrowsB = res
             if arrows is not None: data.setdefault(mid, {})[model] = arrows
+            if arrowsB is not None: data.setdefault(cfg[mid]['alt'], {})[model] = arrowsB
             print(mid, model, 'flechas', [len(t) for t in arrows] if arrows is not None else '-', flush=True)
     if '--no-data' not in sys.argv:
         open(os.path.join(ROOT, 'docs', 'data', 'anim.js'), 'w').write(js_anim(cfg))

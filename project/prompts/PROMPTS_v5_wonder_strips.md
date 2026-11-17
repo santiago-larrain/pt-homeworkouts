@@ -59,3 +59,15 @@ No arrows, no text.
 - Decisiones de revisión (fase 3): kb-swing (la kettlebell se ve en todos los fotogramas, detrás de las piernas en los extremos), calf-raise (talón sube
   poco pero se lee), fire-hydrant (abducción de 60-70°, correcta), lateral-lunge, seated-twist-chair (último fotograma ~75°), curl-up/reverse-crunch
   (sutiles, se leen con la flecha), wall-angel (sin pared; `setup`) y overhead-triceps-ext (mancuerna vertical legible): **se conservan**, no se regeneraron.
+
+## Movimientos alternantes: tira B (v2)
+Los movimientos con `dose.alternating` (dead-bug, bird-dog, toe-taps, superman) tienen una **segunda tira B** `<f|m>-<id>-b.jpg` donde se
+mueve el OTRO par de extremidades (misma cámara, escala, mat y músculos; el fotograma 1 de B ≈ el de A). `anim_config.json`: `"alt": "<id>-b"`
+(+ `bodyAlign: true` en dead-bug: ancla = cabeza). `build_anim.py` corta A y B con el mismo lienzo (`strip_frames.cut_pair`) y alineadas en el fotograma 1;
+`frames.js` recorre inicio → A → inicio → B → inicio. No espejar en horizontal (la cabeza cambiaría de lado).
+- Prompt de B: pasar la tira A (URL cdn.wonder.so) como única referencia y pedir "recreate EXACTLY … but the OTHER arm and leg", **diciendo qué es near/far y qué se dibuja
+  delante/detrás** (la extremidad cercana tapa el torso; la lejana queda detrás). Revisar siempre en el recorte que la lejana no cruce por delante.
+- Dead bug (error de profundidad): el brazo lejano que baja debe quedar DETRÁS del brazo vertical cercano, del hombro y de la cabeza; se corrigió pasando la tira anterior como referencia.
+- Superman: la tira A original levantaba brazo y pierna LEJANOS (mismo lado); se regeneró A (brazo lejano + pierna cercana) y B (brazo cercano + pierna lejana). Bird-dog B costó 2 intentos
+  (el 1.º levantaba brazo y pierna cercanos).
+- Hombre: 2.ª referencia = tira B de la mujer (+ la tira A del hombre como 3.ª para fijar el personaje).

@@ -23,7 +23,7 @@ MAT_D = 60          # distancia de color (suma |ΔRGB|) bajo la cual un píxel d
 HOLE_MAX = 7000     # área máx. (px a 1792 de ancho) de una zona blanca cerrada que se recupera como ropa
 
 
-def cut_strip(src, n, anchor_mode='feet', cuts='', nowall=False):
+def cut_strip(src, n, anchor_mode='feet', cuts='', nowall=False, geom=None, body=False, ref=None):
     im = Image.open(src).convert('RGB'); a = np.asarray(im).astype(int)
     H, W, _ = a.shape
     mx, mn = a.max(2), a.min(2)
@@ -133,11 +133,28 @@ def cut_strip(src, n, anchor_mode='feet', cuts='', nowall=False):
             low = ys > bot - max(6, (bot - top) * 0.04)
             anchors.append(xs[low].mean())
         boxes.append((xs.min(), top, xs.max(), bot))
+    # body=True (tendida boca arriba, p. ej. dead bug): el ancla es la CABEZA, estimada con el pelo oscuro del tercio izquierdo
+    # de la figura (la mano que baja sobre la cabeza no la mueve, como pasaba con 'left'); es el mismo criterio en A y en B.
+    prof0 = None
+    if body:
+        dark = (a.max(2) < 100)
+        for i, m in enumerate(masks):
+            ys, xs = np.where(m & dark)
+            if not len(xs): continue
+            x0, x1 = np.where(m.any(0))[0][[0, -1]]
+            sel = xs < x0 + 0.38 * (x1 - x0)
+            if sel.sum() > 30: anchors[i] = float(np.median(xs[sel]))
     pad = 16
     ext_l = int(max(ax - b[0] for b, ax in zip(boxes, anchors)) + pad)
     ext_r = int(max(b[2] - ax for b, ax in zip(boxes, anchors)) + pad)
     top = max(0, min(b[1] for b in boxes) - pad)
     bottom = min(H, max(floor_bot + 10 if floor_rows else 0, max(b[3] for b in boxes) + pad))
+    own = {'ext_l': ext_l, 'ext_r': ext_r, 'top_rel': int(top - floor_y), 'bot_rel': int(bottom - floor_y)}
+    if geom:  # lienzo común con otra tira (tira B de un movimiento alternante): mismo tamaño y mismo suelo
+        ext_l, ext_r = geom['ext_l'], geom['ext_r']
+        top, bottom = floor_y + geom['top_rel'], floor_y + geom['bot_rel']
+        if top < 0 or bottom > H: raise SystemExit('lienzo común fuera de la imagen')
+        anchors = [ax - geom.get('dx', 0) for ax in anchors]  # dx > 0 mueve la figura a la derecha
 
     frames, out_masks = [], []
     for i, ax in enumerate(anchors):
@@ -154,7 +171,21 @@ def cut_strip(src, n, anchor_mode='feet', cuts='', nowall=False):
         mk[:, x0 - L:x1 - L] = masks[i][top:bottom, x0:x1]
         cm = (src_img * al + bg * (1 - al)).clip(0, 255).astype(np.uint8)
         frames.append(Image.fromarray(cm)); out_masks.append(mk)
-    return {'frames': frames, 'masks': out_masks, 'floor': (floor_y, floor_bot)}
+    return {'frames': frames, 'masks': out_masks, 'floor': (floor_y, floor_bot), 'geom': own, 'prof0': prof0}
+
+
+def cut_pair(srcA, srcB, nA, nB, anchor_mode='feet', cutsA='', cutsB='', nowall=False, body=False):
+    """Corta la tira A y su tira alternante B con el MISMO lienzo y alineando el fotograma 1 de B con el de A
+    (centro de la máscara en x), así pasar de A a B no produce saltos. Devuelve (rA, rB, dx)."""
+    a0 = cut_strip(srcA, nA, anchor_mode, cutsA, nowall, None, body); b0 = cut_strip(srcB, nB, anchor_mode, cutsB, nowall, None, body, a0['prof0'])
+    ga, gb = a0['geom'], b0['geom']
+    G = {'ext_l': max(ga['ext_l'], gb['ext_l']), 'ext_r': max(ga['ext_r'], gb['ext_r']),
+         'top_rel': min(ga['top_rel'], gb['top_rel']), 'bot_rel': max(ga['bot_rel'], gb['bot_rel'])}
+    rA = cut_strip(srcA, nA, anchor_mode, cutsA, nowall, G, body); rB = cut_strip(srcB, nB, anchor_mode, cutsB, nowall, G, body, a0['prof0'])
+    cx = lambda m: np.where(m)[1].mean()
+    dx = int(round(cx(rA['masks'][0]) - cx(rB['masks'][0])))
+    if dx: rB = cut_strip(srcB, nB, anchor_mode, cutsB, nowall, dict(G, dx=dx), body, a0['prof0'])
+    return rA, rB, dx
 
 
 def main():

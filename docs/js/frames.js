@@ -8,6 +8,16 @@ import { ARROWS } from '../data/arrows.js';
 export const hasFrames = id => !!ANIM[id];
 export const frameCount = id => (ANIM[id] ? ANIM[id].n : 0);
 export const frameURL = (id, model, k) => `img/anim/${model === 'm' ? 'm' : 'f'}/${id}-${k + 1}.webp`;
+// movimientos alternantes (dose.alternating): tira B = el otro brazo/pierna (img/anim/<f|m>/<id>-b-<k>.webp, ANIM[id].alt = nº de fotogramas)
+export const frameAltCount = id => (ANIM[id] && ANIM[id].alt) || 0;
+export const frameAltURL = (id, model, k) => `img/anim/${model === 'm' ? 'm' : 'f'}/${id}-b-${k + 1}.webp`;
+// todas las URLs de fotogramas de un movimiento (A y, si hay, B): para precargar / calentar la caché sin conexión
+export const frameURLs = (id, model) => {
+  const out = [];
+  for (let k = 0; k < frameCount(id); k++) out.push(frameURL(id, model, k));
+  for (let k = 0; k < frameAltCount(id); k++) out.push(frameAltURL(id, model, k));
+  return out;
+};
 // fotograma (base 0) de cada posición del movimiento
 export function posFrames(id, nPos) {
   const a = ANIM[id];
@@ -97,13 +107,19 @@ export class FrameAnimator {
     this.P = posFrames(id, nPos);
     this.el = document.createElement('div');
     this.el.className = 'rigframes';
-    this.el.innerHTML = Array.from({ length: A.n }, (_, k) => `<img src="${frameURL(id, model, k)}" alt="" decoding="async" loading="eager" draggable="false">`).join('');
+    this.fixedMode = fixed != null || !play;
+    // alternante: tira B (el otro lado) con el mismo lienzo; sus fotogramas van detrás de los de A (índices n…n+m-1). En modo fijo
+    // (miniaturas, posición fija) solo se usa A.
+    this.m = !this.fixedMode && A.alt && A.n > 1 ? A.alt : 0;
+    const tag = src => `<img src="${src}" alt="" decoding="async" loading="eager" draggable="false">`;
+    this.el.innerHTML = Array.from({ length: A.n }, (_, k) => tag(frameURL(id, model, k))).join('')
+      + Array.from({ length: this.m }, (_, k) => tag(frameAltURL(id, model, k))).join('');
     this.imgs = [...this.el.children];
     box.prepend(this.el);
     this.cur = -1; this.pos = -1; this.reduced = reduced();
     this.arrowsData = (ARROWS[id] || {})[this.model] || null;
-    this.fixedMode = fixed != null || !play;
-    if (this.arrowsData && !this.fixedMode && A.n > 1) this.layer = new ArrowLayer(this.el);
+    this.arrowsDataB = this.m ? (ARROWS[id + '-b'] || {})[this.model] || null : null;
+    if ((this.arrowsData || this.arrowsDataB) && !this.fixedMode && A.n > 1) this.layer = new ArrowLayer(this.el);
     // decodifica todo antes de animar (sin parpadeo en la primera vuelta); el primer fotograma se muestra ya
     this.isReady = false;
     this.ready = Promise.all(this.imgs.map(im => (im.decode ? im.decode() : Promise.resolve()).catch(() => {}))).then(() => {
@@ -115,6 +131,12 @@ export class FrameAnimator {
     const up = [...Array(A.n).keys()];
     this.loopMode = !!A.loop;
     this.seq = this.loopMode ? up : up.concat(up.slice(1, -1).reverse()); // ciclo o ida y vuelta
+    if (this.m) {
+      // alternante: inicio → A de ida y vuelta → inicio → B de ida y vuelta (el fotograma 1 de B ≈ el de A: se comparte el de A)
+      const upB = Array.from({ length: this.m }, (_, k) => A.n + k);
+      const seqB = this.loopMode ? upB.slice(1) : upB.slice(1).concat(upB.slice(1, -1).reverse());
+      this.seq = this.seq.concat([0], seqB);
+    }
     this.buildTimeline();
     this.k = 0; this.phase = 0; this.last = 0; this.lastDraw = 0;
     this.show(this.seq[0], null, 0); this.setPos(this.headingFrom(0, 0));
@@ -123,7 +145,12 @@ export class FrameAnimator {
   setPos(i) {
     if (i !== this.pos && i >= 0) { this.pos = i; this.onPos(i); if (this.layer && this.reduced) this.staticArrow(i); }
   }
-  isPosFrame(f) { return this.P.includes(f) || (!this.loopMode && (f === 0 || f === this.n - 1)); }
+  // fotograma de B → su equivalente en A (mismas posiciones, mismo respiro)
+  base(f) { return f >= this.n ? f - this.n : f; }
+  isPosFrame(f) {
+    const b = this.base(f), last = (f >= this.n ? this.m : this.n) - 1;
+    return this.P.includes(b) || (!this.loopMode && (b === 0 || b === last));
+  }
   // Línea de tiempo: marcas (fotogramas de posición) en la secuencia; el traslado entre dos marcas dura lo mismo
   // (≈ speed·0,85 s) sea cual sea el nº de fotogramas intermedios, con aceleración y frenado suaves; pausa en cada marca.
   buildTimeline() {
@@ -149,8 +176,8 @@ export class FrameAnimator {
   // posición hacia la que se mueve (o en la que está detenida)
   headingFrom(k, t) {
     const a = this.seq[k];
-    if (t === 0 && this.P.includes(a)) return this.P.indexOf(a);
-    for (let j = 1; j <= this.seq.length; j++) { const f = this.seq[(k + j) % this.seq.length]; if (this.P.includes(f)) return this.P.indexOf(f); }
+    if (t === 0 && this.P.includes(this.base(a))) return this.P.indexOf(this.base(a));
+    for (let j = 1; j <= this.seq.length; j++) { const f = this.base(this.seq[(k + j) % this.seq.length]); if (this.P.includes(f)) return this.P.indexOf(f); }
     return 0;
   }
   // a: fotograma de abajo (opaco); b: fotograma que aparece encima con opacidad t
@@ -164,9 +191,10 @@ export class FrameAnimator {
   }
   // flechas de la etapa del paso k: ¿hay transición entre las posiciones de sus marcas?
   arrowsFor(k) {
-    const d = this.arrowsData; if (!d) return null;
     const lg = this.legOf[k]; if (!lg) return null;
-    const pa = this.P.indexOf(this.seq[lg.kp]), pb = this.P.indexOf(this.seq[lg.kn]);
+    const onB = this.seq[lg.kp] >= this.n || this.seq[lg.kn] >= this.n;   // etapa de la tira B (otro lado)
+    const d = onB ? this.arrowsDataB : this.arrowsData; if (!d) return null;
+    const pa = this.P.indexOf(this.base(this.seq[lg.kp])), pb = this.P.indexOf(this.base(this.seq[lg.kn]));
     if (pa < 0 || pb < 0 || pa === pb) return null;
     const n = this.P.length;
     let t = -1, rev = false;
@@ -174,7 +202,7 @@ export class FrameAnimator {
     else if (this.loopMode && pa === n - 1 && pb === 0) t = n - 1;
     else if (pb === pa - 1) { t = pb; rev = true; }
     const list = d[t];
-    return list && list.length ? { list, rev, key: `${t}${rev ? 'r' : 'f'}` } : null;
+    return list && list.length ? { list, rev, key: `${onB ? 'B' : 'A'}${t}${rev ? 'r' : 'f'}` } : null;
   }
   // con prefers-reduced-motion: flecha estática hacia la posición a la que va
   staticArrow(posIdx) {
