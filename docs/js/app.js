@@ -5,7 +5,7 @@ import { buildSteps, estimateSecs, sectionEstimate, doseOf, doseText, fmtSecs, c
 import { configure as configureAudio, unlock as unlockAudio, sfx, say } from './audio.js';
 import { I } from './icons.js';
 import { Animator, stillURL } from './rig/anim.js';
-import { FrameAnimator, hasFrames, frameURL, frameCount, posFrame } from './frames.js';
+import { FrameAnimator, hasFrames, frameURL, frameURLs, frameCount, posFrame } from './frames.js';
 import { sessionKcal, kcalText } from './calories.js';
 import { muscleLoad, muscleLoadFromMoves, topMuscles, mountMuscleMap, muscleMapSVG, muscleLegendHTML, injectMuscleMapCSS, mmDarkVars } from './musclemap.js';
 import { MUSCLES, GROUPS as MUSCLE_GROUPS, canonicalMuscles } from '../data/muscles.js';
@@ -16,7 +16,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
-const APP_VERSION = '1.9';
+const APP_VERSION = '1.10';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -1448,7 +1448,7 @@ function warmFrames() {
     const models = new Set([store.active.gender]), urls = new Set();
     S().plans.forEach(p => { if (isDuo(p)) people(p).forEach(x => models.add(x.model)); });
     models.forEach(model => {
-      S().plans.forEach(p => p.sections.forEach(sec => sec.items.forEach(it => [it.move, it.b && it.b.move].forEach(id => { if (id && hasFrames(id)) for (let k = 0; k < frameCount(id); k++) urls.add(frameURL(id, model, k)); }))));
+      S().plans.forEach(p => p.sections.forEach(sec => sec.items.forEach(it => [it.move, it.b && it.b.move].forEach(id => { if (id && hasFrames(id)) frameURLs(id, model).forEach(u => urls.add(u)); }))));
       MOVES.forEach(m => { if (hasFrames(m.id)) keyIdx(m).forEach(i => urls.add(frameURL(m.id, model, posFrame(m.id, i, m.positions.length)))); });
     });
     navigator.serviceWorker.ready.then(r => { if (r.active) r.active.postMessage({ type: 'warm', urls: [...urls] }); }).catch(() => {});
