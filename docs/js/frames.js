@@ -53,7 +53,7 @@ class ArrowLayer {
     this.key = null;
   }
   setAspect(ar) { if (ar && ar !== this.ar) { this.ar = ar; this.svg.setAttribute('viewBox', `0 0 ${ar} 1`); this.key = null; } }
-  // arrows: [{from,to,curve}] en 0..1; reversed: invierte el sentido
+  // arrows: [{from,to,curve,s?}] en 0..1 (hasta 2 por transición; s = escala del trazo); reversed: invierte el sentido (al volver, las flechas por pares salen hacia afuera)
   set(arrows, reversed, key) {
     if (key === this.key) return;
     this.key = key;
@@ -63,12 +63,15 @@ class ArrowLayer {
       s.on = !!a; s.q = null;
       if (!a) { s.g.style.opacity = 0; return; }
       let p0 = a.from, p1 = a.to, c = a.curve || 0;
+      const sc = a.s || 1;                                   // escala (flechas cortas por pares, p. ej. el aro: s ≈ 0,75)
       if (reversed) { [p0, p1] = [p1, p0]; c = -c; }
       const P0 = [p0[0] * ar, p0[1]], P1 = [p1[0] * ar, p1[1]];
       const dx = P1[0] - P0[0], dy = P1[1] - P0[1], L = Math.hypot(dx, dy) || 1e-6;
       const C = [(P0[0] + P1[0]) / 2 - dy / L * c * L, (P0[1] + P1[1]) / 2 + dx / L * c * L];
       let tx = P1[0] - C[0], ty = P1[1] - C[1]; const tl = Math.hypot(tx, ty) || 1e-6; tx /= tl; ty /= tl;
-      const hl = Math.min(0.09, Math.max(0.055, L * 0.3)), hw = hl * 0.45;
+      const hl = Math.min(0.09, Math.max(0.055, L * 0.3)) * sc, hw = hl * 0.45;
+      s.halo.setAttribute('stroke-width', 0.034 * sc); s.line.setAttribute('stroke-width', 0.016 * sc);
+      s.hh.setAttribute('stroke-width', 0.02 * sc); s.head.setAttribute('stroke-width', 0.006 * sc);
       const E = [P1[0] - tx * hl * 0.75, P1[1] - ty * hl * 0.75];
       const d = `M${P0[0]} ${P0[1]} Q${C[0]} ${C[1]} ${E[0]} ${E[1]}`;
       const B = [P1[0] - tx * hl, P1[1] - ty * hl];

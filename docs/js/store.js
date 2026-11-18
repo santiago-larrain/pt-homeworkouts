@@ -4,7 +4,7 @@ import { entriesOf, replayMilestones } from './progress.js';
 import { cleanReminder } from './health.js';
 
 const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
-export const VERSION = 5;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6) · 5 = recordatorios por perfil y Salud (v1.8)
+export const VERSION = 6;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6) · 5 = recordatorios por perfil y Salud (v1.8) · 6 = aro: ejercicios separados (v1.11)
 
 export const DEFAULT_SETTINGS = {
   name: 'Anita',
@@ -87,8 +87,35 @@ function migrateReminders(s) {
   s.profiles.forEach((pr, i) => { pr.reminders = cleanReminder(pr.reminders || (i === 0 ? s.settings.reminders : null)); });
 }
 
+// v5 → v6 (v1.11): el aro se separó en ejercicios propios. Antes `ring-adductor-lift` (aprieta + torso arriba) y `ring-legs-side`
+// (piernas arriba + lateral) eran un solo movimiento de dos fases; ahora son ring-squeeze + ring-adductor-lift y ring-legs-up +
+// ring-legs-side, cada uno con su dosis por defecto. Solo se convierten los items sin dosis propia o con la dosis antigua de
+// fases (una dosis de repeticiones/tiempo elegida por la usuaria se respeta). En planes en pareja se divide solo si ambos
+// lados son del mismo tipo; si no, solo se cambia la dosis antigua por la nueva. No toca el historial.
+const RING_SPLIT = { 'ring-adductor-lift': 'ring-squeeze', 'ring-legs-side': 'ring-legs-up' };   // movimiento antiguo → el ejercicio que se agrega antes
+const oldRingDose = it => it && RING_SPLIT[it.move] && (!it.dose || it.dose.type === 'phases');
+function migrateRing(s) {
+  for (const p of s.plans) for (const sec of (p.sections || [])) {
+    if (!Array.isArray(sec.items)) continue;
+    const out = [];
+    for (const it of sec.items) {
+      const a = oldRingDose(it), b = it && it.b && oldRingDose(it.b);
+      if (!a && !b) { out.push(it); continue; }
+      const duo = !!(it.b);
+      if (duo && !(a && b && it.move === it.b.move)) {      // pareja con lados distintos: solo se quita la dosis de fases
+        const c = clone(it); if (a) delete c.dose; if (b) delete c.b.dose; out.push(c); continue;
+      }
+      const first = clone(it), second = clone(it);
+      for (const c of [first, second]) { delete c.dose; if (c.b) delete c.b.dose; }
+      first.move = RING_SPLIT[it.move]; if (first.b) first.b.move = RING_SPLIT[it.b.move];
+      out.push(first, second);
+    }
+    sec.items = out;
+  }
+}
+
 function initial() {
-  return { settings: { ...DEFAULT_SETTINGS }, plans: clone(DEFAULT_PLANS), activePlanId: DEFAULT_PLANS[0].id, history: [], hiddenBuiltins: [] };
+  return { version: VERSION, settings: { ...DEFAULT_SETTINGS }, plans: clone(DEFAULT_PLANS), activePlanId: DEFAULT_PLANS[0].id, history: [], hiddenBuiltins: [] };
 }
 
 export const store = {
@@ -108,12 +135,14 @@ export const store = {
     const needProgress = s.profiles.some(pr => !pr.milestones || !(pr.weeklyGoal >= 1));
     if (needProgress) migrateProgress(s);
     if (s.profiles.some(pr => !pr.reminders)) migrateReminders(s);
+    const ringOld = (s.version || 1) < 6;
+    if (ringOld) migrateRing(s);
     s.version = VERSION;
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
     if (!s.plans.some(p => p.id === s.activePlanId)) s.activePlanId = s.plans[0] ? s.plans[0].id : null;
     this.state = s;
-    if (migrated || needProgress) this.save();
+    if (migrated || needProgress || ringOld) this.save();
     return s;
   },
   save() { try { localStorage.setItem(KEY, JSON.stringify(this.state)); } catch (e) { console.warn(e); } },

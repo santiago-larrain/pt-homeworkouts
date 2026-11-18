@@ -172,29 +172,31 @@ const MOVES1 = [
     dose: { type: 'reps', min: 10, max: 12, alternating: true }, imageStatus: 'vector',
   },
   {
-    id: 'ring-adductor-lift', name: 'Aro: aductores + torso arriba', category: 'core', equipment: ['aro', 'mat'],
+    id: 'ring-adductor-lift', name: 'Aro: torso arriba', category: 'core', equipment: ['aro', 'mat'],
     group: 'core', met: 3.5, level: 2,
     focus: ['Aductores', 'Recto abdominal'], support: ['Transverso abdominal'],
-    cue: 'Aprieta firme el aro entre las rodillas',
-    tips: ['Posición 1: boca arriba, aprieta y suelta el aro.', 'Posición 2: sube el torso apoyándote en las manos, sin soltar el aro.', 'Cuello largo, hombros relajados.'],
+    cue: 'Aprieta el aro y sube el torso; baja soltando',
+    setup: 'Boca arriba, rodillas dobladas y pies planos; el aro entre las rodillas.',
+    tips: ['Aprieta el aro mientras el torso sube sobre los antebrazos; al bajar, suelta despacio.', 'Exhala al subir y apretar; inhala al bajar y soltar.', 'Cuello largo, hombros relajados; los pies no se despegan.'],
     positions: [
-      { label: 'Foto 1', breath: 'in', verb: 'aprieta el aro', img: img('ring-adductor-lift', 1) },
-      { label: 'Foto 2', breath: 'ex', verb: 'sube el torso', img: img('ring-adductor-lift', 2) },
+      { label: 'Abajo, suelta', breath: 'in', verb: 'baja y suelta', img: img('ring-adductor-lift', 1) },
+      { label: 'Arriba, aprieta', breath: 'ex', verb: 'sube y aprieta', img: img('ring-adductor-lift', 2) },
     ],
-    dose: { type: 'phases', phases: [{ label: 'Posición 1', secs: 20, pos: 0 }, { label: 'Posición 2', secs: 20, pos: 1 }] }, imageStatus: 'final',
+    dose: { type: 'reps', min: 10, max: 12 }, imageStatus: 'final',
   },
   {
-    id: 'ring-legs-side', name: 'Aro: piernas arriba + lateral', category: 'core', equipment: ['aro', 'mat'],
-    group: 'core', met: 3.5, level: 2,
-    focus: ['Aductores', 'Transverso abdominal', 'Glúteo medio'], support: ['Oblicuos'],
-    cue: 'Aro firme entre los tobillos',
-    tips: ['Piernas arriba: torso apenas elevado, brazos largos, respira profundo.', 'De lado: apóyate en el antebrazo y eleva la pierna de arriba.', 'Mantén el abdomen activo todo el tiempo.'],
+    id: 'ring-legs-side', name: 'Aro: lateral', category: 'core', equipment: ['aro', 'mat'],
+    group: 'piernas', met: 3.5, level: 2,
+    focus: ['Glúteo medio', 'Aductores'], support: ['Oblicuos'],
+    cue: 'Aro firme entre los tobillos; las dos piernas suben juntas',
+    setup: 'De lado, apoyada en el antebrazo; el aro entre los tobillos.',
+    tips: ['Sube las dos piernas a la vez, apretando el aro; baja soltando despacio.', 'Exhala al subir y apretar; inhala al bajar.', 'Torso firme y abdomen activo; no te hundas sobre el hombro.'],
     positions: [
-      { label: 'Piernas arriba', breath: 'ex', verb: 'aprieta y respira', img: img('ring-legs-side', 1) },
-      { label: 'De lado', breath: 'ex', verb: 'eleva la pierna', img: img('ring-legs-side', 2) },
+      { label: 'Abajo, suelta', breath: 'in', verb: 'baja y suelta', img: img('ring-legs-side', 1) },
+      { label: 'Arriba, aprieta', breath: 'ex', verb: 'sube y aprieta', img: img('ring-legs-side', 2) },
     ],
     sided: true, mirror: true,
-    dose: { type: 'phases', phases: [{ label: 'Piernas arriba', secs: 20, pos: 0 }, { label: 'De lado', secs: 15, pos: 1, perSide: true }] }, imageStatus: 'final',
+    dose: { type: 'reps', min: 10, max: 12, perSide: true }, imageStatus: 'final',
   },
   {
     id: 'doorway-pec', name: 'Pectoral en marco de puerta', category: 'elongacion', equipment: ['puerta'],
@@ -250,7 +252,7 @@ const MOVES1 = [
   },
 ];
 
-// Catálogo completo (v1.7): los 17 movimientos originales + los 54 de moves2.js = 71.
+// Catálogo completo (v1.7): los 17 movimientos originales + los 56 de moves2.js = 73.
 export const CATEGORIES = [...CATEGORIES1, ...CATEGORIES2];
 export const EQUIPMENT = { ...EQUIPMENT1, ...EQUIPMENT2 };
 export const MOVES = [...MOVES1, ...MOVES2];

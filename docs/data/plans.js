@@ -46,11 +46,13 @@ const PLANS1 = [
         ],
       },
       {
-        id: 'B3', name: 'Core y Pilates con aro', note: 'Estabilidad de core + circuito de aro.',
-        kind: 'circuit', rounds: 3, rest: 45,
+        id: 'B3', name: 'Core y Pilates con aro', note: 'Estabilidad de core + circuito de aro (cada ejercicio: aprieta y suelta).',
+        kind: 'circuit', rounds: 3, rest: 45, gap: 5,
         items: [
           { move: 'dead-bug', dose: { type: 'reps', min: 10, max: 12, alternating: true } },
+          { move: 'ring-squeeze' },
           { move: 'ring-adductor-lift' },
+          { move: 'ring-legs-up' },
           { move: 'ring-legs-side' },
         ],
       },

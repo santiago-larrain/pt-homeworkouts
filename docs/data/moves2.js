@@ -1,4 +1,4 @@
-// Catálogo v2: 54 movimientos nuevos (generado por project/tools/gen_moves2.py desde project/catalog_v2/moves.json).
+// Catálogo v2: 56 movimientos nuevos (generado por project/tools/gen_moves2.py desde project/catalog_v2/moves.json).
 // Misma forma que MOVES de catalog.js (+ group, sided, mirror, met, level, setup). Sin `img` por posición: usan fotogramas (ANIM).
 // Para integrar: concatenar MOVES2 a MOVES, y CATEGORIES2/EQUIPMENT2 a CATEGORIES/EQUIPMENT.
 
@@ -524,5 +524,25 @@ export const MOVES2 = [
     tips: ["Mancuernas apoyadas en los hombros, codos al frente.", "Baja hasta muslos paralelos; al subir, aprovecha el impulso para el press.", "Termina con brazos estirados y costillas abajo."],
     positions: [{ label: "Sentadilla", breath: "in", verb: "baja" }, { label: "Arriba", breath: "ex", verb: "sube y empuja" }],
     dose: {"type": "reps", "min": 8, "max": 12}, imageStatus: 'final',
+  },
+  {
+    id: "ring-squeeze", name: "Aro: aprieta entre rodillas", category: "core", equipment: ["aro", "mat"],
+    group: "piernas", sided: false, mirror: false, met: 3.0, level: 1,
+    focus: ["Aductores"], support: ["Transverso abdominal"],
+    cue: "Aprieta el aro con las rodillas y suelta despacio",
+    setup: "Boca arriba, rodillas dobladas y pies planos; el aro entre las rodillas.",
+    tips: ["Boca arriba, rodillas dobladas y pies planos; el aro entre las rodillas, con las almohadillas contra la parte interna de cada una.", "Exhala al apretar (1 segundo); inhala al soltar sin dejar caer el aro.", "Pelvis neutra, hombros y cuello relajados."],
+    positions: [{ label: "Suelta", breath: "in", verb: "suelta" }, { label: "Aprieta", breath: "ex", verb: "aprieta el aro" }],
+    dose: {"type": "reps", "min": 12, "max": 15}, imageStatus: 'final',
+  },
+  {
+    id: "ring-legs-up", name: "Aro: piernas arriba", category: "core", equipment: ["aro", "mat"],
+    group: "core", sided: false, mirror: false, met: 3.5, level: 2,
+    focus: ["Aductores", "Transverso abdominal"], support: ["Recto abdominal", "Psoas"],
+    cue: "Aro firme entre los tobillos; sube las piernas apretando",
+    setup: "Boca arriba, cabeza y hombros apenas elevados; el aro entre los tobillos.",
+    tips: ["Cabeza y hombros apenas elevados, brazos largos hacia adelante.", "Sube las piernas casi verticales apretando el aro; baja soltando sin apoyar los pies.", "Exhala al subir y apretar; inhala al bajar. Lumbar pegada al mat."],
+    positions: [{ label: "Abajo, suelta", breath: "in", verb: "baja y suelta" }, { label: "Arriba, aprieta", breath: "ex", verb: "sube y aprieta" }],
+    dose: {"type": "reps", "min": 10, "max": 12}, imageStatus: 'final',
   },
 ];

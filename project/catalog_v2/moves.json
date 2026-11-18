@@ -3057,5 +3057,117 @@
       ],
       "prompt_f": "Animation keyframe strip for a fitness app. The SAME woman as the attached character sheet (identical face, dark ponytail with side braid, warm tan skin, pink leaf-pattern sports bra and high-waisted leggings, barefoot), in the exact cartoon style of the references (brown outlines, soft flat shading). Pure white background with one thin light-grey floor line across the whole width. SIX frames in one horizontal row, left to right, evenly spaced with wide empty space between the figures (no divider lines, no borders), identical camera, identical scale and identical floor height in every frame, so the frames play as a smooth animation. View: RIGHT SIDE PROFILE, facing right. (\"near\" = the limb closer to the camera, \"far\" = the limb farther from the camera.) Props, identical size, colour and position in every frame unless stated: a pair of small hex dumbbells (pink rubber coating), the same size in every frame. Movement, dumbbell thruster in 6 stages: 1) bottom of the squat: thighs parallel to the floor, knees bent about 105 degrees, torso leaning forward about 30 degrees, both dumbbells resting at the front of the shoulders with the elbows pointing forward and low, heels flat; 2) rising: knees bent about 80 degrees, hips rising, dumbbells still at the shoulders, torso leaning about 25 degrees; 3) rising further: knees bent about 130 degrees, torso leaning about 10 degrees, dumbbells still at the shoulders; 4) standing: legs straight, hips extended, torso upright, dumbbells at the shoulders and just beginning to rise past the chin, elbows bent about 80 degrees; 5) the dumbbells pass the forehead, arms bent about 40 degrees, legs straight, torso upright; 6) top: legs straight, arms fully extended overhead with soft elbows and the dumbbells directly above the shoulders, biceps beside the ears, ribs down, torso tall. What does NOT move: the feet stay flat in the same place, the back stays straight. Focus muscles drawn over the clothes with anatomical shape and fibre lines in ORANGE: quadriceps, gluteus maximus and front deltoids; helpers in YELLOW: triceps, hamstrings, transversus abdominis. Same muscles in every frame. Anatomically correct. No arrows, no text."
     }
+  },
+  {
+    "id": "ring-squeeze",
+    "name": "Aro: aprieta entre rodillas",
+    "category": "core",
+    "group": "piernas",
+    "equipment": [
+      "aro",
+      "mat"
+    ],
+    "focus": [
+      "Aductores"
+    ],
+    "support": [
+      "Transverso abdominal"
+    ],
+    "cue": "Aprieta el aro con las rodillas y suelta despacio",
+    "tips": [
+      "Boca arriba, rodillas dobladas y pies planos; el aro entre las rodillas, con las almohadillas contra la parte interna de cada una.",
+      "Exhala al apretar (1 segundo); inhala al soltar sin dejar caer el aro.",
+      "Pelvis neutra, hombros y cuello relajados."
+    ],
+    "positions": [
+      {
+        "label": "Suelta",
+        "breath": "in",
+        "verb": "suelta"
+      },
+      {
+        "label": "Aprieta",
+        "breath": "ex",
+        "verb": "aprieta el aro"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 4,
+      "view": "front view from her feet, slightly above, reclined on the mat",
+      "ground": "mat",
+      "anchor": "center",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "(v1.11: tira generada a mano con Wonder; ver project/references/anim/f-ring-squeeze.jpg y project/prompts/PROMPTS_v5_wonder_strips.md → «Aro»)"
+    }
+  },
+  {
+    "id": "ring-legs-up",
+    "name": "Aro: piernas arriba",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "aro",
+      "mat"
+    ],
+    "focus": [
+      "Aductores",
+      "Transverso abdominal"
+    ],
+    "support": [
+      "Recto abdominal",
+      "Psoas"
+    ],
+    "cue": "Aro firme entre los tobillos; sube las piernas apretando",
+    "tips": [
+      "Cabeza y hombros apenas elevados, brazos largos hacia adelante.",
+      "Sube las piernas casi verticales apretando el aro; baja soltando sin apoyar los pies.",
+      "Exhala al subir y apretar; inhala al bajar. Lumbar pegada al mat."
+    ],
+    "positions": [
+      {
+        "label": "Abajo, suelta",
+        "breath": "in",
+        "verb": "baja y suelta"
+      },
+      {
+        "label": "Arriba, aprieta",
+        "breath": "ex",
+        "verb": "sube y aprieta"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "right side profile, lying on her back",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        3
+      ],
+      "prompt_f": "(v1.11: tira generada a mano con Wonder; ver project/references/anim/f-ring-legs-up.jpg y project/prompts/PROMPTS_v5_wonder_strips.md → «Aro»)"
+    }
   }
 ]

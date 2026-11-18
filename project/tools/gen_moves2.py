@@ -20,6 +20,8 @@ SETUP = {
     'banded-bridge': 'Mini banda justo sobre las rodillas.',
     'clamshell': 'Mini banda justo sobre las rodillas; pies y caderas apilados.',
     'ring-bridge': 'Aro entre las rodillas, a la altura de los muslos.',
+    'ring-squeeze': 'Boca arriba, rodillas dobladas y pies planos; el aro entre las rodillas.',
+    'ring-legs-up': 'Boca arriba, cabeza y hombros apenas elevados; el aro entre los tobillos.',
     'ring-chest-press': 'Aro entre las palmas, a la altura del pecho.',
     'hamstring-stretch-supine': 'Banda (o toalla) alrededor de la planta del pie estirado.',
     'floor-fly': 'Mancuernas ligeras; los codos no bajan del nivel del suelo.',
@@ -31,7 +33,7 @@ SETUP = {
     'mountain-climber-slow': 'Plancha alta sobre el mat, manos bajo los hombros.',
 }
 def js(v): return json.dumps(v, ensure_ascii=False)
-out = ['// Catálogo v2: 54 movimientos nuevos (generado por project/tools/gen_moves2.py desde project/catalog_v2/moves.json).',
+out = ['// Catálogo v2: 56 movimientos nuevos (generado por project/tools/gen_moves2.py desde project/catalog_v2/moves.json).',
        '// Misma forma que MOVES de catalog.js (+ group, sided, mirror, met, level, setup). Sin `img` por posición: usan fotogramas (ANIM).',
        '// Para integrar: concatenar MOVES2 a MOVES, y CATEGORIES2/EQUIPMENT2 a CATEGORIES/EQUIPMENT.',
        '',
