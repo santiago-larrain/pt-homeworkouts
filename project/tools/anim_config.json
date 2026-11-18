@@ -130,79 +130,13 @@
    "pos": [
     0,
     2,
-    4
+    3
    ],
    "arrows": false,
    "arrows_note": "brazo y pierna opuestos se mueven a la vez; las flechas automáticas salían distintas en mujer y hombre",
    "alt": "dead-bug-b",
-   "bodyAlign": true
-  },
-  "ring-adductor-lift": {
-   "frames": 4,
-   "anchor": "right",
-   "pos": [
-    0,
-    3
-   ],
-   "arrows": {
-    "f": [
-     [
-      {
-       "from": [
-        0.5,
-        0.22
-       ],
-       "to": [
-        0.58,
-        0.31
-       ],
-       "curve": 0,
-       "s": 0.75
-      },
-      {
-       "from": [
-        0.8,
-        0.22
-       ],
-       "to": [
-        0.72,
-        0.31
-       ],
-       "curve": 0,
-       "s": 0.75
-      }
-     ]
-    ],
-    "m": [
-     [
-      {
-       "from": [
-        0.5,
-        0.22
-       ],
-       "to": [
-        0.58,
-        0.31
-       ],
-       "curve": 0,
-       "s": 0.75
-      },
-      {
-       "from": [
-        0.8,
-        0.22
-       ],
-       "to": [
-        0.72,
-        0.31
-       ],
-       "curve": 0,
-       "s": 0.75
-      }
-     ]
-    ]
-   },
-   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
+   "bodyAlign": true,
+   "keep": 4
   },
   "kneeling-hip-flexor": {
    "frames": 4,
@@ -221,73 +155,6 @@
   "child-pose-lateral": {
    "frames": 4,
    "anchor": "center"
-  },
-  "ring-legs-side": {
-   "frames": 4,
-   "anchor": "left",
-   "pos": [
-    0,
-    3
-   ],
-   "arrows": {
-    "f": [
-     [
-      {
-       "from": [
-        0.86,
-        0.34
-       ],
-       "to": [
-        0.86,
-        0.47
-       ],
-       "curve": 0,
-       "s": 0.75
-      },
-      {
-       "from": [
-        0.86,
-        0.8
-       ],
-       "to": [
-        0.86,
-        0.67
-       ],
-       "curve": 0,
-       "s": 0.75
-      }
-     ]
-    ],
-    "m": [
-     [
-      {
-       "from": [
-        0.86,
-        0.34
-       ],
-       "to": [
-        0.86,
-        0.47
-       ],
-       "curve": 0,
-       "s": 0.75
-      },
-      {
-       "from": [
-        0.86,
-        0.8
-       ],
-       "to": [
-        0.86,
-        0.67
-       ],
-       "curve": 0,
-       "s": 0.75
-      }
-     ]
-    ]
-   },
-   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
   },
   "bodyweight-squat": {
    "frames": 5,
@@ -809,36 +676,36 @@
    "arrows": false,
    "arrows_note": "movimiento de cuerpo completo; la flecha automática salía en los pies"
   },
-  "ring-legs-up": {
-   "frames": 4,
+  "ring-squeeze": {
+   "frames": 3,
    "anchor": "left",
    "pos": [
     0,
-    3
+    2
    ],
    "arrows": {
     "f": [
      [
       {
        "from": [
-        0.58,
-        0.3
+        0.44,
+        0.24
        ],
        "to": [
-        0.68,
-        0.37
+        0.545,
+        0.24
        ],
        "curve": 0,
        "s": 0.75
       },
       {
        "from": [
-        0.92,
-        0.3
+        0.9,
+        0.24
        ],
        "to": [
-        0.83,
-        0.37
+        0.79,
+        0.24
        ],
        "curve": 0,
        "s": 0.75
@@ -849,24 +716,24 @@
      [
       {
        "from": [
-        0.58,
-        0.3
+        0.44,
+        0.22
        ],
        "to": [
-        0.68,
-        0.37
+        0.545,
+        0.22
        ],
        "curve": 0,
        "s": 0.75
       },
       {
        "from": [
-        0.92,
-        0.3
+        0.9,
+        0.22
        ],
        "to": [
-        0.83,
-        0.37
+        0.79,
+        0.22
        ],
        "curve": 0,
        "s": 0.75
@@ -874,39 +741,38 @@
      ]
     ]
    },
-   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
+   "arrows_note": "Aro v1.12: pose quieta; solo el aro se aprieta un poco; flechas manuales por pares hacia el aro (inward al apretar, hacia afuera al soltar)"
   },
-  "ring-squeeze": {
-   "frames": 4,
-   "anchor": "center",
+  "ring-adductor-lift": {
+   "frames": 3,
+   "anchor": "left",
    "pos": [
     0,
-    3
+    2
    ],
-   "matfix": 0.7,
    "arrows": {
     "f": [
      [
       {
        "from": [
-        0.17,
-        0.5
+        0.43,
+        0.3
        ],
        "to": [
-        0.31,
-        0.5
+        0.545,
+        0.3
        ],
        "curve": 0,
        "s": 0.75
       },
       {
        "from": [
-        0.83,
-        0.5
+        0.9,
+        0.3
        ],
        "to": [
-        0.69,
-        0.5
+        0.785,
+        0.3
        ],
        "curve": 0,
        "s": 0.75
@@ -917,24 +783,24 @@
      [
       {
        "from": [
-        0.17,
-        0.52
+        0.43,
+        0.3
        ],
        "to": [
-        0.31,
-        0.52
+        0.545,
+        0.3
        ],
        "curve": 0,
        "s": 0.75
       },
       {
        "from": [
-        0.83,
-        0.52
+        0.9,
+        0.3
        ],
        "to": [
-        0.69,
-        0.52
+        0.785,
+        0.3
        ],
        "curve": 0,
        "s": 0.75
@@ -942,7 +808,279 @@
      ]
     ]
    },
-   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
+   "arrows_note": "Aro v1.12: pose quieta; solo el aro se aprieta un poco; flechas manuales por pares hacia el aro (inward al apretar, hacia afuera al soltar)"
+  },
+  "ring-legs-45": {
+   "frames": 3,
+   "anchor": "left",
+   "pos": [
+    0,
+    1
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.526,
+        0.165
+       ],
+       "to": [
+        0.658,
+        0.235
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.956,
+        0.4
+       ],
+       "to": [
+        0.816,
+        0.33
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.526,
+        0.17
+       ],
+       "to": [
+        0.662,
+        0.25
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.956,
+        0.43
+       ],
+       "to": [
+        0.82,
+        0.35
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ]
+   },
+   "arrows_note": "Aro v1.12: pose quieta; solo el aro se aprieta un poco; flechas manuales por pares hacia el aro (inward al apretar, hacia afuera al soltar)",
+   "still": true,
+   "padR": 0.14
+  },
+  "ring-legs-up": {
+   "frames": 3,
+   "anchor": "left",
+   "pos": [
+    0,
+    1
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.474,
+        0.22
+       ],
+       "to": [
+        0.605,
+        0.22
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.965,
+        0.22
+       ],
+       "to": [
+        0.851,
+        0.22
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.474,
+        0.22
+       ],
+       "to": [
+        0.605,
+        0.22
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.965,
+        0.22
+       ],
+       "to": [
+        0.851,
+        0.22
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ]
+   },
+   "arrows_note": "Aro v1.12: pose quieta; solo el aro se aprieta un poco; flechas manuales por pares hacia el aro (inward al apretar, hacia afuera al soltar)",
+   "still": true,
+   "padR": 0.14
+  },
+  "ring-side-low": {
+   "frames": 3,
+   "anchor": "left",
+   "pos": [
+    0,
+    2
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.88,
+        0.45
+       ],
+       "to": [
+        0.88,
+        0.58
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.88,
+        0.995
+       ],
+       "to": [
+        0.88,
+        0.895
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.885,
+        0.46
+       ],
+       "to": [
+        0.885,
+        0.6
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.885,
+        0.995
+       ],
+       "to": [
+        0.885,
+        0.895
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ]
+   },
+   "arrows_note": "Aro v1.12: pose quieta; solo el aro se aprieta un poco; flechas manuales por pares hacia el aro (inward al apretar, hacia afuera al soltar)"
+  },
+  "ring-legs-side": {
+   "frames": 3,
+   "anchor": "left",
+   "pos": [
+    0,
+    2
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.88,
+        0.17
+       ],
+       "to": [
+        0.88,
+        0.3
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.88,
+        0.88
+       ],
+       "to": [
+        0.88,
+        0.76
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.88,
+        0.12
+       ],
+       "to": [
+        0.88,
+        0.29
+       ],
+       "curve": 0,
+       "s": 0.7
+      },
+      {
+       "from": [
+        0.885,
+        0.88
+       ],
+       "to": [
+        0.885,
+        0.76
+       ],
+       "curve": 0,
+       "s": 0.7
+      }
+     ]
+    ]
+   },
+   "arrows_note": "Aro v1.12: pose quieta; solo el aro se aprieta un poco; flechas manuales por pares hacia el aro (inward al apretar, hacia afuera al soltar)"
   }
  }
 }

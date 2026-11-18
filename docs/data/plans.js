@@ -46,14 +46,17 @@ const PLANS1 = [
         ],
       },
       {
-        id: 'B3', name: 'Core y Pilates con aro', note: 'Estabilidad de core + circuito de aro (cada ejercicio: aprieta y suelta).',
-        kind: 'circuit', rounds: 3, rest: 45, gap: 5,
+        id: 'B3', name: 'Core y Pilates con aro', note: 'Estabilidad de core + las seis posiciones del aro (cada una: aprieta y suelta al ritmo de la respiración).',
+        kind: 'circuit', rounds: 2, rest: 45, gap: 5,
         items: [
           { move: 'dead-bug', dose: { type: 'reps', min: 10, max: 12, alternating: true } },
-          { move: 'ring-squeeze' },
-          { move: 'ring-adductor-lift' },
-          { move: 'ring-legs-up' },
-          { move: 'ring-legs-side' },
+          // las seis posiciones del aro, en el orden de las fotos de referencia (cada una: aprieta y suelta al ritmo de la respiración)
+          { move: 'ring-squeeze', dose: { type: 'time', secs: 20, note: 'aprieta y suelta al ritmo de la respiración' } },
+          { move: 'ring-adductor-lift', dose: { type: 'time', secs: 20, note: 'aprieta y suelta al ritmo de la respiración' } },
+          { move: 'ring-legs-45', dose: { type: 'time', secs: 20, note: 'aprieta y suelta al ritmo de la respiración' } },
+          { move: 'ring-legs-up', dose: { type: 'time', secs: 20, note: 'aprieta y suelta al ritmo de la respiración' } },
+          { move: 'ring-side-low', dose: { type: 'time', secs: 20, perSide: true, note: 'aprieta y suelta al ritmo de la respiración' } },
+          { move: 'ring-legs-side', dose: { type: 'time', secs: 20, perSide: true, note: 'aprieta y suelta al ritmo de la respiración' } },
         ],
       },
       {

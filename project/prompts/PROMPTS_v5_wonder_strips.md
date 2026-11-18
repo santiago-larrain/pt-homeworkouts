@@ -78,3 +78,11 @@ mueve el OTRO par de extremidades (misma cámara, escala, mat y músculos; el fo
 - **Aro**: el aro entre las rodillas visto de lado queda de canto; la vista **desde los pies, algo elevada** (ring-squeeze) lo muestra de frente y se ve cómo se aplasta. De lado (ring-legs-side) pedir «BOTH legs stay pressed TOGETHER and rise as one unit» y «ring squeezed FLAT, wider than tall»; la primera versión levantaba solo la pierna de arriba y estiraba el aro.
 - Mat escalonado en la vista desde los pies: `matfix` en `anim_config.json` rellena los recortes blancos.
 - El filtro de contenido de Wonder rechazó varias veces una petición idéntica en estructura a otra aceptada (vista desde los pies del hombre); si pasa, usar otro prompt/referencia o arreglar la tira por código.
+
+## Aro v1.12: seis posiciones quietas (fotos de referencia)
+- Referencia del usuario: seis fotos (tumbada, sobre antebrazos, piernas a 45°, piernas verticales, lateral con piernas en el suelo, lateral con ambas piernas arriba). Es material con copyright: NO se guarda en el repo; las poses se describieron con palabras (la subida a Wonder no estaba disponible).
+- Cada posición es una tira de 3 figuras IDÉNTICAS en las que solo cambia el aro (suelto → apretado un poco → más). Prompt: «In ALL three frames the pose is EXACTLY the <last> figure of the second image … The body does not move AT ALL between frames. ONLY the ring changes …», pasando como 2.ª referencia una tira anterior del mismo personaje (la tira de movimiento fija la pose).
+- Piernas arriba (45° y 90°): el aro visto de canto es una barra y no se ve comprimirse → `still: true` (2 fotogramas iguales); lo marcan el borde, la pastilla y las flechas.
+- Lateral con las dos piernas arriba: hay que decir «the BOTTOM leg also clearly lifted … visible gap of mat under the bottom foot»; sin eso solo sube la pierna de arriba.
+- Hombre: plantilla 2 con la tira de la mujer como 2.ª referencia; salió a la primera en las seis.
+- Dead bug (v1.12): se quitó el 5.º fotograma (`keep: 4`, `pos: [0, 2, 3]`); la tira B del hombre se regeneró desde la B de la mujer (plantilla 2 + «near arm lowers, far arm stays vertical, far arm behind»).

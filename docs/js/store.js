@@ -4,7 +4,7 @@ import { entriesOf, replayMilestones } from './progress.js';
 import { cleanReminder } from './health.js';
 
 const KEY = 'ptw.state.v1';   // no cambiar: el esquema se versiona con `state.version`
-export const VERSION = 6;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6) · 5 = recordatorios por perfil y Salud (v1.8) · 6 = aro: ejercicios separados (v1.11)
+export const VERSION = 7;     // 2 = perfiles (v1.4) · 3 = tema/apariencia, meta semanal, hápticos (v1.5) · 4 = calorías, cuerpo, hitos (v1.6) · 5 = recordatorios por perfil y Salud (v1.8) · 6 = aro: ejercicios separados (v1.11) · 7 = aro: seis posiciones quietas (v1.12)
 
 export const DEFAULT_SETTINGS = {
   name: 'Anita',
@@ -114,6 +114,26 @@ function migrateRing(s) {
   }
 }
 
+// v6 → v7 (v1.12): el aro pasa a seis posiciones quietas (las fotos de referencia): tumbada, sobre antebrazos, piernas a 45°,
+// piernas arriba, lateral abajo y lateral arriba. Solo se reemplaza en el bloque B3 de «Dynamic Reset 3×3» si todavía tiene
+// EXACTAMENTE los cuatro ejercicios del aro por defecto (sin dosis propia) uno tras otro; si la usuaria lo editó, no se toca.
+const RING4 = ['ring-squeeze', 'ring-adductor-lift', 'ring-legs-up', 'ring-legs-side'];
+const ringHold = (move, perSide) => ({ move, dose: { type: 'time', secs: 20, ...(perSide ? { perSide: true } : {}), note: 'aprieta y suelta al ritmo de la respiración' } });
+export const RING6 = () => [ringHold('ring-squeeze'), ringHold('ring-adductor-lift'), ringHold('ring-legs-45'), ringHold('ring-legs-up'), ringHold('ring-side-low', true), ringHold('ring-legs-side', true)];
+function migrateRing6(s) {
+  for (const p of s.plans) {
+    if (p.id !== 'dynamic-reset-3x3') continue;
+    for (const sec of (p.sections || [])) {
+      if (sec.id !== 'B3' || !Array.isArray(sec.items)) continue;
+      const it = sec.items;
+      const at = it.findIndex((x, i) => RING4.every((m, j) => it[i + j] && JSON.stringify(it[i + j]) === JSON.stringify({ move: m })));
+      if (at < 0) continue;
+      it.splice(at, 4, ...RING6());
+      if (sec.rounds === 3 && sec.rest === 45 && sec.gap === 5) sec.rounds = 2;   // seis posiciones de 20 s: dos vueltas bastan
+    }
+  }
+}
+
 function initial() {
   return { version: VERSION, settings: { ...DEFAULT_SETTINGS }, plans: clone(DEFAULT_PLANS), activePlanId: DEFAULT_PLANS[0].id, history: [], hiddenBuiltins: [] };
 }
@@ -137,12 +157,14 @@ export const store = {
     if (s.profiles.some(pr => !pr.reminders)) migrateReminders(s);
     const ringOld = (s.version || 1) < 6;
     if (ringOld) migrateRing(s);
+    const ring6Old = (s.version || 1) < 7;
+    if (ring6Old) migrateRing6(s);
     s.version = VERSION;
     // agrega planes nuevos que vengan con la app (sin pisar los editados)
     for (const p of DEFAULT_PLANS) if (!s.plans.some(x => x.id === p.id) && !s.hiddenBuiltins.includes(p.id)) s.plans.push(clone(p));
     if (!s.plans.some(p => p.id === s.activePlanId)) s.activePlanId = s.plans[0] ? s.plans[0].id : null;
     this.state = s;
-    if (migrated || needProgress || ringOld) this.save();
+    if (migrated || needProgress || ringOld || ring6Old) this.save();
     return s;
   },
   save() { try { localStorage.setItem(KEY, JSON.stringify(this.state)); } catch (e) { console.warn(e); } },
@@ -160,7 +182,7 @@ export const store = {
   importJSON(txt) {
     const d = JSON.parse(txt);
     if (!Array.isArray(d.plans)) throw new Error('Archivo no válido');
-    this.state = { version: d.version === VERSION ? VERSION : 1, settings: { ...DEFAULT_SETTINGS, ...d.settings }, plans: d.plans, activePlanId: d.activePlanId, history: d.history || [], hiddenBuiltins: d.hiddenBuiltins || [], profiles: d.profiles, activeProfile: d.activeProfile };
+    this.state = { version: Number.isInteger(d.version) && d.version >= 1 && d.version <= VERSION ? d.version : 1, settings: { ...DEFAULT_SETTINGS, ...d.settings }, plans: d.plans, activePlanId: d.activePlanId, history: d.history || [], hiddenBuiltins: d.hiddenBuiltins || [], profiles: d.profiles, activeProfile: d.activeProfile };
     this.save(); this.load();
   },
   // Pide al navegador no borrar los datos (Safari puede borrar datos de sitios no usados en 7 días;

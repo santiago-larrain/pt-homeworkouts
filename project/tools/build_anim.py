@@ -67,6 +67,26 @@ def save(frames, model, mid):
         im.save(os.path.join(OUT, model, f'{mid}-{k}.webp'), 'WEBP', quality=QUALITY, method=6)
 
 
+def trim(r, keep=None, still=False, pad=0):
+    """keep: se queda con los primeros N fotogramas (p. ej. dead bug sin su 5.º, v1.12); still: pose quieta (se repite el
+    fotograma 1: el aro de perfil no se ve comprimirse; la respiración la marcan el borde, la pastilla y las flechas)."""
+    if still:
+        for k in ('frames', 'masks'): r[k] = [r[k][0], r[k][0]]
+    elif keep:
+        for k in ('frames', 'masks'): r[k] = r[k][:keep]
+    if pad:  # padR: margen de papel a la derecha (fracción del ancho) para que quepan las flechas del aro junto al borde
+        from PIL import Image
+        import numpy as np
+        out, outm = [], []
+        for im, m in zip(r['frames'], r['masks']):
+            w, h = im.size; nw = round(w * (1 + pad))
+            canvas = Image.new('RGB', (nw, h), im.convert('RGB').getpixel((w - 1, 2))); canvas.paste(im.convert('RGB'), (0, 0))
+            mm = np.zeros((h, nw), bool); mm[:, :w] = m
+            out.append(canvas); outm.append(mm)
+        r['frames'], r['masks'] = out, outm
+    return r
+
+
 def pos_of(c):
     return c.get('pos') or [0, c['frames'] - 1]
 
@@ -95,11 +115,13 @@ def job_(args):
             if not os.path.exists(f): raise SystemExit(f'falta {f}')
         cuts = c.get('cuts') or {}; acuts = c.get('altCuts') or {}
         r, rb, dx = cut_pair(srcA, srcB, c['frames'], c.get('altFrames', c['frames']), c['anchor'], cuts.get(model, ''), acuts.get(model, ''), c.get('nowall', False), bool(c.get('bodyAlign')))
+        trim(r, c.get('keep')); trim(rb, c.get('altKeep', c.get('keep')))
         save(r['frames'], model, mid); save(rb['frames'], model, c['alt'])
         print(mid, model, 'B alineada con dx =', dx, flush=True)
     else:
         r = cut(model, mid, c['frames'], c['anchor'], c.get('cuts'), c.get('nowall', False), bool(c.get('bodyAlign'))); rb = None
         if c.get('matfix'): r['frames'] = fix_mat(r['frames'], r['masks'], float(c['matfix']))
+        trim(r, c.get('keep'), bool(c.get('still')), float(c.get('padR') or 0))
         save(r['frames'], model, mid)
     arrows = None; arrowsB = None
     if want_arrows and c.get('arrows') is not False:
@@ -121,14 +143,14 @@ def job_(args):
 
 
 def sanitize(tr):
-    """Revisión de flechas (v1.11): una flecha de menos de 0,10 (fracción del fotograma) se lee como una mancha (la punta es más
+    """Revisión de flechas (v1.11): una flecha de menos de 0,07 (fracción del fotograma) se lee como una mancha (la punta es más
     grande que el cuerpo) y se descarta; las cortas (< 0,2) con mucha curvatura salen como ganchos, así que se enderezan."""
     out = []
     for t in tr or []:
         keep = []
         for a in t:
             L = ((a['to'][0] - a['from'][0]) ** 2 + (a['to'][1] - a['from'][1]) ** 2) ** 0.5
-            if L < 0.10: continue
+            if L < 0.07: continue
             if L < 0.2 and abs(a.get('curve', 0)) > 0.15: a = dict(a, curve=round(0.15 if a['curve'] > 0 else -0.15, 3))
             keep.append(a)
         out.append(keep)
@@ -161,11 +183,11 @@ def js_anim(cfg):
              '// Los fotogramas intermedios se recorren con fundidos suaves; en las posiciones la animación se detiene un momento.',
              'export const ANIM = {']
     for mid, c in cfg.items():
-        n = sum(p['frames'] - p.get('skip', 0) for p in c['parts']) if 'parts' in c else c['frames']
+        n = sum(p['frames'] - p.get('skip', 0) for p in c['parts']) if 'parts' in c else (2 if c.get('still') else c.get('keep') or c['frames'])
         bits = [f'n: {n}']
         if c.get('pos') and c['pos'] != [0, n - 1]: bits.append(f"pos: {json.dumps(c['pos'])}")
         if c.get('loop'): bits.append('loop: true')
-        if c.get('alt'): bits.append(f"alt: {c.get('altFrames', c['frames'])}")
+        if c.get('alt'): bits.append(f"alt: {c.get('altKeep', c.get('keep') or c.get('altFrames', c['frames']))}")
         lines.append(f"  '{mid}': {{ {', '.join(bits)} }},")
     lines.append('};')
     return '\n'.join(lines) + '\n'

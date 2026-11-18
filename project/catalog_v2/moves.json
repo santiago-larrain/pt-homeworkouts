@@ -3060,7 +3060,7 @@
   },
   {
     "id": "ring-squeeze",
-    "name": "Aro: aprieta entre rodillas",
+    "name": "Aro: rodillas, tumbada",
     "category": "core",
     "group": "piernas",
     "equipment": [
@@ -3073,49 +3073,49 @@
     "support": [
       "Transverso abdominal"
     ],
-    "cue": "Aprieta el aro con las rodillas y suelta despacio",
+    "cue": "Aprieta fuerte el aro con las rodillas, suelta",
     "tips": [
-      "Boca arriba, rodillas dobladas y pies planos; el aro entre las rodillas, con las almohadillas contra la parte interna de cada una.",
-      "Exhala al apretar (1 segundo); inhala al soltar sin dejar caer el aro.",
+      "Boca arriba, rodillas dobladas, pies planos y brazos a los lados; el aro entre las rodillas, con las almohadillas contra la parte interna de cada una.",
+      "Posición quieta: solo el aro se aprieta un poco. Exhala al apretar fuerte; inhala al soltar sin dejar caer el aro.",
       "Pelvis neutra, hombros y cuello relajados."
     ],
     "positions": [
       {
         "label": "Suelta",
         "breath": "in",
-        "verb": "suelta"
+        "verb": "prepara y suelta"
       },
       {
         "label": "Aprieta",
         "breath": "ex",
-        "verb": "aprieta el aro"
+        "verb": "aprieta fuerte"
       }
     ],
     "dose": {
-      "type": "reps",
-      "min": 12,
-      "max": 15
+      "type": "time",
+      "secs": 20,
+      "note": "aprieta y suelta al ritmo de la respiración"
     },
     "sided": false,
     "mirror": false,
     "met": 3.0,
     "level": 1,
     "strip": {
-      "frames": 4,
-      "view": "front view from her feet, slightly above, reclined on the mat",
+      "frames": 3,
+      "view": "right side profile, lying on her back",
       "ground": "mat",
-      "anchor": "center",
+      "anchor": "left",
       "loop": false,
       "pos": [
         0,
-        3
+        2
       ],
-      "prompt_f": "(v1.11: tira generada a mano con Wonder; ver project/references/anim/f-ring-squeeze.jpg y project/prompts/PROMPTS_v5_wonder_strips.md → «Aro»)"
+      "prompt_f": "(v1.12: posición quieta de la foto de referencia, solo el aro se aprieta; tira generada con Wonder; ver project/prompts/PROMPTS_v5_wonder_strips.md → «Aro v1.12»)"
     }
   },
   {
     "id": "ring-legs-up",
-    "name": "Aro: piernas arriba",
+    "name": "Aro: tobillos, piernas arriba",
     "category": "core",
     "group": "core",
     "equipment": [
@@ -3130,44 +3130,158 @@
       "Recto abdominal",
       "Psoas"
     ],
-    "cue": "Aro firme entre los tobillos; sube las piernas apretando",
+    "cue": "Piernas verticales, aro entre los tobillos: aprieta fuerte, suelta",
     "tips": [
-      "Cabeza y hombros apenas elevados, brazos largos hacia adelante.",
-      "Sube las piernas casi verticales apretando el aro; baja soltando sin apoyar los pies.",
-      "Exhala al subir y apretar; inhala al bajar. Lumbar pegada al mat."
+      "Hombros y cabeza apenas elevados, brazos rectos hacia adelante, paralelos al suelo.",
+      "Piernas rectas y juntas, verticales, con el aro entre los tobillos. Posición quieta: aprieta y suelta el aro.",
+      "Exhala al apretar fuerte; inhala al soltar. Lumbar pegada al mat; si molesta, baja las piernas a 45°."
     ],
     "positions": [
       {
-        "label": "Abajo, suelta",
+        "label": "Suelta",
         "breath": "in",
-        "verb": "baja y suelta"
+        "verb": "prepara y suelta"
       },
       {
-        "label": "Arriba, aprieta",
+        "label": "Aprieta",
         "breath": "ex",
-        "verb": "sube y aprieta"
+        "verb": "aprieta fuerte"
       }
     ],
     "dose": {
-      "type": "reps",
-      "min": 10,
-      "max": 12
+      "type": "time",
+      "secs": 20,
+      "note": "aprieta y suelta al ritmo de la respiración"
     },
     "sided": false,
     "mirror": false,
     "met": 3.5,
     "level": 2,
     "strip": {
-      "frames": 4,
+      "frames": 3,
       "view": "right side profile, lying on her back",
       "ground": "mat",
       "anchor": "left",
       "loop": false,
       "pos": [
         0,
-        3
+        2
       ],
-      "prompt_f": "(v1.11: tira generada a mano con Wonder; ver project/references/anim/f-ring-legs-up.jpg y project/prompts/PROMPTS_v5_wonder_strips.md → «Aro»)"
+      "prompt_f": "(v1.12: posición quieta de la foto de referencia, solo el aro se aprieta; tira generada con Wonder; ver project/prompts/PROMPTS_v5_wonder_strips.md → «Aro v1.12»)"
+    }
+  },
+  {
+    "id": "ring-legs-45",
+    "name": "Aro: tobillos, piernas a 45°",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "aro",
+      "mat"
+    ],
+    "focus": [
+      "Aductores",
+      "Recto abdominal"
+    ],
+    "support": [
+      "Psoas",
+      "Transverso abdominal"
+    ],
+    "cue": "Piernas a 45°, aro entre los tobillos: aprieta fuerte, suelta",
+    "tips": [
+      "Hombros y cabeza apenas elevados, brazos rectos hacia adelante, paralelos al suelo.",
+      "Piernas rectas y juntas a unos 45° del suelo, con el aro entre los tobillos. Posición quieta: aprieta y suelta el aro.",
+      "Exhala al apretar fuerte; inhala al soltar. Lumbar pegada al mat."
+    ],
+    "positions": [
+      {
+        "label": "Suelta",
+        "breath": "in",
+        "verb": "prepara y suelta"
+      },
+      {
+        "label": "Aprieta",
+        "breath": "ex",
+        "verb": "aprieta fuerte"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 20,
+      "note": "aprieta y suelta al ritmo de la respiración"
+    },
+    "sided": false,
+    "mirror": false,
+    "met": 3.5,
+    "level": 2,
+    "strip": {
+      "frames": 3,
+      "view": "right side profile, lying on her back",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        2
+      ],
+      "prompt_f": "(v1.12: posición quieta de la foto de referencia, solo el aro se aprieta; tira generada con Wonder; ver project/prompts/PROMPTS_v5_wonder_strips.md → «Aro v1.12»)"
+    }
+  },
+  {
+    "id": "ring-side-low",
+    "name": "Aro: lateral, piernas en el suelo",
+    "category": "core",
+    "group": "piernas",
+    "equipment": [
+      "aro",
+      "mat"
+    ],
+    "focus": [
+      "Glúteo medio",
+      "Aductores"
+    ],
+    "support": [
+      "Oblicuos"
+    ],
+    "cue": "De lado, aro entre los tobillos: aprieta fuerte, suelta",
+    "tips": [
+      "De lado, apoyada en el antebrazo (codo bajo el hombro) y la otra mano en el mat, delante del pecho.",
+      "Piernas rectas, apiladas sobre el mat, con el aro entre los tobillos. Posición quieta: aprieta y suelta el aro.",
+      "Exhala al apretar fuerte; inhala al soltar. Torso firme, sin hundirte sobre el hombro. Repite del otro lado."
+    ],
+    "positions": [
+      {
+        "label": "Suelta",
+        "breath": "in",
+        "verb": "prepara y suelta"
+      },
+      {
+        "label": "Aprieta",
+        "breath": "ex",
+        "verb": "aprieta fuerte"
+      }
+    ],
+    "dose": {
+      "type": "time",
+      "secs": 20,
+      "note": "aprieta y suelta al ritmo de la respiración",
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.0,
+    "level": 1,
+    "strip": {
+      "frames": 3,
+      "view": "side view, lying on her side",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": false,
+      "pos": [
+        0,
+        2
+      ],
+      "prompt_f": "(v1.12: posición quieta de la foto de referencia, solo el aro se aprieta; tira generada con Wonder; ver project/prompts/PROMPTS_v5_wonder_strips.md → «Aro v1.12»)"
     }
   }
 ]
