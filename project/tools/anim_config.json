@@ -80,7 +80,40 @@
   },
   "floor-press": {
    "frames": 4,
-   "anchor": "left"
+   "anchor": "left",
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.4,
+        0.55
+       ],
+       "to": [
+        0.39,
+        0.2
+       ],
+       "curve": 0
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.4,
+        0.55
+       ],
+       "to": [
+        0.39,
+        0.2
+       ],
+       "curve": 0
+      }
+     ]
+    ]
+   },
+   "arrows_note": "el cuerpo no se mueve: solo los brazos; flecha manual junto al brazo (las automáticas salían del movimiento de las piernas)"
   },
   "band-external-rotation": {
    "frames": 4,
@@ -106,7 +139,70 @@
   },
   "ring-adductor-lift": {
    "frames": 4,
-   "anchor": "right"
+   "anchor": "right",
+   "pos": [
+    0,
+    3
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.5,
+        0.22
+       ],
+       "to": [
+        0.58,
+        0.31
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.8,
+        0.22
+       ],
+       "to": [
+        0.72,
+        0.31
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.5,
+        0.22
+       ],
+       "to": [
+        0.58,
+        0.31
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.8,
+        0.22
+       ],
+       "to": [
+        0.72,
+        0.31
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ]
+   },
+   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
   },
   "kneeling-hip-flexor": {
    "frames": 4,
@@ -127,25 +223,71 @@
    "anchor": "center"
   },
   "ring-legs-side": {
-   "parts": [
-    {
-     "src": "ring-legs-up",
-     "frames": 3,
-     "anchor": "feet"
-    },
-    {
-     "src": "ring-legs-side",
-     "frames": 3,
-     "anchor": "left",
-     "skip": 1
-    }
-   ],
+   "frames": 4,
+   "anchor": "left",
    "pos": [
-    2,
-    4
+    0,
+    3
    ],
-   "arrows": false,
-   "note": "dos vistas distintas (piernas arriba + de lado): sin flecha"
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.86,
+        0.34
+       ],
+       "to": [
+        0.86,
+        0.47
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.86,
+        0.8
+       ],
+       "to": [
+        0.86,
+        0.67
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.86,
+        0.34
+       ],
+       "to": [
+        0.86,
+        0.47
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.86,
+        0.8
+       ],
+       "to": [
+        0.86,
+        0.67
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ]
+   },
+   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
   },
   "bodyweight-squat": {
    "frames": 5,
@@ -342,7 +484,40 @@
     0,
     3
    ],
-   "alt": "toe-taps-b"
+   "alt": "toe-taps-b",
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.95,
+        0.22
+       ],
+       "to": [
+        0.93,
+        0.66
+       ],
+       "curve": 0
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.95,
+        0.22
+       ],
+       "to": [
+        0.93,
+        0.66
+       ],
+       "curve": 0
+      }
+     ]
+    ]
+   },
+   "arrows_note": "flecha manual: el pie baja al mat (la tira B repite las mismas)"
   },
   "superman": {
    "frames": 4,
@@ -633,6 +808,141 @@
    ],
    "arrows": false,
    "arrows_note": "movimiento de cuerpo completo; la flecha automática salía en los pies"
+  },
+  "ring-legs-up": {
+   "frames": 4,
+   "anchor": "left",
+   "pos": [
+    0,
+    3
+   ],
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.58,
+        0.3
+       ],
+       "to": [
+        0.68,
+        0.37
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.92,
+        0.3
+       ],
+       "to": [
+        0.83,
+        0.37
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.58,
+        0.3
+       ],
+       "to": [
+        0.68,
+        0.37
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.92,
+        0.3
+       ],
+       "to": [
+        0.83,
+        0.37
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ]
+   },
+   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
+  },
+  "ring-squeeze": {
+   "frames": 4,
+   "anchor": "center",
+   "pos": [
+    0,
+    3
+   ],
+   "matfix": 0.7,
+   "arrows": {
+    "f": [
+     [
+      {
+       "from": [
+        0.17,
+        0.5
+       ],
+       "to": [
+        0.31,
+        0.5
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.83,
+        0.5
+       ],
+       "to": [
+        0.69,
+        0.5
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ],
+    "m": [
+     [
+      {
+       "from": [
+        0.17,
+        0.52
+       ],
+       "to": [
+        0.31,
+        0.52
+       ],
+       "curve": 0,
+       "s": 0.75
+      },
+      {
+       "from": [
+        0.83,
+        0.52
+       ],
+       "to": [
+        0.69,
+        0.52
+       ],
+       "curve": 0,
+       "s": 0.75
+      }
+     ]
+    ]
+   },
+   "arrows_note": "pares de flechas manuales hacia el aro (s = escala); al soltar frames.js las invierte (salen hacia afuera)"
   }
  }
 }

@@ -71,3 +71,10 @@ mueve el OTRO par de extremidades (misma cámara, escala, mat y músculos; el fo
 - Superman: la tira A original levantaba brazo y pierna LEJANOS (mismo lado); se regeneró A (brazo lejano + pierna cercana) y B (brazo cercano + pierna lejana). Bird-dog B costó 2 intentos
   (el 1.º levantaba brazo y pierna cercanos).
 - Hombre: 2.ª referencia = tira B de la mujer (+ la tira A del hombre como 3.ª para fijar el personaje).
+
+## Rehechos de la v1.11 (figura 4, dead bug, floor press, toe taps y aro)
+- **Tendida boca arriba**: la cámara ligeramente elevada (~30°) desde el lado muestra las dos piernas/brazos sin que una tape a la otra (figura 4: pedir «BOTH legs always fully drawn, two feet visible in every frame»; toe taps: «each with its own foot drawn completely»).
+- **Floor press**: decir qué NO se mueve («head, torso, hips, legs and feet touch the mat at the same points in every frame; ONLY the arms and dumbbells move»). Comprobar con `docs/img/anim` que las piernas quedan en el mismo sitio (desfase ≤ 2 px).
+- **Aro**: el aro entre las rodillas visto de lado queda de canto; la vista **desde los pies, algo elevada** (ring-squeeze) lo muestra de frente y se ve cómo se aplasta. De lado (ring-legs-side) pedir «BOTH legs stay pressed TOGETHER and rise as one unit» y «ring squeezed FLAT, wider than tall»; la primera versión levantaba solo la pierna de arriba y estiraba el aro.
+- Mat escalonado en la vista desde los pies: `matfix` en `anim_config.json` rellena los recortes blancos.
+- El filtro de contenido de Wonder rechazó varias veces una petición idéntica en estructura a otra aceptada (vista desde los pies del hombre); si pasa, usar otro prompt/referencia o arreglar la tira por código.

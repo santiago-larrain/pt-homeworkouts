@@ -22,7 +22,7 @@ export const ANIM = {
   'figure-4': { n: 4 },
   'doorway-pec': { n: 3 },
   'child-pose-lateral': { n: 4 },
-  'ring-legs-side': { n: 5, pos: [2, 4] },
+  'ring-legs-side': { n: 4 },
   'bodyweight-squat': { n: 5 },
   'chair-squat': { n: 5 },
   'reverse-lunge': { n: 4 },
@@ -77,4 +77,6 @@ export const ANIM = {
   'low-impact-skater': { n: 4, pos: [0, 1], loop: true },
   'mountain-climber-slow': { n: 4, pos: [0, 2], loop: true },
   'db-thruster': { n: 6 },
+  'ring-legs-up': { n: 4 },
+  'ring-squeeze': { n: 4 },
 };

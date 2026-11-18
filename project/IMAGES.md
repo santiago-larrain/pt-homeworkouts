@@ -10,14 +10,14 @@
 
 ## Fotogramas (v1.3, pipeline v2 de la fase 3)
 - `project/tools/anim_config.json` es la **única fuente de configuración** por movimiento (71): `frames`, `anchor`, `cuts` por modelo,
-  `loop`, `pos`, `nowall`, `parts` (tiras unidas, `ring-legs-side`) y `arrows` (`false` = sin flecha, o flechas manuales).
+  `loop`, `pos`, `nowall`, `parts` (tiras unidas; ya sin uso), `matfix` (fracción de altura bajo la cual se rellena el mat escalonado) y `arrows` (`false` = sin flecha, o flechas manuales).
   `python3 project/tools/build_anim.py [id …]` corta todo (en paralelo) y **genera** `docs/data/anim.js` (`n`, `pos`, `loop`),
   `docs/data/arrows.js` (flechas) y `docs/img/anim/list.json`. No edites `anim.js` / `arrows.js` a mano.
 - `strip_frames.py <tira> <N> <salida> <prefijo> [--anchor=feet|center|left|right] [--cuts=x1,…] [--nowall]` (también `cut_strip()` importable):
   separa las figuras por regiones conectadas, reconoce y reconstruye el suelo/mat, alinea por el punto de apoyo y exporta fotogramas del mismo tamaño.
 - Ancla: `feet` de pie / en cuatro apoyos, `left` tendida con la cabeza a la izquierda (o el marco de puerta), `right` cuando
   los pies quedan fijos a la derecha, `center` para pasos laterales y vistas desde arriba. Si lo que debe quedar quieto se mueve, probar otra.
-- `ring-legs-side` usa dos tiras (`ring-legs-up` + `ring-legs-side`, sin su primer fotograma) unidas en 5 fotogramas (`parts`).
+- **Aro (v1.11)**: cada ejercicio es propio y tiene su tira: `ring-squeeze` (vista desde los pies: el aro se ve de frente y se aplasta), `ring-adductor-lift` (torso arriba), `ring-legs-up` y `ring-legs-side` (de lado, las dos piernas suben juntas). Mismo aro en todas (metal gris con almohadillas rosadas). Flechas manuales por pares hacia el aro (`s` = escala); al soltar `frames.js` las invierte.
 - Peso: fotogramas ≤ 640 px de ancho, WebP q80.
 
 ### Lo aprendido con el cortador (v2)
@@ -38,6 +38,9 @@ Es una heurística: sirve bien en movimientos de una extremidad o de la cadera (
 sobre un punto fijo y en cambios muy pequeños. Se sobreescribe a mano con `arrows` en `anim_config.json` (`{f: [[{from,to,curve}…]], m: …}`,
 una lista por transición, coordenadas 0..1 del fotograma) o se apaga con `arrows: false` (calf-raise, overhead-triceps-ext, doorway-pec,
 standing-side-bend, db-thruster). Revisión visual: `docs/dev/anim.html`.
+
+### Revisión de flechas (v1.11)
+`build_anim.py` pasa todas las flechas por `sanitize()`: descarta las de largo < 0,10 (la punta es mayor que el cuerpo y se lee como una mancha, p. ej. face-pull) y endereza las cortas (< 0,2) con curvatura > 0,15 (se veían como ganchos). Cada flecha admite `s` (escala del trazo; las cortas por pares usan 0,75). Si la figura casi no se mueve salvo una parte (floor-press, toe-taps) conviene fijar la flecha a mano: las automáticas salían de pequeñas derivas de las piernas.
 
 ### Fluidez
 Se probó interpolación por flujo óptico (OpenCV DIS) para fotogramas intermedios en 6 movimientos variados: con movimientos grandes (sentadilla,

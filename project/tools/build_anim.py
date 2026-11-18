@@ -3,6 +3,7 @@
 Uso (desde la raíz del repo):  python3 project/tools/build_anim.py [id …] [--no-arrows] [--no-data]
 - Lee  project/tools/anim_config.json  (una entrada por movimiento: fotogramas, ancla, cortes por modelo, loop, pos,
   nowall, tiras unidas `parts`, flechas manuales `arrows`).
+- `matfix: <fracción>`: rellena los recortes blancos de un mat escalonado (ring-squeeze, vista desde los pies).
 - `alt: "<id>-b"` (+ `bodyAlign` (alinea por el contorno inferior del cuerpo), `altFrames`, `altCuts`, `altArrows`: 'same' (por defecto) | 'auto' | false | {f,m}): tira B de un movimiento alternante, `<f|m>-<id>-b.jpg`; se corta con el mismo lienzo que A y
   alineada con su fotograma 1 (strip_frames.cut_pair) y se escribe `<id>-b-<k>.webp` (flechas en ARROWS['<id>-b']).
 - Lee  project/references/anim/<f|m>-<id>.jpg  (una tira con N poses en fila; ver project/IMAGES.md).
@@ -29,6 +30,26 @@ def cut(model, sid, n, anchor, cuts, nowall, body=False):
     src = os.path.join(SRC, f'{model}-{sid}.jpg')
     if not os.path.exists(src): raise SystemExit(f'falta {src}')
     return cut_strip(src, n, anchor, (cuts or {}).get(model, ''), nowall, None, body)
+
+
+def fix_mat(frames, masks, top):
+    """matfix (fracción de la altura bajo la cual el mat es continuo): en tiras con mat escalonado (vista desde los pies) rellena los
+    recortes blancos del mat con el color del mat más cercano, solo fuera de la figura (los calcetines blancos quedan intactos)."""
+    from PIL import Image
+    import numpy as np
+    from scipy import ndimage
+    out = []
+    for im, m in zip(frames, masks):
+        a = np.asarray(im.convert('RGB')).copy(); h, w, _ = a.shape
+        white = ndimage.binary_dilation(a.min(2) > 212, iterations=2)
+        reg = np.zeros((h, w), bool); reg[int(h * top):] = True
+        fill = white & ~m & reg
+        valid = ~white & reg & ~ndimage.binary_dilation(m, iterations=3)
+        if fill.any() and valid.any():
+            idx = ndimage.distance_transform_edt(~valid, return_distances=False, return_indices=True)
+            a[fill] = a[idx[0][fill], idx[1][fill]]
+        out.append(Image.fromarray(a))
+    return out
 
 
 def save(frames, model, mid):
@@ -78,6 +99,7 @@ def job_(args):
         print(mid, model, 'B alineada con dx =', dx, flush=True)
     else:
         r = cut(model, mid, c['frames'], c['anchor'], c.get('cuts'), c.get('nowall', False), bool(c.get('bodyAlign'))); rb = None
+        if c.get('matfix'): r['frames'] = fix_mat(r['frames'], r['masks'], float(c['matfix']))
         save(r['frames'], model, mid)
     arrows = None; arrowsB = None
     if want_arrows and c.get('arrows') is not False:
@@ -96,6 +118,21 @@ def job_(args):
                 import arrows as A
                 arrowsB = A.compute(rb['masks'], [np.asarray(f) for f in rb['frames']], pos_of(c), bool(c.get('loop')))
     return mid, model, (arrows, arrowsB)
+
+
+def sanitize(tr):
+    """Revisión de flechas (v1.11): una flecha de menos de 0,10 (fracción del fotograma) se lee como una mancha (la punta es más
+    grande que el cuerpo) y se descarta; las cortas (< 0,2) con mucha curvatura salen como ganchos, así que se enderezan."""
+    out = []
+    for t in tr or []:
+        keep = []
+        for a in t:
+            L = ((a['to'][0] - a['from'][0]) ** 2 + (a['to'][1] - a['from'][1]) ** 2) ** 0.5
+            if L < 0.10: continue
+            if L < 0.2 and abs(a.get('curve', 0)) > 0.15: a = dict(a, curve=round(0.15 if a['curve'] > 0 else -0.15, 3))
+            keep.append(a)
+        out.append(keep)
+    return out
 
 
 def js_arrows(data):
@@ -154,6 +191,8 @@ def main():
             if arrows is not None: data.setdefault(mid, {})[model] = arrows
             if arrowsB is not None: data.setdefault(cfg[mid]['alt'], {})[model] = arrowsB
             print(mid, model, 'flechas', [len(t) for t in arrows] if arrows is not None else '-', flush=True)
+    for mid in list(data):
+        for m in list(data[mid]): data[mid][m] = sanitize(data[mid][m])
     if '--no-data' not in sys.argv:
         open(os.path.join(ROOT, 'docs', 'data', 'anim.js'), 'w').write(js_anim(cfg))
         if want_arrows: open(arrows_path, 'w').write(js_arrows(data))

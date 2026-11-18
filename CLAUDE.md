@@ -9,8 +9,8 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | Ruta | Qué es |
 |---|---|
 | `docs/` | **La app publicada** (raíz de GitHub Pages). Sin build: HTML + ES modules + CSS. |
-| `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`, 71): los 17 originales + `moves2.js`. Fuente de verdad de cada ejercicio. |
-| `docs/data/moves2.js` | Movimientos v2 (`MOVES2`, 54) con `CATEGORIES2` y `EQUIPMENT2`; lo genera `project/tools/gen_moves2.py` desde `project/catalog_v2/moves.json`. `catalog.js` los concatena. |
+| `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`, 73): los 17 originales + `moves2.js`. Fuente de verdad de cada ejercicio. |
+| `docs/data/moves2.js` | Movimientos v2 (`MOVES2`, 56) con `CATEGORIES2` y `EQUIPMENT2`; lo genera `project/tools/gen_moves2.py` desde `project/catalog_v2/moves.json`. `catalog.js` los concatena. |
 | `docs/data/plans.js` | **Planes incluidos** (`DEFAULT_PLANS`): *Dynamic Reset 3×3* + `PLANS2`. |
 | `docs/data/plans2.js` | Planes v2 (`PLANS2`, 5): Cuerpo completo 20, Glúteos y piernas con bandas, Tren superior con mancuernas, Core y postura, Movilidad 10. |
 | `docs/js/musclemap.js` · `docs/data/muscles.js` | **Mapa muscular** (SVG frente/espalda teñido por carga) y su geometría/alias. Ver `project/MUSCLEMAP.md`. |
@@ -63,6 +63,7 @@ Lee también: `project/PROGRAM.md` (rutina original), `project/RESEARCH.md` (té
 - **Historial (v1.6)**: cada sesión guarda `profiles`, `kcal:{perfil:n}`, `kcalApprox` (perfiles que usaron datos por defecto), `moveSecs:{perfil:{movimiento:segundos}}`, `secs`, `planId`, `blocks`. Las sesiones anteriores no tienen kcal. Perfil: `weights:[{date,kg,cm?}]`, `weeklyGoal`, `milestones:{id:fecha}`.
 - **Mapa muscular**: `muscleLoad(plan)` / `muscleLoadFromMoves(...)` → carga 0..1 por músculo canónico (foco 1, apoyo 0,5, por tiempo de trabajo). Tarjetas «Qué trabaja» en el detalle del plan (con selector de persona en pareja) y del movimiento, mapa semanal/mensual en Historial → Actividad (a partir de `moveSecs`), mapa de la sesión en su detalle y «Hoy trabajaste» en el cierre del reproductor (solo si cabe sin desplazarse). Los nombres de `focus`/`support` se reconocen con los alias de `muscles.js` (`canonicalMuscles`); la búsqueda y el filtro «Músculo específico» del catálogo usan lo mismo.
 - **Recordatorios y Salud (v1.8)**: `profile.reminders = {on, days:[0-6 (0=domingo)], time:'HH:MM', seq}`; `settings.healthShortcut` (¿instalado el Atajo?), `settings.healthLog` (guardar entrenamientos en Salud), `settings.reminderOffer` (oferta de recordatorio descartada). Pesos importados de Salud llevan `source:'salud'`. El puente con iOS es solo un Atajo (`project/SHORTCUT.md`): ni notificaciones locales ni HealthKit son posibles en una PWA.
+- **Aro (v1.11, `state.version` 6)**: `ring-squeeze` / `ring-adductor-lift` («torso arriba») / `ring-legs-up` / `ring-legs-side` («lateral») son ejercicios propios (aprieta y suelta, 2 posiciones, dosis de repeticiones) con flechas por pares hacia el aro. `store.migrateRing` convierte los items antiguos de dos fases (sin dosis o con dosis `phases`) en los ejercicios nuevos; el motor sigue aceptando dosis `phases`.
 - Los planes incluidos se copian al estado local al primer uso. Las ediciones de la usuaria nunca se sobrescriben;
   "Restaurar plan original" vuelve a copiar desde `plans.js`. Los planes nuevos de `plans.js` se agregan solos.
 
