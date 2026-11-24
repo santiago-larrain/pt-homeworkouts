@@ -565,4 +565,14 @@ export const MOVES2 = [
     positions: [{ label: "Suelta", breath: "in", verb: "prepara y suelta" }, { label: "Aprieta", breath: "ex", verb: "aprieta fuerte" }],
     dose: {"type": "time", "secs": 20, "note": "aprieta y suelta al ritmo de la respiración", "perSide": true}, imageStatus: 'final',
   },
+  {
+    id: "side-plank-hip-dip", name: "Hip dips en plancha lateral", category: "core", equipment: ["mat"],
+    alias: "Hip dips",
+    group: "core", sided: true, mirror: true, met: 3.8, level: 2,
+    focus: ["Oblicuos", "Glúteo medio"], support: ["Cuadrado lumbar", "Transverso abdominal", "Deltoides lateral"],
+    cue: "Codo bajo el hombro, cuerpo en línea",
+    tips: ["Antebrazo en el mat, codo justo bajo el hombro; piernas rectas y apiladas.", "Baja la cadera hasta rozar el mat sin apoyarla y sube pasando la línea, apretando el costado.", "Más fácil: rodillas dobladas apoyadas en el mat; más difícil: pies en tijera, uno delante del otro."],
+    positions: [{ label: "Abajo", breath: "in", verb: "baja la cadera" }, { label: "Arriba", breath: "ex", verb: "sube la cadera" }],
+    dose: {"type": "reps", "min": 8, "max": 12, "perSide": true}, imageStatus: 'final',
+  },
 ];

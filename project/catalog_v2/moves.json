@@ -3283,5 +3283,64 @@
       ],
       "prompt_f": "(v1.12: posición quieta de la foto de referencia, solo el aro se aprieta; tira generada con Wonder; ver project/prompts/PROMPTS_v5_wonder_strips.md → «Aro v1.12»)"
     }
+  },
+  {
+    "id": "side-plank-hip-dip",
+    "name": "Hip dips en plancha lateral",
+    "alias": "Hip dips",
+    "category": "core",
+    "group": "core",
+    "equipment": [
+      "mat"
+    ],
+    "focus": [
+      "Oblicuos",
+      "Glúteo medio"
+    ],
+    "support": [
+      "Cuadrado lumbar",
+      "Transverso abdominal",
+      "Deltoides lateral"
+    ],
+    "cue": "Codo bajo el hombro, cuerpo en línea",
+    "tips": [
+      "Antebrazo en el mat, codo justo bajo el hombro; piernas rectas y apiladas.",
+      "Baja la cadera hasta rozar el mat sin apoyarla y sube pasando la línea, apretando el costado.",
+      "Más fácil: rodillas dobladas apoyadas en el mat; más difícil: pies en tijera, uno delante del otro."
+    ],
+    "positions": [
+      {
+        "label": "Abajo",
+        "breath": "in",
+        "verb": "baja la cadera"
+      },
+      {
+        "label": "Arriba",
+        "breath": "ex",
+        "verb": "sube la cadera"
+      }
+    ],
+    "dose": {
+      "type": "reps",
+      "min": 8,
+      "max": 12,
+      "perSide": true
+    },
+    "sided": true,
+    "mirror": true,
+    "met": 3.8,
+    "level": 2,
+    "strip": {
+      "frames": 4,
+      "view": "FRONT view from the side of her belly, forearm side plank, HEAD toward the LEFT",
+      "ground": "mat",
+      "anchor": "left",
+      "loop": true,
+      "pos": [
+        1,
+        3
+      ],
+      "prompt_f": "(v1.13: tira generada con Wonder en el primer intento; plantilla 1, vista frontal tumbada de lado como side-plank-knee; ver project/prompts/PROMPTS_v5_wonder_strips.md)"
+    }
   }
 ]

@@ -9,8 +9,8 @@ Todo el contenido visible está en **español** (Chile/neutral). El código y lo
 | Ruta | Qué es |
 |---|---|
 | `docs/` | **La app publicada** (raíz de GitHub Pages). Sin build: HTML + ES modules + CSS. |
-| `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`, 75): los 17 originales + `moves2.js`. Fuente de verdad de cada ejercicio. |
-| `docs/data/moves2.js` | Movimientos v2 (`MOVES2`, 58) con `CATEGORIES2` y `EQUIPMENT2`; lo genera `project/tools/gen_moves2.py` desde `project/catalog_v2/moves.json`. `catalog.js` los concatena. |
+| `docs/data/catalog.js` | **Galería de movimientos** (`MOVES`, 76): los 17 originales + `moves2.js`. Fuente de verdad de cada ejercicio. |
+| `docs/data/moves2.js` | Movimientos v2 (`MOVES2`, 59) con `CATEGORIES2` y `EQUIPMENT2`; lo genera `project/tools/gen_moves2.py` desde `project/catalog_v2/moves.json`. `catalog.js` los concatena. |
 | `docs/data/plans.js` | **Planes incluidos** (`DEFAULT_PLANS`): *Dynamic Reset 3×3* + `PLANS2`. |
 | `docs/data/plans2.js` | Planes v2 (`PLANS2`, 5): Cuerpo completo 20, Glúteos y piernas con bandas, Tren superior con mancuernas, Core y postura, Movilidad 10. |
 | `docs/js/musclemap.js` · `docs/data/muscles.js` | **Mapa muscular** (SVG frente/espalda teñido por carga) y su geometría/alias. Ver `project/MUSCLEMAP.md`. |

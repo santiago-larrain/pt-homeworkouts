@@ -1,6 +1,6 @@
 // Service worker: guarda la app en caché para que funcione sin internet.
 // IMPORTANTE: sube CACHE_VERSION cada vez que cambies archivos o imágenes.
-const CACHE_VERSION = 'ptw-v1.12.0';
+const CACHE_VERSION = 'ptw-v1.13.0';
 const CORE = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/engine.js', 'js/store.js', 'js/audio.js', 'js/icons.js', 'js/calories.js', 'js/progress.js',

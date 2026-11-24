@@ -56,6 +56,7 @@ for m in moves:
          f"    group: {js(m['group'])}, sided: {js(m['sided']).lower()}, mirror: {js(m['mirror']).lower()}, met: {m['met']}, level: {m['level']},",
          f"    focus: {js(m['focus'])}, support: {js(m['support'])},",
          f"    cue: {js(m['cue'])},"]
+    if m.get('alias'): L.insert(2, f"    alias: {js(m['alias'])},")
     if m['id'] in SETUP: L.append(f"    setup: {js(SETUP[m['id']])},")
     L += [f"    tips: {js(m['tips'])},",
           f"    positions: [{pos}],",
