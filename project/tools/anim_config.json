@@ -332,7 +332,7 @@
    "loop": true,
    "pos": [0, 1],
    "nofloor": true,
-   "arrows": {"f": [[{"from": [0.28, 0.4], "to": [0.4, 0.63], "curve": 0.3}], [{"from": [0.58, 0.42], "to": [0.42, 0.63], "curve": -0.3}]], "m": [[{"from": [0.28, 0.4], "to": [0.4, 0.63], "curve": 0.3}], [{"from": [0.58, 0.42], "to": [0.42, 0.63], "curve": -0.3}]]},
+   "arrows": {"f": [[{"from": [0.28, 0.3], "to": [0.4, 0.52], "curve": 0.35}], [{"from": [0.52, 0.3], "to": [0.38, 0.5], "curve": -0.35}]], "m": [[{"from": [0.28, 0.3], "to": [0.4, 0.52], "curve": 0.35}], [{"from": [0.52, 0.3], "to": [0.38, 0.5], "curve": -0.35}]]},
    "arrows_note": "flecha curva manual en la cadera: gira hacia el suelo en cada lado; A (fotograma 2) y B (fotograma 4) en sentidos opuestos"
   },
   "side-plank-knee": {

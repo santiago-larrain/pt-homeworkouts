@@ -3,6 +3,7 @@
 //   n:   número de fotogramas (iguales para ambos modelos).
 //   pos: fotograma (base 0) que corresponde a cada posición de MOVES[id].positions (por defecto: primero y último).
 //   loop: ciclo 1→…→n→1 (movimientos circulares) en vez de ida y vuelta.
+//   same: {fotograma: fotograma} → ese fotograma equivale a una posición (también pausa y marca la respiración).
 //   alt: nº de fotogramas de la tira B (img/anim/<f|m>/<id>-b-<k>.webp) de un movimiento alternante (dose.alternating): el otro brazo/pierna.
 // Los fotogramas intermedios se recorren con fundidos suaves; en las posiciones la animación se detiene un momento.
 export const ANIM = {
@@ -41,7 +42,7 @@ export const ANIM = {
   'kb-swing': { n: 5, pos: [0, 2], loop: true },
   'plank': { n: 4 },
   'side-plank-hip-dip': { n: 4, pos: [1, 3], loop: true },
-  'plank-hip-dip': { n: 4, pos: [0, 1], loop: true },
+  'plank-hip-dip': { n: 4, pos: [0, 1], loop: true, same: {"2": 0, "3": 1} },
   'side-plank-knee': { n: 4 },
   'bird-dog': { n: 4, alt: 4 },
   'curl-up': { n: 4 },
