@@ -575,4 +575,14 @@ export const MOVES2 = [
     positions: [{ label: "Abajo", breath: "in", verb: "baja la cadera" }, { label: "Arriba", breath: "ex", verb: "sube la cadera" }],
     dose: {"type": "reps", "min": 8, "max": 12, "perSide": true}, imageStatus: 'final',
   },
+  {
+    id: "plank-hip-dip", name: "Hip dips en plancha frontal", category: "core", equipment: ["mat"],
+    alias: "Plank hip dips",
+    group: "core", sided: false, mirror: true, met: 3.8, level: 2,
+    focus: ["Oblicuos", "Transverso abdominal"], support: ["Recto abdominal", "Deltoides anterior"],
+    cue: "Hombros quietos, gira solo la cadera",
+    tips: ["Antebrazos paralelos en el mat, codos justo bajo los hombros; cuerpo recto de la cabeza a los talones.", "Gira la pelvis para acercar una cadera al mat sin apoyarla, vuelve al centro y cambia de lado; hombros y cabeza no se mueven.", "Más fácil: apoya las rodillas en el mat; más difícil: separa un poco menos los pies y hazlo lento."],
+    positions: [{ label: "Centro", breath: "in", verb: "vuelve al centro" }, { label: "Gira", breath: "ex", verb: "baja la cadera de lado" }],
+    dose: {"type": "reps", "min": 10, "max": 16, "alternating": true}, imageStatus: 'final',
+  },
 ];

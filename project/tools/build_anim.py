@@ -3,6 +3,7 @@
 Uso (desde la raíz del repo):  python3 project/tools/build_anim.py [id …] [--no-arrows] [--no-data]
 - Lee  project/tools/anim_config.json  (una entrada por movimiento: fotogramas, ancla, cortes por modelo, loop, pos,
   nowall, tiras unidas `parts`, flechas manuales `arrows`).
+- `nofloor: true`: no detecta suelo (un mat separado por figura, vista desde los pies; evita la banda de mat de lado a lado).
 - `matfix: <fracción>`: rellena los recortes blancos de un mat escalonado (ring-squeeze, vista desde los pies).
 - `alt: "<id>-b"` (+ `bodyAlign` (alinea por el contorno inferior del cuerpo), `altFrames`, `altCuts`, `altArrows`: 'same' (por defecto) | 'auto' | false | {f,m}): tira B de un movimiento alternante, `<f|m>-<id>-b.jpg`; se corta con el mismo lienzo que A y
   alineada con su fotograma 1 (strip_frames.cut_pair) y se escribe `<id>-b-<k>.webp` (flechas en ARROWS['<id>-b']).
@@ -101,6 +102,7 @@ def job(args):
 def job_(args):
     mid, model, c, want_arrows = args
     import numpy as np
+    import strip_frames; strip_frames.NOFLOOR = bool(c.get('nofloor'))
     if 'parts' in c:
         frames = []
         for p in c['parts']:

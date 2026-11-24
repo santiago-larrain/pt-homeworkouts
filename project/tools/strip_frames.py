@@ -23,6 +23,9 @@ MAT_D = 60          # distancia de color (suma |ΔRGB|) bajo la cual un píxel d
 HOLE_MAX = 7000     # área máx. (px a 1792 de ancho) de una zona blanca cerrada que se recupera como ropa
 
 
+NOFLOOR = False  # nofloor (anim_config): ignora la detección de suelo (un mat por figura, vista desde los pies)
+
+
 def cut_strip(src, n, anchor_mode='feet', cuts='', nowall=False, geom=None, body=False, ref=None):
     im = Image.open(src).convert('RGB'); a = np.asarray(im).astype(int)
     H, W, _ = a.shape
@@ -41,6 +44,7 @@ def cut_strip(src, n, anchor_mode='feet', cuts='', nowall=False, geom=None, body
     # suelo / mat: filas casi completas (entre figuras siempre hay papel)
     frac = ink.mean(1)
     floor_rows = [int(y) for y in np.where(frac > 0.82)[0]]
+    if NOFLOOR: floor_rows = []
     # solo la franja contigua más baja (una banda elástica larga a media altura no es suelo)
     if floor_rows:
         keep = [floor_rows[-1]]

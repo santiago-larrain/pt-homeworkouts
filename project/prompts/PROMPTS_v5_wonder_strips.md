@@ -86,3 +86,9 @@ mueve el OTRO par de extremidades (misma cámara, escala, mat y músculos; el fo
 - Lateral con las dos piernas arriba: hay que decir «the BOTTOM leg also clearly lifted … visible gap of mat under the bottom foot»; sin eso solo sube la pierna de arriba.
 - Hombre: plantilla 2 con la tira de la mujer como 2.ª referencia; salió a la primera en las seis.
 - Dead bug (v1.12): se quitó el 5.º fotograma (`keep: 4`, `pos: [0, 2, 3]`); la tira B del hombre se regeneró desde la B de la mujer (plantilla 2 + «near arm lowers, far arm stays vertical, far arm behind»).
+
+## Hip dips en plancha frontal (v1.14)
+- Cuatro intentos de la v1.13 (perfil, desde atrás con pies elevados, 3/4 bajo, cabeza) fallaron. Funcionó la cámara **BAJA (15-20°) desde los PIES, algo ladeada**, mirando a lo largo del cuerpo: se ven las plantas, la pelvis rotando y la sombra bajo el cuerpo.
+- Claves: 3 fotogramas, **un mat trapezoidal propio por fotograma** (perspectiva) con mucho espacio entre ellos; el 1.er intento salió «tumbada» y se corrigió pasando la tira como referencia y pidiendo «hips as high as shoulders, knees/thighs/belly OFF the mat, soft shadow under her»; luego un 3.º más exagerado («pelvis line tilted 40°»). Tira B: la A como única referencia y «mirror image of the rotation … to the LEFT».
+- Hombre B: con la tira B de la mujer como única referencia copió la A (mismo lado); funcionó pasar la A del hombre + la B de la mujer y decir «draw the MAN from the first image doing the mirrored version shown in the second».
+- `nofloor: true` en `anim_config.json`: sin él la detección de suelo extendía el mat de lado a lado (banda). Alineación `center` (mat y antebrazos quedan fijos).

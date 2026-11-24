@@ -41,6 +41,7 @@ export const ANIM = {
   'kb-swing': { n: 5, pos: [0, 2], loop: true },
   'plank': { n: 4 },
   'side-plank-hip-dip': { n: 4, pos: [1, 3], loop: true },
+  'plank-hip-dip': { n: 3, alt: 3 },
   'side-plank-knee': { n: 4 },
   'bird-dog': { n: 4, alt: 4 },
   'curl-up': { n: 4 },
