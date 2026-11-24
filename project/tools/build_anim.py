@@ -181,6 +181,7 @@ def js_anim(cfg):
              '//   n:   número de fotogramas (iguales para ambos modelos).',
              '//   pos: fotograma (base 0) que corresponde a cada posición de MOVES[id].positions (por defecto: primero y último).',
              '//   loop: ciclo 1→…→n→1 (movimientos circulares) en vez de ida y vuelta.',
+             '//   same: {fotograma: fotograma} → ese fotograma equivale a una posición (también pausa y marca la respiración).',
              '//   alt: nº de fotogramas de la tira B (img/anim/<f|m>/<id>-b-<k>.webp) de un movimiento alternante (dose.alternating): el otro brazo/pierna.',
              '// Los fotogramas intermedios se recorren con fundidos suaves; en las posiciones la animación se detiene un momento.',
              'export const ANIM = {']
@@ -190,6 +191,7 @@ def js_anim(cfg):
         if c.get('pos') and c['pos'] != [0, n - 1]: bits.append(f"pos: {json.dumps(c['pos'])}")
         if c.get('loop'): bits.append('loop: true')
         if c.get('alt'): bits.append(f"alt: {c.get('altKeep', c.get('keep') or c.get('altFrames', c['frames']))}")
+        if c.get('same'): bits.append(f"same: {json.dumps({str(k): v for k, v in c['same'].items()})}")  # fotograma → fotograma de posición equivalente (pausa y respiración)
         lines.append(f"  '{mid}': {{ {', '.join(bits)} }},")
     lines.append('};')
     return '\n'.join(lines) + '\n'

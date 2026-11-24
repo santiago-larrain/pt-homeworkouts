@@ -149,7 +149,7 @@ export class FrameAnimator {
     if (i !== this.pos && i >= 0) { this.pos = i; this.onPos(i); if (this.layer && this.reduced) this.staticArrow(i); }
   }
   // fotograma de B → su equivalente en A (mismas posiciones, mismo respiro)
-  base(f) { return f >= this.n ? f - this.n : f; }
+  base(f) { const b = f >= this.n ? f - this.n : f; const sm = ANIM[this.id] && ANIM[this.id].same; return sm && sm[b] != null ? sm[b] : b; }
   isPosFrame(f) {
     const b = this.base(f), last = (f >= this.n ? this.m : this.n) - 1;
     return this.P.includes(b) || (!this.loopMode && (b === 0 || b === last));
