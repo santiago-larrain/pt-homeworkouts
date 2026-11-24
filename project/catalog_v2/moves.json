@@ -3389,16 +3389,16 @@
     "met": 3.8,
     "level": 2,
     "strip": {
-      "frames": 3,
-      "view": "LOW camera at the FEET end looking along the body, slightly off-axis, forearm front plank",
+      "frames": 4,
+      "view": "cámara en la CABEZA, algo elevada (~20-25°), vista frontal 3/4: antebrazos hacia la cámara, cuerpo en diagonal hacia arriba a la izquierda; neutro, cadera a un lado, neutro, cadera al otro",
       "ground": "mat",
-      "anchor": "center",
-      "loop": false,
+      "anchor": "right",
+      "loop": true,
       "pos": [
         0,
-        2
+        1
       ],
-      "prompt_f": "(v1.14: vista baja desde los pies, 3 fotogramas + tira B; ver project/prompts/PROMPTS_v5_wonder_strips.md)"
+      "prompt_f": "(v1.15: tira de 4 fotogramas, cámara en la cabeza; ver project/prompts/PROMPTS_v5_wonder_strips.md)"
     }
   }
 ]

@@ -326,14 +326,13 @@
    "arrows_note": "flecha manual vertical en la cadera (la automática salía en diagonal)"
   },
   "plank-hip-dip": {
-   "frames": 3,
-   "anchor": "center",
-   "pos": [0, 2],
-   "alt": "plank-hip-dip-b",
+   "frames": 4,
+   "anchor": "right",
+   "loop": true,
+   "pos": [0, 1],
    "nofloor": true,
-   "arrows": {"f": [[{"from": [0.6, 0.4], "to": [0.76, 0.58], "curve": 0.25}], [{"from": [0.76, 0.58], "to": [0.6, 0.4], "curve": 0.25}]], "m": [[{"from": [0.6, 0.4], "to": [0.76, 0.58], "curve": 0.25}], [{"from": [0.76, 0.58], "to": [0.6, 0.4], "curve": 0.25}]]},
-   "altArrows": {"f": [[{"from": [0.4, 0.4], "to": [0.24, 0.58], "curve": -0.25}], [{"from": [0.24, 0.58], "to": [0.4, 0.4], "curve": -0.25}]], "m": [[{"from": [0.4, 0.4], "to": [0.24, 0.58], "curve": -0.25}], [{"from": [0.24, 0.58], "to": [0.4, 0.4], "curve": -0.25}]]},
-   "arrows_note": "flecha curva manual: la cadera gira y baja hacia un lado (A: derecha de la imagen; B: izquierda)"
+   "arrows": {"f": [[{"from": [0.28, 0.4], "to": [0.4, 0.63], "curve": 0.3}], [{"from": [0.58, 0.42], "to": [0.42, 0.63], "curve": -0.3}]], "m": [[{"from": [0.28, 0.4], "to": [0.4, 0.63], "curve": 0.3}], [{"from": [0.58, 0.42], "to": [0.42, 0.63], "curve": -0.3}]]},
+   "arrows_note": "flecha curva manual en la cadera: gira hacia el suelo en cada lado; A (fotograma 2) y B (fotograma 4) en sentidos opuestos"
   },
   "side-plank-knee": {
    "frames": 4,

@@ -16,7 +16,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const S = () => store.state;
 const set = () => S().settings;
-const APP_VERSION = '1.14';
+const APP_VERSION = '1.15';
 const BADGE = ['A', '1', '2', '3', '4', '5', '6', '7', '8'];
 const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
